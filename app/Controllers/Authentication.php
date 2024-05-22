@@ -119,7 +119,10 @@ class Authentication extends BaseController
                         $result = $model->addUser($insertionData);
 
                         if (empty($result)) {
-                            $session->setFlashdata("error", "Could Not Create User. Please Try Again.");
+                            $message = [
+                                "message" => "Could Not Create User. Please Try Again."
+                            ];
+                            $session->setFlashdata("error", $message);
                             $session->setFlashdata('form_data', $data);
                         } else {
                             $otp_code = CustomFunctions::generateValidationLink();
@@ -148,39 +151,66 @@ class Authentication extends BaseController
 
                                 $sent_OTP = $model->saveSentOTP($OTP_data);
                                 if (empty($sent_OTP)) {
-                                    $session->setFlashdata("error", "An Error Occurred while sending the email verification code.");
+                                    $message = [
+                                        "message" => "An Error Occurred while sending the email verification code."
+                                    ];
+                                    $session->setFlashdata("error", $message);
                                     $session->setFlashdata('form_data', $data);
+                                    return redirect()->to("resend-code");
                                 } else {
-                                    $session->setFlashdata("success", "Account Created Successfully, and a Verification Email has been Sent.");
+                                    $message = [
+                                        "message" => "Account Created Successfully, and a Verification Email has been Sent."
+                                    ];
+                                    $session->setFlashdata("success", $message);
                                     return redirect()->to("login");
                                 }
                             } else {
-                                $session->setFlashdata("error", "An Error Occurred while sending the email verification code.");
+                                $message = [
+                                    "message" => "An Error Occurred while sending the email verification code."
+                                ];
+                                $session->setFlashdata("error", $message);
                                 $session->setFlashdata('form_data', $data);
+                                return redirect()->to("resend-code");
                             }
                         }
                     } else {
                         if ($isUserWithSimilarEmailExisting && $isUserWithSimilarPhoneExisting) {
-                            $session->setFlashdata("error", "User With Similar Phone Number and Email Address Already Exists.");
+                            $message = [
+                                "message" => "User With Similar Phone Number and Email Address Already Exists."
+                            ];
+                            $session->setFlashdata("error", $message);
                             $session->setFlashdata('form_data', $data);
                         }
                         if (empty($isUserWithSimilarEmailExisting)) {
-                            $session->setFlashdata("error", "User With Similar Phone Number Already Exists.");
+                            $message = [
+                                "message" => "User With Similar Phone Number Already Exists."
+                            ];
+                            $session->setFlashdata("error", $message);
                             $session->setFlashdata('form_data', $data);
                         }
                         if (empty($isUserWithSimilarPhoneExisting)) {
-                            $session->setFlashdata("error", "User With Similar Email Address Already Exists.");
+                            $message = [
+                                "message" => "User With Similar Email Address Already Exists."
+                            ];
+                            $session->setFlashdata("error", $message);
                             $session->setFlashdata('form_data', $data);
                         }
                     }
 
                 } else {
-                    $session->setFlashdata("error", $validation->getErrors());
+                    $_SESSION['validationErrors'] = $validation->getErrors();
+                    $message = [
+                        "message" => $validation->getErrors()
+                    ];
+                    $session->setFlashdata("validationErrors", $message);
                     $session->setFlashdata('form_data', $data);
                 }
 
             } else {
-                $session->setFlashdata("error", "Invalid Form Data.");
+                $message = [
+                    "message" => "Invalid Form Data."
+                ];
+                $session->setFlashdata("error", $message);
                 $session->setFlashdata('form_data', $data);
             }
 
