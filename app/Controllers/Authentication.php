@@ -5,9 +5,7 @@ namespace App\Controllers;
 use CodeIgniter\API\ResponseTrait;
 use App\Models\UsersModel;
 use Exception;
-use Firebase\JWT\JWT;
 use Config\MyFunctions as CustomFunctions;
-use Firebase\JWT\Key;
 
 class Authentication extends BaseController
 {
@@ -25,8 +23,9 @@ class Authentication extends BaseController
     {
         if ($this->request->is('post')) {
             //Retrieve Submitted Data
-            $data = $this->request->getJSON(true);
+            $data = $this->request->getPost();
             $validation = \Config\Services::validation();
+            $session = \Config\Services::session();
             helper(['form']);
 
             if (!is_null($data)) {
@@ -73,6 +72,15 @@ class Authentication extends BaseController
                             'required' => 'Password Field Cannot be Empty.'
                         ]
                     ],
+
+                    'user_level' => [
+                        'rules' => 'required|in_list[3,4]',
+                        'label' => 'Account Type',
+                        'errors' => [
+                            'required' => 'Account Type Field Cannot be Empty.',
+                            'in_list' => 'Account Type Field Must Contain A Valid Account Type.'
+                        ]
+                    ],
                 ]);
 
                 if ($validation->run($data)) {
@@ -111,14 +119,14 @@ class Authentication extends BaseController
                         $result = $model->addUser($insertionData);
 
                         if (empty($result)) {
-                            return $this->respond(['status' => 'failure', 'message' => 'Could not Create User.', 'data' => $data], 500);
-
+                            $session->setFlashdata("error", "Could Not Create User. Please Try Again.");
+                            $session->setFlashdata('form_data', $data);
                         } else {
                             $otp_code = CustomFunctions::generateValidationLink();
                             $sendTO = $user_email;
                             $subject = "Account Activation Code.";
 
-                            $html_template = file_get_contents(__DIR__.'/Templates/account_activation.html');
+                            $html_template = file_get_contents(__DIR__ . '/Templates/account_activation.html');
                             $verification_url = base_url("api/v1/auth/verify/$otp_code");
 
                             $html_content = str_replace('{{username}}', $user_firstname, $html_template);
@@ -140,38 +148,44 @@ class Authentication extends BaseController
 
                                 $sent_OTP = $model->saveSentOTP($OTP_data);
                                 if (empty($sent_OTP)) {
-                                    return $this->respond(['status' => 'failure', 'message' => 'An Error Occurred while sending the email verification code.', 'data' => $data], 500);
+                                    $session->setFlashdata("error", "An Error Occurred while sending the email verification code.");
+                                    $session->setFlashdata('form_data', $data);
                                 } else {
-
-                                    return $this->respond(['status' => 'success', 'message' => 'Account Created Successfully, and a Verification Email has been Sent.', 'data' => ["user_data" => $data, "verification_link" => $verification_url]], 200);
+                                    $session->setFlashdata("success", "Account Created Successfully, and a Verification Email has been Sent.");
+                                    return redirect()->to("login");
                                 }
                             } else {
-                                return $this->respond(['status' => 'failure', 'message' => 'An Error Occurred while sending the email verification code.', 'data' => $data], 400);
+                                $session->setFlashdata("error", "An Error Occurred while sending the email verification code.");
+                                $session->setFlashdata('form_data', $data);
                             }
                         }
                     } else {
                         if ($isUserWithSimilarEmailExisting && $isUserWithSimilarPhoneExisting) {
-                            return $this->respond(['status' => 'failure', 'message' => 'User With Similar Phone Number and Email Address Already Exists.', 'data' => $data], 400);
+                            $session->setFlashdata("error", "User With Similar Phone Number and Email Address Already Exists.");
+                            $session->setFlashdata('form_data', $data);
                         }
                         if (empty($isUserWithSimilarEmailExisting)) {
-                            return $this->respond(['status' => 'failure', 'message' => 'User With Similar Phone Number Already Exists.', 'data' => $data], 400);
+                            $session->setFlashdata("error", "User With Similar Phone Number Already Exists.");
+                            $session->setFlashdata('form_data', $data);
                         }
                         if (empty($isUserWithSimilarPhoneExisting)) {
-                            return $this->respond(['status' => 'failure', 'message' => 'User With Similar Email Address Already Exists.', 'data' => $data], 400);
+                            $session->setFlashdata("error", "User With Similar Email Address Already Exists.");
+                            $session->setFlashdata('form_data', $data);
                         }
                     }
 
                 } else {
-                    return $this->respond(['status' => 'failure', 'message' => ($validation->getErrors()), 'data' => $data], 400);
+                    $session->setFlashdata("error", $validation->getErrors());
+                    $session->setFlashdata('form_data', $data);
                 }
 
             } else {
-
-                return $this->respond(['status' => 'failure', 'message' => 'Invalid Body.', 'data' => ''], 400);
+                $session->setFlashdata("error", "Invalid Form Data.");
+                $session->setFlashdata('form_data', $data);
             }
 
         }
-        return $this->respond(['status' => 'failure', 'message' => 'The Requested URL could not be Found.', 'data' => ''], 404);
+        return redirect()->back();
     }
 
     public function verifyAccount($otp_code): \CodeIgniter\HTTP\ResponseInterface
@@ -282,7 +296,7 @@ class Authentication extends BaseController
                             $sendTO = $user_data['user_email'];
                             $subject = "Password Recovery.";
 
-                            $html_template = file_get_contents(__DIR__.'/Templates/password_recovery.html');
+                            $html_template = file_get_contents(__DIR__ . '/Templates/password_recovery.html');
                             $verification_url = base_url("api/v1/auth/verify/$otp_code");
 
                             $html_content = str_replace('{{username}}', $user_data['user_firstname'], $html_template);
@@ -502,7 +516,7 @@ class Authentication extends BaseController
     {
         if ($auth === null) {
             $authHeader = $this->request->getHeaderLine('Authorization');
-        }  else {
+        } else {
             $authHeader = $auth;
         }
         $matches = array();

@@ -9,24 +9,18 @@ class MongoConnectionModel
 {
     protected Client $client;
     protected mixed $location_database;
-    private mixed $users_database;
+    private mixed $database;
 
     public function __construct()
     {
         $uri = $_ENV['mongodb_connection_uri'];
         $this->client = new Client($uri);
-        $this->location_database = $_ENV['mongodb_locations_database']; // Locations Database
-        $this->users_database = $_ENV['mongodb_users_database']; // Locations Database
+        $this->database = $_ENV['mongodb_database']; // Used Database
     }
 
-    public function connectToLocationsDatabase(): \MongoDB\Database
+    public function connectToDatabase(): \MongoDB\Database
     {
-        return $this->client->selectDatabase($this->location_database);
-    }
-
-    public function connectToUsersDatabase(): \MongoDB\Database
-    {
-        return $this->client->selectDatabase($this->users_database);
+        return $this->client->selectDatabase($this->database);
     }
 
     // Function to convert MongoDB document to array

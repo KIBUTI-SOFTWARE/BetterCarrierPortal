@@ -29,10 +29,15 @@
                         A few more clicks to sign in to your account.
                     </div>
                     <form name="login" action="/login" method="post" enctype="multipart/form-data">
+                        <?php
+                        $session = session();
+                        $form_data = $session->getFlashdata('form_data');
+                        ?>
                         <div class="intro-x mt-8">
                             <label for="username"></label>
                             <input data-tw-merge="" id="username" name="username" type="text" required
                                    placeholder="Email or Phone"
+                                   value="<?= $form_data['username'] ?? '' ?>"
                                    class="disabled:bg-slate-100 disabled:cursor-not-allowed dark:disabled:bg-darkmode-800/50 dark:disabled:border-transparent [&[readonly]]:bg-slate-100 [&[readonly]]:cursor-not-allowed [&[readonly]]:dark:bg-darkmode-800/50 [&[readonly]]:dark:border-transparent transition duration-200 ease-in-out w-full text-sm border-slate-200 shadow-sm rounded-md placeholder:text-slate-400/90 focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus:border-primary focus:border-opacity-40 dark:bg-darkmode-800 dark:border-transparent dark:focus:ring-slate-700 dark:focus:ring-opacity-50 dark:placeholder:text-slate-500/80 group-[.form-inline]:flex-1 group-[.input-group]:rounded-none group-[.input-group]:[&:not(:first-child)]:border-l-transparent group-[.input-group]:first:rounded-l group-[.input-group]:last:rounded-r group-[.input-group]:z-10 intro-x block min-w-full px-4 py-3 xl:min-w-[350px]">
                             <label for="user_password"></label>
                             <input data-tw-merge="" type="password" id="user_password" name="user_password" required
@@ -52,6 +57,7 @@
                         </div>
                         <div class="intro-x mt-5 text-center xl:mt-8 xl:text-left">
                             <button data-tw-merge="" type="submit"
+                                    id="submit"
                                     class="transition duration-200 border shadow-sm inline-flex items-center justify-center rounded-md font-medium cursor-pointer focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus-visible:outline-none dark:focus:ring-slate-700 dark:focus:ring-opacity-50 [&:hover:not(:disabled)]:bg-opacity-90 [&:hover:not(:disabled)]:border-opacity-90 [&:not(button)]:text-center disabled:opacity-70 disabled:cursor-not-allowed bg-primary border-primary text-white dark:border-primary w-full px-4 py-3 align-top xl:mr-3 xl:w-32">
                                 Login
                             </button>

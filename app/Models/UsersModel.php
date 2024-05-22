@@ -9,7 +9,7 @@ class UsersModel extends MongoConnectionModel
 
     public function addUser(array $user_data): ?array
     {
-        $database = $this->connectToUsersDatabase();
+        $database = $this->connectToDatabase();
         $collection = $database->selectCollection($this->users_collection);
         $insert_result = $collection->insertOne($user_data);
 
@@ -22,7 +22,7 @@ class UsersModel extends MongoConnectionModel
 
     public function isUserWithEmailExisting(string $email): ?array
     {
-        $collection = $this->connectToUsersDatabase()->selectCollection($this->users_collection);
+        $collection = $this->connectToDatabase()->selectCollection($this->users_collection);
 
         $user = $collection->findOne([
             'user_email' => $email,
@@ -34,7 +34,7 @@ class UsersModel extends MongoConnectionModel
 
     public function isUserWithPhoneExisting(string $phone): ?array
     {
-        $collection = $this->connectToUsersDatabase()->selectCollection($this->users_collection);
+        $collection = $this->connectToDatabase()->selectCollection($this->users_collection);
 
         $user = $collection->findOne([
             'user_phone' => $phone,
@@ -46,7 +46,7 @@ class UsersModel extends MongoConnectionModel
 
     public function getUsers($user_level): array
     {
-        $collection = $this->connectToUsersDatabase()->selectCollection($this->users_collection);
+        $collection = $this->connectToDatabase()->selectCollection($this->users_collection);
 
         $query = $user_level === '1' ? [] : ['user_deleted_flag' => false, 'user_level' => ['$gt' => 1]];
 
@@ -57,7 +57,7 @@ class UsersModel extends MongoConnectionModel
 
     public function getUsersByLevel($user_level): array
     {
-        $collection = $this->connectToUsersDatabase()->selectCollection($this->users_collection);
+        $collection = $this->connectToDatabase()->selectCollection($this->users_collection);
 
         $users = iterator_to_array($collection->find([
             'user_deleted_flag' => false,
@@ -69,7 +69,7 @@ class UsersModel extends MongoConnectionModel
 
     public function getUserByID($user_id): ?array
     {
-        $collection = $this->connectToUsersDatabase()->selectCollection($this->users_collection);
+        $collection = $this->connectToDatabase()->selectCollection($this->users_collection);
 
         $user = $collection->findOne([
             '_id' => new \MongoDB\BSON\ObjectId($user_id),
@@ -81,7 +81,7 @@ class UsersModel extends MongoConnectionModel
 
     public function searchUser($identifier): ?array
     {
-        $collection = $this->connectToUsersDatabase()->selectCollection($this->users_collection);
+        $collection = $this->connectToDatabase()->selectCollection($this->users_collection);
 
         try {
             $objectId = new \MongoDB\BSON\ObjectId($identifier);
@@ -105,7 +105,7 @@ class UsersModel extends MongoConnectionModel
 
     public function updateUser(array $data, $id): ?int
     {
-        $collection = $this->connectToUsersDatabase()->selectCollection($this->users_collection);
+        $collection = $this->connectToDatabase()->selectCollection($this->users_collection);
 
         $updateResult = $collection->updateOne(
             ['_id' => new \MongoDB\BSON\ObjectId($id)],
@@ -117,7 +117,7 @@ class UsersModel extends MongoConnectionModel
 
     public function getUserByEmail(string $email): ?array
     {
-        $collection = $this->connectToUsersDatabase()->selectCollection($this->users_collection);
+        $collection = $this->connectToDatabase()->selectCollection($this->users_collection);
 
         $user = $collection->findOne([
             'user_email' => $email,
@@ -129,7 +129,7 @@ class UsersModel extends MongoConnectionModel
 
     public function getOTP(string $otp_code): ?array
     {
-        $collection = $this->connectToUsersDatabase()->selectCollection($this->otp_collection);
+        $collection = $this->connectToDatabase()->selectCollection($this->otp_collection);
 
         $otp = $collection->findOne([
             'otp_code' => $otp_code,
@@ -141,7 +141,7 @@ class UsersModel extends MongoConnectionModel
 
     public function saveSentOTP(array $data): bool
     {
-        $collection = $this->connectToUsersDatabase()->selectCollection($this->otp_collection);
+        $collection = $this->connectToDatabase()->selectCollection($this->otp_collection);
 
         $insertResult = $collection->insertOne($data);
 
@@ -150,7 +150,7 @@ class UsersModel extends MongoConnectionModel
 
     public function updateOTP(array $data, $id): ?int
     {
-        $collection = $this->connectToUsersDatabase()->selectCollection($this->otp_collection);
+        $collection = $this->connectToDatabase()->selectCollection($this->otp_collection);
 
         $updateResult = $collection->updateOne(
             ['_id' => new \MongoDB\BSON\ObjectId($id)],
@@ -162,7 +162,7 @@ class UsersModel extends MongoConnectionModel
 
     public function deleteOTP($id): ?int
     {
-        $collection = $this->connectToUsersDatabase()->selectCollection($this->otp_collection);
+        $collection = $this->connectToDatabase()->selectCollection($this->otp_collection);
 
         $deleteResult = $collection->deleteOne(['_id' => new \MongoDB\BSON\ObjectId($id)]);
 

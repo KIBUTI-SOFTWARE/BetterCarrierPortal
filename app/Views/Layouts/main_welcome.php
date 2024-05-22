@@ -15,7 +15,13 @@
 <!-- END: Head -->
 <body>
 <?= $this->renderSection("content") ?>
-
+<script>
+    document.getElementById('form').addEventListener('submit', function () {
+        const submitButton = document.getElementById('submit');
+        submitButton.innerHTML = 'Submitting...';
+        submitButton.disabled = true;
+    });
+</script>
 <!-- BEGIN: Vendor JS Assets-->
 <script src="dist/js/vendors/dom.js"></script>
 <script src="dist/js/vendors/tailwind-merge.js"></script>

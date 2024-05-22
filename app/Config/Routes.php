@@ -15,4 +15,5 @@ $routes->get('/forgot-password-1', 'Home::forgot_password_1');
 $routes->get('/forgot-password-2', 'Home::forgot_password_2');
 $routes->get('/forgot-password-3', 'Home::forgot_password_3');
 
-
+//User Authentication
+$routes->post('/register', 'Authentication::register');
