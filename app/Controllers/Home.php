@@ -33,4 +33,9 @@ class Home extends BaseController
     {
         return view('forgot-password-3');
     }
+
+    public function resendCode(): string
+    {
+        return view('resend-code');
+    }
 }

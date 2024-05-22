@@ -155,7 +155,7 @@ class Authentication extends BaseController
                                         "message" => "An Error Occurred while sending the email verification code."
                                     ];
                                     $session->setFlashdata("error", $message);
-                                    $session->setFlashdata('form_data', $data);
+                                    $session->setTempdata('form_data', $data, 300000000);
                                     return redirect()->to("resend-code");
                                 } else {
                                     $message = [
@@ -169,7 +169,7 @@ class Authentication extends BaseController
                                     "message" => "An Error Occurred while sending the email verification code."
                                 ];
                                 $session->setFlashdata("error", $message);
-                                $session->setFlashdata('form_data', $data);
+                                $session->setTempdata('form_data', $data, 300000000);
                                 return redirect()->to("resend-code");
                             }
                         }
