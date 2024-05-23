@@ -5,7 +5,7 @@ use Predis\Client;
 
 class RedisLibrary
 {
-    protected Client $redis;
+    protected $redis;
 
     public function __construct()
     {

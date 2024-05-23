@@ -2,6 +2,9 @@
 
 namespace App\Controllers;
 
+use App\Libraries\MongoQueueLibrary;
+use App\Libraries\RedisLibrary;
+use App\Libraries\RedisQueueLibrary;
 use CodeIgniter\API\ResponseTrait;
 use App\Models\UsersModel;
 use Exception;
@@ -126,52 +129,47 @@ class Authentication extends BaseController
                             $session->setFlashdata('form_data', $data);
                         } else {
                             $otp_code = CustomFunctions::generateValidationLink();
-                            $sendTO = $user_email;
                             $subject = "Account Activation Code.";
 
                             $html_template = file_get_contents(__DIR__ . '/Templates/account_activation.html');
-                            $verification_url = base_url("api/v1/auth/verify/$otp_code");
+                            $verification_url = base_url("verify/$otp_code");
 
                             $html_content = str_replace('{{username}}', $user_firstname, $html_template);
                             $html_content = str_replace('{{base_url}}', base_url(), $html_content);
                             $html_content = str_replace('{{otp}}', $verification_url, $html_content);
 
                             $message = $html_content;
+                            $queue = "email_queues";
 
-                            $OTPSendingResults = CustomFunctions::sendVerificationEmail($subject, $message, $sendTO);
+                            $job = [
+                                'to' => $user_email,
+                                'subject' => $subject,
+                                'message' => $message,
+                                'retries' => 3
+                            ];
 
-                            if (!empty($OTPSendingResults) && $OTPSendingResults === 'SUCCESS') {
-                                $OTP_data = [
-                                    'otp_code' => $otp_code,
-                                    'otp_sent_to' => $sendTO,
-                                    'otp_sent_on' => CustomFunctions::getDate(),
-                                    'otp_expires_on' => "",
-                                    'otp_status' => false
-                                ];
+                            // Add the email job to the Redis queue
+                            $redisQueue = new RedisQueueLibrary();
+                            $redisQueue->push($queue, $job);
 
-                                $sent_OTP = $model->saveSentOTP($OTP_data);
-                                if (empty($sent_OTP)) {
-                                    $message = [
-                                        "message" => "An Error Occurred while sending the email verification code."
-                                    ];
-                                    $session->setFlashdata("error", $message);
-                                    $session->setTempdata('form_data', $data, 300000000);
-                                    return redirect()->to("resend-code");
-                                } else {
-                                    $message = [
-                                        "message" => "Account Created Successfully, and a Verification Email has been Sent."
-                                    ];
-                                    $session->setFlashdata("success", $message);
-                                    return redirect()->to("login");
-                                }
-                            } else {
-                                $message = [
-                                    "message" => "An Error Occurred while sending the email verification code."
-                                ];
-                                $session->setFlashdata("error", $message);
-                                $session->setTempdata('form_data', $data, 300000000);
-                                return redirect()->to("resend-code");
-                            }
+                            $mongoQueue = new MongoQueueLibrary();
+                            $mongoQueue->push($job);
+
+                            $OTP_data = [
+                                'otp_code' => $otp_code,
+                                'otp_sent_to' => $user_email,
+                                'otp_sent_on' => date('Y-m-d H:i:s'),
+                                'otp_status' => false,
+                            ];
+
+                            $sent_OTP = $model->saveSentOTP($OTP_data);
+                            $message = [
+                                "message" => "Account Created Successfully, and a Verification Email has been Sent."
+                            ];
+                            $session->setTempdata('form_data', $data, 3000000);
+                            $session->setFlashdata("success", $message);
+                            return redirect()->to("resend-code");
+
                         }
                     } else {
                         if ($isUserWithSimilarEmailExisting && $isUserWithSimilarPhoneExisting) {

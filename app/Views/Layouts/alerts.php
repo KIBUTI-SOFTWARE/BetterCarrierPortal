@@ -2,14 +2,14 @@
 $session = \Config\Services::session();
 
 if ($session->getFlashdata("success") !== null) {
-    $alert = $session
+    $alert = $session->getFlashdata("success");
     ?>
     <!--Injecting success alert-->
     <script>
         Swal.fire({
             position: "top-end",
             timer: 10000,
-            text: "<?= $session->getFlashdata("success"); ?>",
+            text: "<?= $alert['message']; ?>",
             icon: "success"
         });
     </script>
@@ -18,13 +18,14 @@ if ($session->getFlashdata("success") !== null) {
 
 
 if ($session->getFlashdata("error") !== null) {
+    $alert = $session->getFlashdata("error");
     ?>
     <!--Injecting success alert-->
     <script>
         Swal.fire({
             position: "top-end",
             timer: 10000,
-            text: "<?= $session->getFlashdata("error"); ?>",
+            text: "<?= $alert['message']; ?>",
             icon: "error"
         });
     </script>
@@ -32,13 +33,14 @@ if ($session->getFlashdata("error") !== null) {
 }
 
 if ($session->getFlashdata("info") !== null) {
+    $alert = $session->getFlashdata("info");
     ?>
     <!--Injecting success alert-->
     <script>
         Swal.fire({
             position: "top-end",
             timer: 10000,
-            text: "<?= $session->getFlashdata("info"); ?>",
+            text: "<?= $alert['message']; ?>",
             icon: "info"
         });
     </script>
