@@ -7,6 +7,7 @@ use App\Libraries\RedisLibrary;
 use App\Libraries\RedisQueueLibrary;
 use CodeIgniter\API\ResponseTrait;
 use App\Models\UsersModel;
+use Config\Session;
 use Exception;
 use Config\MyFunctions as CustomFunctions;
 
@@ -502,11 +503,12 @@ class Authentication extends BaseController
 
     }
 
-    public function login(): \CodeIgniter\HTTP\ResponseInterface
+    public function login(): \CodeIgniter\HTTP\RedirectResponse
     {
         if ($this->request->is('post')) {
+            $session = \Config\Services::session();
             $validation = \Config\Services::validation();
-            $data = $this->request->getJSON(true);
+            $data = $this->request->getPost();
             helper(['form']);
 
             if (!is_null($data)) {
@@ -520,7 +522,7 @@ class Authentication extends BaseController
                         ]
                     ],
 
-                    'password' => [
+                    'user_password' => [
                         'rules' => 'required',
                         'label' => "Password",
                         'errors' => [
@@ -532,113 +534,60 @@ class Authentication extends BaseController
                 if ($validation->run($data)) {
 
                     $username = $data['username'];
-                    $password = $data['password'];
+                    $password = $data['user_password'];
 
-                    $conn = db_connect();
                     $model = new UsersModel();
 
                     $result = $model->searchUser($username);
 
                     if (empty($result)) {
-                        return $this->respond(['status' => 'failure', 'message' => 'Could not Find user with the username.', 'data' => $data], 401);
+                        $message = [
+                            "message" => "Could not Find user with the username."
+                        ];
                     } else {
                         if ($result['user_deleted_flag'] === true) {
-                            return $this->respond(['status' => 'failure', 'message' => 'Account Not Found.', 'data' => $data], 401);
+                            $message = [
+                                "message" => "Account Not Found."
+                            ];
                         } else {
                             if ($result['user_account_activated'] === true) {
                                 if (password_verify($password, $result['user_password'])) {
-
-                                    $_SESSION['user'] = $result;
-                                    $key = getenv('JWT_SECRET');
-                                    $iat = time(); // current timestamp value
-                                    $exp = $iat + 900;
-
-                                    $payload = array(
-                                        "app" => "LOCATIONS API v1",
-                                        "iat" => $iat, //Time the JWT issued at
-                                        "exp" => $exp, // Expiration time of token
-                                        "data" => $result,
-                                    );
-
-                                    $token = JWT::encode($payload, $key, 'HS256');
-
-                                    return $this->respond(['status' => 'success', 'message' => 'Logged in Successfully.', 'data' => ['token' => $token]], 200);
+                                    $message = [
+                                        "message" => "Logged in Successfully."
+                                    ];
+                                    $session->setFlashdata("success", $message);
+                                    $session->set('user', $result);
+                                    return redirect()->to("dashboard");
                                 }
-
-                                return $this->respond(['status' => 'failure', 'message' => 'Incorrect Password or Username.', 'data' => $data], 401);
+                                $message = [
+                                    "message" => "Incorrect Password or Username."
+                                ];
                             } else {
-                                return $this->respond(['status' => 'failure', 'message' => 'Account is Disabled.', 'data' => $data], 401);
+                                $message = [
+                                    "message" => "Account is Disabled."
+                                ];
                             }
-
                         }
-
                     }
+                    $session->setFlashdata("error", $message);
 
                 } else {
-                    return $this->respond(['status' => 'failure', 'message' => ($validation->getErrors()), 'data' => $data], 400);
+                    $_SESSION['validationErrors'] = $validation->getErrors();
+                    $message = [
+                        "message" => $validation->getErrors()
+                    ];
+                    $session->setFlashdata("validationErrors", $message);
                 }
 
             } else {
-
-                return $this->respond(['status' => 'failure', 'message' => 'Invalid Username or Password.', 'data' => ''], 401);
+                $message = [
+                    "message" => "Invalid Username or Password."
+                ];
+                $session->setFlashdata("error", $message);
             }
+            $session->setFlashdata('form_data', $data);
         }
-        return $this->respond(['status' => 'failure', 'message' => 'The Requested URL could not be Found.', 'data' => ''], 404);
-    }
-
-    public function getTokenData($auth = null): \CodeIgniter\HTTP\ResponseInterface|bool|string
-    {
-        if ($auth === null) {
-            $authHeader = $this->request->getHeaderLine('Authorization');
-        } else {
-            $authHeader = $auth;
-        }
-        $matches = array();
-        $key = getenv('JWT_SECRET');
-        if (empty($authHeader) || !preg_match('/Bearer (.+)/', $authHeader, $matches)) {
-            return $this->respond(['status' => 'failure', 'message' => 'Incorrect Authorization Token.', 'data' => ''], 401);
-        }
-        $token = $matches[1];
-        $token_data = JWT::decode($token, new Key($key, 'HS256'));
-        return json_encode(['token_data' => $token_data]);
-    }
-
-    public function generateRefreshToken(): \CodeIgniter\HTTP\ResponseInterface
-    {
-        try {
-            $token = $this->request->getHeaderLine('Authorization');
-
-            $key = getenv('JWT_SECRET');
-            $matches = array();
-            if (empty($token) || !preg_match('/Bearer (.+)/', $token, $matches)) {
-                throw new \Exception('Incorrect Authorization Token.', 401);
-            }
-            $token = $matches[1];
-            $token_data = JWT::decode($token, new Key($key, 'HS256'));
-            $user_data = json_decode(json_encode($token_data), true);
-
-            $iat = time(); // current timestamp value
-            $exp = $iat + 1296000;
-
-            $payload = array(
-                "app" => "LOCATIONS API v1",
-                "iat" => $iat, //Time the JWT issued at
-                "exp" => $exp, // Expiration time of token
-                "data" => $user_data['data'],
-            );
-
-            $token_generated_on = date('Y-m-d\TH:i:s.uP', $iat);
-            $token_expires_on = date('Y-m-d\TH:i:s.uP', $exp);
-
-            $new_token = JWT::encode($payload, $key, 'HS256');
-
-            return $this->respond(['status' => 'success', 'message' => 'New Token Generated Successfully.', 'data' => ['token' => $new_token, 'generated_on' => $token_generated_on, 'expires_on' => $token_expires_on]], 200);
-        } catch (\Throwable $e) {
-            // Handle the error
-            $status = $e->getCode() ?: 500;
-            $message = $e->getMessage() ?: 'An unexpected error occurred.';
-            return $this->respond(['status' => 'failure', 'message' => $message, 'data' => ''], $status);
-        }
+        return redirect()->back();
     }
 
     /**

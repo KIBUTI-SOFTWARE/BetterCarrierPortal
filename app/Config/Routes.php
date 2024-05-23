@@ -20,3 +20,7 @@ $routes->get('/resend-code', 'Home::resendCode');
 $routes->post('/register', 'Authentication::register');
 $routes->post('/resend-code', 'Authentication::resendCode');
 $routes->get('/verify/(:any)', 'Authentication::verifyAccount/$1');
+$routes->post('/login', 'Authentication::login');
+
+//Dashboard
+$routes->get('/dashboard', 'Dashboard::dashboard');
