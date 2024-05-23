@@ -24,7 +24,7 @@
             <div class="my-10 flex h-screen py-5 xl:my-0 xl:h-auto xl:py-0">
                 <div class="mx-auto my-auto w-full rounded-md bg-white px-5 py-8 shadow-md dark:bg-darkmode-600 sm:w-3/4 sm:px-8 lg:w-2/4 xl:ml-20 xl:w-auto xl:bg-transparent xl:p-0 xl:shadow-none">
                     <h2 class="intro-x text-center text-2xl font-bold xl:text-left xl:text-3xl">
-                        Password Recovery (Step 1/3)
+                        Password Recovery (Step 1/2)
                     </h2>
                     <div class="intro-x mt-2 text-center text-slate-400 xl:hidden">
                         A few more clicks to recover your password.

@@ -319,33 +319,48 @@ class Authentication extends BaseController
     public function verifyPasswordRecoveryLink($otp_code): \CodeIgniter\HTTP\ResponseInterface
     {
         if ($this->request->is('get')) {
+            $session = \Config\Services::session();
             $model = new UsersModel();
 
             $otp_data = $model->getOTP($otp_code);
 
             if (empty($otp_data)) {
-                return $this->respond(['status' => 'failure', 'message' => 'Incorrect Verification Link.', 'data' => ''], 400);
+                $message = [
+                    "message" => "Incorrect Verification Link."
+                ];
+                $session->setFlashdata("error", $message);
             } else {
                 $otp_id = $otp_data['_id'];
 
                 $user_data = $model->getUserByEmail($otp_data['otp_sent_to']);
 
                 if (empty($user_data)) {
-                    return $this->respond(['status' => 'failure', 'message' => 'User Account Not Found.', 'data' => ''], 400);
+                    $message = [
+                        "message" => "User Account Not Found."
+                    ];
+                    $session->setFlashdata("error", $message);
                 }
 
                 $update_otp = $model->deleteOTP($otp_id);
 
                 if (empty($update_otp)) {
-                    return $this->respond(["status" => "failure", "message" => "Couldn't Verify Account, Please Try Again.", "data" => ""], 400);
+                    $message = [
+                        "message" => "Couldn't Verify Account, Please Try Again."
+                    ];
+                    $session->setFlashdata("error", $message);
                 } else {
                     unset($user_data['user_password']);
-                    return $this->respond(["status" => "success", "message" => "Account Verified Successfully.", "data" => $user_data], 200);
+                    $message = [
+                        "message" => "Account Verified Successfully."
+                    ];
+                    $session->removeTempdata("form_data");
+                    $session->setTempdata("form_data", $user_data, 300000);
+                    $session->setFlashdata("success", $message);
+                    return redirect()->to("forgot-password-3");
                 }
             }
         }
-        return $this->respond(['status' => 'failure', 'message' => 'The Requested URL could not be Found.', 'data' => ''], 404);
-
+        return redirect()->to("forgot-password-1");
     }
 
     public function verifyEmail(): \CodeIgniter\HTTP\ResponseInterface
@@ -430,9 +445,10 @@ class Authentication extends BaseController
 
     public function setNewPassword(): \CodeIgniter\HTTP\ResponseInterface
     {
-        if ($this->request->is('patch')) {
+        if ($this->request->is('post')) {
+            $session = \Config\Services::session();
             //Retrieve Submitted Data
-            $data = $this->request->getJSON(true);
+            $data = $this->request->getPost();
             $validation = \Config\Services::validation();
             helper(['form']);
 
@@ -475,10 +491,16 @@ class Authentication extends BaseController
 
                     if ($password === $confirm_password) {
                         if (empty($result)) {
-                            return $this->respond(['status' => 'failure', 'message' => 'Could not Find User with Email or Phone Number.', 'data' => $data], 400);
+                            $message = [
+                                "message" => "Could not Find User with Email or Phone Number."
+                            ];
+                            $session->setFlashdata("error", $message);
 
                         } else if ($result['user_deleted_flag'] === true) {
-                            return $this->respond(['status' => 'failure', 'message' => 'Account Not Found.', 'data' => $data], 400);
+                            $message = [
+                                "message" => "Account Not Found."
+                            ];
+                            $session->setFlashdata("error", $message);
                         } else if ($result['user_account_activated'] === true) {
                             $newPassword = [
                                 'user_password' => password_hash($password, PASSWORD_DEFAULT),
@@ -487,28 +509,50 @@ class Authentication extends BaseController
                             $result = $userModel->updateUser($newPassword, $user_id);
 
                             if (empty($result)) {
-                                return $this->respond(['status' => 'failure', 'message' => 'Could not Update User Password, Please Try Again.', 'data' => $data], 400);
+                                $message = [
+                                    "message" => "Could not Update User Password, Please Try Again."
+                                ];
+                                $session->setFlashdata("error", $message);
                             } else {
-                                return $this->respond(['status' => 'failure', 'message' => 'User Password Updated Successfully.', 'data' => $data], 200);
+                                $message = [
+                                    "message" => "User Password Updated Successfully."
+                                ];
+                                $session->setFlashdata("success", $message);
+                                $session->removeTempdata("form_data");
+                                return redirect()->to("login");
                             }
                         } else {
-                            return $this->respond(['status' => 'failure', 'message' => 'Your Account is Disabled.', 'data' => $data], 400);
+                            $message = [
+                                "message" => "Your Account is Disabled."
+                            ];
+                            $session->setFlashdata("error", $message);
                         }
                     } else {
-                        return $this->respond(['status' => 'failure', 'message' => 'New and Confirm Password Values must be the same.', 'data' => $data], 400);
+                        $message = [
+                            "message" => "New and Confirm Password Values must be the same."
+                        ];
+                        $session->setFlashdata("error", $message);
                     }
 
                 } else {
-                    return $this->respond(['status' => 'failure', 'message' => ($validation->getErrors()), 'data' => $data], 400);
+                    $_SESSION['validationErrors'] = $validation->getErrors();
+                    $message = [
+                        "message" => $validation->getErrors()
+                    ];
+                    $session->setFlashdata("validationErrors", $message);
                 }
 
             } else {
-
-                return $this->respond(['status' => 'failure', 'message' => 'Invalid Body.', 'data' => ''], 400);
+                $message = [
+                    "message" => "Invalid Form Data."
+                ];
+                $session->setFlashdata("error", $message);
             }
 
+            $session->setTempdata('form_data', $data, 30000);
         }
-        return $this->respond(['status' => 'failure', 'message' => 'The Requested URL could not be Found.', 'data' => ''], 404);
+
+        return redirect()->back();
 
     }
 

@@ -27,7 +27,7 @@ $routes->get('/logout', 'Authentication::logout');
 $routes->post('/password-recovery-1', 'Authentication::verifyEmail');
 $routes->get('/verify-link/(:any)', 'Authentication::verifyPasswordRecoveryLink/$1');
 $routes->post('/forgot-password-2', 'Authentication::forgot_password_2');
-$routes->post('/forgot-password-3', 'Authentication::forgot_password_3');
+$routes->post('/password-recovery-3', 'Authentication::setNewPassword');
 
 //Dashboard
 $routes->get('/dashboard', 'Dashboard::dashboard');
