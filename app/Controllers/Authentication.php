@@ -220,7 +220,13 @@ class Authentication extends BaseController
                         ];
                         $session->setTempdata('form_data', $data, 3000000);
                         $session->setFlashdata("success", $message);
-                        return redirect()->to("resend-code");
+                    } else {
+                        $message = [
+                            "message" => "A User with the provided Email could not be found."
+                        ];
+                        $session->removeTempdata('form_data');
+                        $session->setFlashdata("error", $message);
+                        return redirect()->to("login");
                     }
 
                 } else {
