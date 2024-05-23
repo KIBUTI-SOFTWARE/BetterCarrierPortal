@@ -145,15 +145,15 @@ class Authentication extends BaseController
                                 'to' => $user_email,
                                 'subject' => $subject,
                                 'message' => $message,
-                                'retries' => 3
+                                'retries' => 0
                             ];
 
                             // Add the email job to the Redis queue
                             $redisQueue = new RedisQueueLibrary();
                             $redisQueue->push($queue, $job);
 
-                            $mongoQueue = new MongoQueueLibrary();
-                            $mongoQueue->push($job);
+//                            $mongoQueue = new MongoQueueLibrary();
+//                            $mongoQueue->push($job);
 
                             $OTP_data = [
                                 'otp_code' => $otp_code,
