@@ -590,6 +590,15 @@ class Authentication extends BaseController
         return redirect()->back();
     }
 
+    public function logout(): \CodeIgniter\HTTP\RedirectResponse
+    {
+        $session = \Config\Services::session();
+        $session->remove('user');
+        session_destroy();
+
+        return redirect('login');
+    }
+
     /**
      * @param mixed $user_firstname
      * @param mixed $user_email
