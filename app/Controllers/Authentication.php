@@ -253,12 +253,16 @@ class Authentication extends BaseController
     public function verifyAccount($otp_code): \CodeIgniter\HTTP\ResponseInterface
     {
         if ($this->request->is('get')) {
+            $session = \Config\Services::session();
             $model = new UsersModel();
 
             $otp_data = $model->getOTP($otp_code);
 
             if (empty($otp_data)) {
-                return $this->respond(['status' => 'failure', 'message' => 'Incorrect Verification Link.', 'data' => ''], 400);
+                $message = [
+                    "message" => "Incorrect Verification Link."
+                ];
+                $session->setFlashdata("error", $message);
             } else {
                 $otp_id = $otp_data['_id'];
 
@@ -269,22 +273,30 @@ class Authentication extends BaseController
                 $user_data = $model->getUserByEmail($otp_data['otp_sent_to']);
 
                 if (empty($user_data)) {
-                    return $this->respond(['status' => 'failure', 'message' => 'User Account Not Found.', 'data' => ''], 400);
+                    $message = [
+                        "message" => "User Account Not Found."
+                    ];
+                    $session->setFlashdata("error", $message);
                 }
 
                 $update_user = $model->updateUser($updateUserData, $user_data['_id']);
                 $update_otp = $model->deleteOTP($otp_id);
 
                 if (empty($update_user) || empty($update_otp)) {
-                    return $this->respond(["status" => "failure", "message" => "Couldn't Verify Account, Please Try Again.", "data" => ""], 400);
+                    $message = [
+                        "message" => "Couldn't Verify Account, Please Try Again."
+                    ];
+                    $session->setFlashdata("error", $message);
                 } else {
                     unset($user_data['user_password']);
-                    return $this->respond(["status" => "success", "message" => "Account Verified Successfully.", "data" => $user_data], 200);
+                    $message = [
+                        "message" => "Account Verified Successfully."
+                    ];
+                    $session->setFlashdata("success", $message);
                 }
             }
         }
-        return $this->respond(['status' => 'failure', 'message' => 'The Requested URL could not be Found.', 'data' => ''], 404);
-
+        return redirect()->to("login");
     }
 
     public function verifyPasswordRecoveryLink($otp_code): \CodeIgniter\HTTP\ResponseInterface
