@@ -15,7 +15,7 @@
                          alt="Midone - Tailwind Admin Dashboard Template">
                     <div class="-intro-x mt-10 text-4xl font-medium leading-tight text-white">
                         A few more clicks to <br>
-                        activate your account.
+                        verify your account.
                     </div>
                 </div>
             </div>

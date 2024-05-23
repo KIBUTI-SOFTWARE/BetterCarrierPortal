@@ -128,7 +128,8 @@ class Authentication extends BaseController
                             $session->setFlashdata("error", $message);
                             $session->setFlashdata('form_data', $data);
                         } else {
-                            $otp_sent = $this->generateAndSendOTP($user_firstname, $user_email, $model);
+                            $action = "Activate Account";
+                            $otp_sent = $this->generateAndSendOTP(ucwords($user_firstname), $user_email, $model, $action);
                             $message = [
                                 "message" => "Account Created Successfully, and a Verification Email has been Sent."
                             ];
@@ -215,10 +216,25 @@ class Authentication extends BaseController
                     $isUserExisting = $model->getUserByEmail($user_email);
 
                     if (!empty($isUserExisting)) {
-                        $otp_sent = $this->generateAndSendOTP($user_firstname, $user_email, $model);
-                        $message = [
-                            "message" => "A new Verification Email has been Sent."
-                        ];
+                        $other = $session->getTempdata("form_data");
+                        $previous_action = $other['action'] ?? null;
+                        if ($previous_action === null) {
+                            $action = "Activate Account";
+                            $message = [
+                                "message" => "A new Verification Email has been Sent."
+                            ];
+                        }  else {
+                            $action = "Password Recovery";
+                            $message = [
+                                "message" => "A new Password Recovery Email has been Sent."
+                            ];
+                            unset($isUserExisting['user_password']);
+                            $other = [
+                                "action" => 'passwordRecovery',
+                            ];
+                            $data = array_merge($data, $isUserExisting, $other);
+                        }
+                        $otp_sent = $this->generateAndSendOTP(ucwords($user_firstname), $user_email, $model, $action);
                         $session->setTempdata('form_data', $data, 3000000);
                         $session->setFlashdata("success", $message);
                     } else {
@@ -336,8 +352,9 @@ class Authentication extends BaseController
     {
         if ($this->request->is('post')) {
             //Retrieve Submitted Data
-            $data = $this->request->getJSON(true);
+            $data = $this->request->getPost();
             $validation = \Config\Services::validation();
+            $session = \Config\Services::session();
             helper(['form']);
 
             if (!is_null($data)) {
@@ -360,63 +377,55 @@ class Authentication extends BaseController
                     $user_data = $model->searchUser($username);
 
                     if (empty($user_data)) {
-                        return $this->respond(['status' => 'failure', 'message' => 'Could not Find User with the username.', 'data' => $data], 400);
-
+                        $message = [
+                            "message" => "Could not Find User with the username."
+                        ];
+                        $session->setFlashdata("error", $message);
                     } else if ($user_data['user_deleted_flag'] === true) {
-                        return $this->respond(['status' => 'failure', 'message' => 'Account Not Found.', 'data' => $data], 400);
+                        $message = [
+                            "message" => "Account Not Found."
+                        ];
+                        $session->setFlashdata("error", $message);
                     } else {
                         if ($user_data['user_account_activated'] === true) {
-
-                            $otp_code = CustomFunctions::generateValidationLink();
+                            $action = "Password Recovery";
                             $sendTO = $user_data['user_email'];
-                            $subject = "Password Recovery.";
-
-                            $html_template = file_get_contents(__DIR__ . '/Templates/password_recovery.html');
-                            $verification_url = base_url("api/v1/auth/verify/$otp_code");
-
-                            $html_content = str_replace('{{username}}', $user_data['user_firstname'], $html_template);
-                            $html_content = str_replace('{{base_url}}', base_url(), $html_content);
-                            $html_content = str_replace('{{otp}}', $verification_url, $html_content);
-
-                            $message = $html_content;
-
-                            $OTPSendingResults = CustomFunctions::sendVerificationEmail($subject, $message, $sendTO);
-
-                            if (!empty($OTPSendingResults) && $OTPSendingResults === 'SUCCESS') {
-                                $OTP_data = [
-                                    'otp_code' => $otp_code,
-                                    'otp_sent_to' => $sendTO,
-                                    'otp_sent_on' => CustomFunctions::getDate(),
-                                    'otp_expires_on' => "",
-                                    'otp_status' => false
-                                ];
-
-                                $sent_OTP = $model->saveSentOTP($OTP_data);
-
-                                if (empty($sent_OTP)) {
-                                    return $this->respond(['status' => 'failure', 'message' => 'An Error Occurred while sending the email verification code.', 'data' => $data], 500);
-                                } else {
-
-                                    return $this->respond(['status' => 'success', 'message' => 'An email with the password recovery link has been sent to you.', 'data' => $data], 200);
-                                }
-                            } else {
-                                return $this->respond(['status' => 'failure', 'message' => 'An Error Occurred while sending the email verification code.', 'data' => $data], 400);
-                            }
-
+                            $user_firstname = ucwords($user_data['user_firstname'] ?? "");
+                            $sent_OTP = $this->generateAndSendOTP($user_firstname, $sendTO, $model, $action);
+                            unset($user_data['user_password']);
+                            $other = [
+                                "action" => 'passwordRecovery',
+                            ];
+                            $data = array_merge($data, $user_data, $other);
+                            $session->setTempdata("form_data", $data, 3000000);
+                            $message = [
+                                "message" => "An email with the password recovery link has been sent to you."
+                            ];
+                            $session->setFlashdata("success", $message);
+                            return redirect()->to("resend-code");
                         }
                     }
-
-                    $_SESSION['error'] = "Your Account is Disabled.";
+                    $message = [
+                        "message" => "Your Account id Disabled."
+                    ];
+                    $session->setFlashdata("error", $message);
                 } else {
-                    return $this->respond(['status' => 'failure', 'message' => ($validation->getErrors()), 'data' => $data], 400);
+                    $_SESSION['validationErrors'] = $validation->getErrors();
+                    $message = [
+                        "message" => $validation->getErrors()
+                    ];
+                    $session->setFlashdata("validationErrors", $message);
                 }
 
             } else {
 
-                return $this->respond(['status' => 'failure', 'message' => 'Invalid Body.', 'data' => ''], 400);
+                $message = [
+                    "message" => "Incorrect Form Fields."
+                ];
+                $session->setFlashdata("error", $message);
             }
         }
-        return $this->respond(['status' => 'failure', 'message' => 'The Requested URL could not be Found.', 'data' => ''], 404);
+        return redirect()->back();
     }
 
     public function setNewPassword(): \CodeIgniter\HTTP\ResponseInterface
@@ -603,36 +612,44 @@ class Authentication extends BaseController
      * @param mixed $user_firstname
      * @param mixed $user_email
      * @param UsersModel $model
-     * @return array|false|string|string[]
+     * @param string $action
+     * @return bool
      */
-    public function generateAndSendOTP(mixed $user_firstname, mixed $user_email, UsersModel $model): string|array|false
+    private function generateAndSendOTP(string $user_firstname, string $user_email, UsersModel $model, string $action): bool
     {
+        $subject = $action === "Activate Account" ? "Account Activation Code." : "Password Recovery.";
+        $templatePath = $action === "Activate Account" ? '/Templates/account_activation.html' : '/Templates/password_recovery.html';
+
         $otp_code = CustomFunctions::generateValidationLink();
-        $subject = "Account Activation Code.";
+        $verification_url = base_url(($action === "Activate Account" ? "verify" : "verify-link") . "/$otp_code");
+        try {
+            $html_template = file_get_contents(__DIR__ . $templatePath);
+        } catch (Exception $e) {
+            log_message('error', 'Error reading email template: ' . $e->getMessage());
+            return false;
+        }
 
-        $html_template = file_get_contents(__DIR__ . '/Templates/account_activation.html');
-        $verification_url = base_url("verify/$otp_code");
-
-        $html_content = str_replace('{{username}}', $user_firstname, $html_template);
-        $html_content = str_replace('{{base_url}}', base_url(), $html_content);
-        $html_content = str_replace('{{otp}}', $verification_url, $html_content);
-
-        $message = $html_content;
-        $queue = "email_queues";
+        $html_content = str_replace(['{{username}}', '{{base_url}}', '{{otp}}'], [$user_firstname, base_url(), $verification_url], $html_template);
 
         $job = [
             'to' => $user_email,
             'subject' => $subject,
-            'message' => $message,
+            'message' => $html_content,
             'retries' => 0
         ];
 
-        // Add the email job to the Redis queue
         $redisQueue = new RedisQueueLibrary();
-        $redisQueue->push($queue, $job);
 
-//                            $mongoQueue = new MongoQueueLibrary();
-//                            $mongoQueue->push($job);
+        try {
+            $queue = "email_queues";
+            $redisQueue->push($queue, $job);
+        } catch (Exception $e) {
+            log_message('error', 'Error pushing job to Redis: ' . $e->getMessage());
+
+            // Fallback to MongoDB
+            $mongoQueue = new MongoQueueLibrary();
+            $mongoQueue->push($job);
+        }
 
         $OTP_data = [
             'otp_code' => $otp_code,
@@ -643,4 +660,5 @@ class Authentication extends BaseController
 
         return $model->saveSentOTP($OTP_data);
     }
+
 }
