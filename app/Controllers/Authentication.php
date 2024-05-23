@@ -95,7 +95,6 @@ class Authentication extends BaseController
                     $user_password = password_hash($data['user_password'], PASSWORD_DEFAULT);
                     $user_level = $data['user_level'] ?? "3";
 
-                    $conn = db_connect();
                     $model = new UsersModel();
 
                     $insertionData = [
@@ -128,41 +127,7 @@ class Authentication extends BaseController
                             $session->setFlashdata("error", $message);
                             $session->setFlashdata('form_data', $data);
                         } else {
-                            $otp_code = CustomFunctions::generateValidationLink();
-                            $subject = "Account Activation Code.";
-
-                            $html_template = file_get_contents(__DIR__ . '/Templates/account_activation.html');
-                            $verification_url = base_url("verify/$otp_code");
-
-                            $html_content = str_replace('{{username}}', $user_firstname, $html_template);
-                            $html_content = str_replace('{{base_url}}', base_url(), $html_content);
-                            $html_content = str_replace('{{otp}}', $verification_url, $html_content);
-
-                            $message = $html_content;
-                            $queue = "email_queues";
-
-                            $job = [
-                                'to' => $user_email,
-                                'subject' => $subject,
-                                'message' => $message,
-                                'retries' => 0
-                            ];
-
-                            // Add the email job to the Redis queue
-                            $redisQueue = new RedisQueueLibrary();
-                            $redisQueue->push($queue, $job);
-
-//                            $mongoQueue = new MongoQueueLibrary();
-//                            $mongoQueue->push($job);
-
-                            $OTP_data = [
-                                'otp_code' => $otp_code,
-                                'otp_sent_to' => $user_email,
-                                'otp_sent_on' => date('Y-m-d H:i:s'),
-                                'otp_status' => false,
-                            ];
-
-                            $sent_OTP = $model->saveSentOTP($OTP_data);
+                            $otp_sent = $this->generateAndSendOTP($user_firstname, $user_email, $model);
                             $message = [
                                 "message" => "Account Created Successfully, and a Verification Email has been Sent."
                             ];
@@ -193,6 +158,69 @@ class Authentication extends BaseController
                             $session->setFlashdata("error", $message);
                             $session->setFlashdata('form_data', $data);
                         }
+                    }
+
+                } else {
+                    $_SESSION['validationErrors'] = $validation->getErrors();
+                    $message = [
+                        "message" => $validation->getErrors()
+                    ];
+                    $session->setFlashdata("validationErrors", $message);
+                    $session->setFlashdata('form_data', $data);
+                }
+
+            } else {
+                $message = [
+                    "message" => "Invalid Form Data."
+                ];
+                $session->setFlashdata("error", $message);
+                $session->setFlashdata('form_data', $data);
+            }
+
+        }
+        return redirect()->back();
+    }
+
+    public function resendCode(): \CodeIgniter\HTTP\ResponseInterface
+    {
+        if ($this->request->is('post')) {
+            //Retrieve Submitted Data
+            $data = $this->request->getPost();
+            $validation = \Config\Services::validation();
+            $session = \Config\Services::session();
+            helper(['form']);
+
+            if (!is_null($data)) {
+
+                $validation->setRules([
+
+                    'user_email' => [
+                        'rules' => 'required|valid_email',
+                        'label' => "User Email",
+                        'errors' => [
+                            'required' => "User Email Field Cannot be Empty.",
+                            'valid_email' => "User Email Field must contain a valid Email.",
+                        ]
+                    ],
+                ]);
+
+                if ($validation->run($data)) {
+
+                    $user_email = $data['user_email'];
+                    $user_firstname = $data['user_firstname'];
+
+                    $model = new UsersModel();
+
+                    $isUserExisting = $model->getUserByEmail($user_email);
+
+                    if (!empty($isUserExisting)) {
+                        $otp_sent = $this->generateAndSendOTP($user_firstname, $user_email, $model);
+                        $message = [
+                            "message" => "A new Verification Email has been Sent."
+                        ];
+                        $session->setTempdata('form_data', $data, 3000000);
+                        $session->setFlashdata("success", $message);
+                        return redirect()->to("resend-code");
                     }
 
                 } else {
@@ -593,5 +621,50 @@ class Authentication extends BaseController
             $message = $e->getMessage() ?: 'An unexpected error occurred.';
             return $this->respond(['status' => 'failure', 'message' => $message, 'data' => ''], $status);
         }
+    }
+
+    /**
+     * @param mixed $user_firstname
+     * @param mixed $user_email
+     * @param UsersModel $model
+     * @return array|false|string|string[]
+     */
+    public function generateAndSendOTP(mixed $user_firstname, mixed $user_email, UsersModel $model): string|array|false
+    {
+        $otp_code = CustomFunctions::generateValidationLink();
+        $subject = "Account Activation Code.";
+
+        $html_template = file_get_contents(__DIR__ . '/Templates/account_activation.html');
+        $verification_url = base_url("verify/$otp_code");
+
+        $html_content = str_replace('{{username}}', $user_firstname, $html_template);
+        $html_content = str_replace('{{base_url}}', base_url(), $html_content);
+        $html_content = str_replace('{{otp}}', $verification_url, $html_content);
+
+        $message = $html_content;
+        $queue = "email_queues";
+
+        $job = [
+            'to' => $user_email,
+            'subject' => $subject,
+            'message' => $message,
+            'retries' => 0
+        ];
+
+        // Add the email job to the Redis queue
+        $redisQueue = new RedisQueueLibrary();
+        $redisQueue->push($queue, $job);
+
+//                            $mongoQueue = new MongoQueueLibrary();
+//                            $mongoQueue->push($job);
+
+        $OTP_data = [
+            'otp_code' => $otp_code,
+            'otp_sent_to' => $user_email,
+            'otp_sent_on' => date('Y-m-d H:i:s'),
+            'otp_status' => false,
+        ];
+
+        return $model->saveSentOTP($OTP_data);
     }
 }

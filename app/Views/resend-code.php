@@ -35,6 +35,11 @@
                     </div>
                     <form name="resend-code" action="/resend-code" method="post" enctype="multipart/form-data">
                         <div class="intro-x mt-8">
+                            <label for="user-firstname"></label>
+                            <input data-tw-merge="" type="hidden" id="user-firstname" name="user_firstname" required
+                                   placeholder="First Name"
+                                   value="<?= $form_data['user_firstname'] ?? '' ?>"
+                                   class="disabled:bg-slate-100 disabled:cursor-not-allowed dark:disabled:bg-darkmode-800/50 dark:disabled:border-transparent [&[readonly]]:bg-slate-100 [&[readonly]]:cursor-not-allowed [&[readonly]]:dark:bg-darkmode-800/50 [&[readonly]]:dark:border-transparent transition duration-200 ease-in-out w-full text-sm border-slate-200 shadow-sm rounded-md placeholder:text-slate-400/90 focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus:border-primary focus:border-opacity-40 dark:bg-darkmode-800 dark:border-transparent dark:focus:ring-slate-700 dark:focus:ring-opacity-50 dark:placeholder:text-slate-500/80 group-[.form-inline]:flex-1 group-[.input-group]:rounded-none group-[.input-group]:[&:not(:first-child)]:border-l-transparent group-[.input-group]:first:rounded-l group-[.input-group]:last:rounded-r group-[.input-group]:z-10 intro-x block min-w-full px-4 py-3 xl:min-w-[350px]">
                             <label for="user_email"></label>
                             <input data-tw-merge="" id="user_email" name="user_email" type="hidden" required
                                    value="<?=$form_data["user_email"] ?? ""?>"

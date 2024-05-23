@@ -18,3 +18,4 @@ $routes->get('/resend-code', 'Home::resendCode');
 
 //User Authentication
 $routes->post('/register', 'Authentication::register');
+$routes->post('/resend-code', 'Authentication::resendCode');
