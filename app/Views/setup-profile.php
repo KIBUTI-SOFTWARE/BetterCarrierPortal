@@ -1,3 +1,9 @@
+<?php
+$session = session();
+$user = $session->get("user");
+$user_profile = json_decode($user["user_profile"], true);
+$user_level = $user["user_level"];
+?>
 <?= $this->extend('Layouts/main_dashboard.php') ?>
 <?= $this->section('content') ?>
 <!-- BEGIN: Wizard Layout -->
@@ -10,39 +16,68 @@
                 1
             </button>
             <div class="step-label ml-3 text-base font-medium lg:mx-auto lg:mt-3 lg:w-32">
-                Create New Account
+                Personal Information
             </div>
         </div>
-        <!-- Step 2 -->
-        <div class="intro-x z-10 mt-5 flex flex-1 items-center lg:mt-0 lg:block lg:text-center">
-            <button data-tw-merge=""
-                    class="step-indicator transition duration-200 border shadow-sm inline-flex items-center justify-center py-2 px-3 font-medium cursor-pointer focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus-visible:outline-none dark:focus:ring-slate-700 dark:focus:ring-opacity-50 h-10 w-10 rounded-full">
-                2
-            </button>
-            <div class="step-label ml-3 text-base text-slate-600 dark:text-slate-400 lg:mx-auto lg:mt-3 lg:w-32">
-                Setup Your Profile
+        <?php
+        if ($user_level === "3") {
+            ?>
+            <!-- Step 2 -->
+            <div class="intro-x z-10 mt-5 flex flex-1 items-center lg:mt-0 lg:block lg:text-center">
+                <button data-tw-merge=""
+                        class="step-indicator transition duration-200 border shadow-sm inline-flex items-center justify-center py-2 px-3 font-medium cursor-pointer focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus-visible:outline-none dark:focus:ring-slate-700 dark:focus:ring-opacity-50 h-10 w-10 rounded-full">
+                    2
+                </button>
+                <div class="step-label ml-3 text-base text-slate-600 dark:text-slate-400 lg:mx-auto lg:mt-3 lg:w-32">
+                    Professional Information
+                </div>
             </div>
-        </div>
-        <!-- Step 3 -->
-        <div class="intro-x z-10 mt-5 flex flex-1 items-center lg:mt-0 lg:block lg:text-center">
-            <button data-tw-merge=""
-                    class="step-indicator transition duration-200 border shadow-sm inline-flex items-center justify-center py-2 px-3 font-medium cursor-pointer focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus-visible:outline-none dark:focus:ring-slate-700 dark:focus:ring-opacity-50 h-10 w-10 rounded-full">
-                3
-            </button>
-            <div class="step-label ml-3 text-base text-slate-600 dark:text-slate-400 lg:mx-auto lg:mt-3 lg:w-32">
-                Setup Your Business Details
+            <!-- Step 3 -->
+            <div class="intro-x z-10 mt-5 flex flex-1 items-center lg:mt-0 lg:block lg:text-center">
+                <button data-tw-merge=""
+                        class="step-indicator transition duration-200 border shadow-sm inline-flex items-center justify-center py-2 px-3 font-medium cursor-pointer focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus-visible:outline-none dark:focus:ring-slate-700 dark:focus:ring-opacity-50 h-10 w-10 rounded-full">
+                    3
+                </button>
+                <div class="step-label ml-3 text-base text-slate-600 dark:text-slate-400 lg:mx-auto lg:mt-3 lg:w-32">
+                    Company Information
+                </div>
             </div>
-        </div>
-        <!-- Step 3 -->
-        <div class="intro-x z-10 mt-5 flex flex-1 items-center lg:mt-0 lg:block lg:text-center">
-            <button data-tw-merge=""
-                    class="step-indicator transition duration-200 border shadow-sm inline-flex items-center justify-center py-2 px-3 font-medium cursor-pointer focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus-visible:outline-none dark:focus:ring-slate-700 dark:focus:ring-opacity-50 h-10 w-10 rounded-full">
-                3
-            </button>
-            <div class="step-label ml-3 text-base text-slate-600 dark:text-slate-400 lg:mx-auto lg:mt-3 lg:w-32">
-                Finalize Your Purchase
+            <!-- Step 4 -->
+            <div class="intro-x z-10 mt-5 flex flex-1 items-center lg:mt-0 lg:block lg:text-center">
+                <button data-tw-merge=""
+                        class="step-indicator transition duration-200 border shadow-sm inline-flex items-center justify-center py-2 px-3 font-medium cursor-pointer focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus-visible:outline-none dark:focus:ring-slate-700 dark:focus:ring-opacity-50 h-10 w-10 rounded-full">
+                    4
+                </button>
+                <div class="step-label ml-3 text-base text-slate-600 dark:text-slate-400 lg:mx-auto lg:mt-3 lg:w-32">
+                    Finalizing
+                </div>
             </div>
-        </div>
+            <?php
+        } else if ($user_level === "4") {
+            ?>
+            <!-- Step 2 -->
+            <div class="intro-x z-10 mt-5 flex flex-1 items-center lg:mt-0 lg:block lg:text-center">
+                <button data-tw-merge=""
+                        class="step-indicator transition duration-200 border shadow-sm inline-flex items-center justify-center py-2 px-3 font-medium cursor-pointer focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus-visible:outline-none dark:focus:ring-slate-700 dark:focus:ring-opacity-50 h-10 w-10 rounded-full">
+                    2
+                </button>
+                <div class="step-label ml-3 text-base text-slate-600 dark:text-slate-400 lg:mx-auto lg:mt-3 lg:w-32">
+                    Professional Information
+                </div>
+            </div>
+            <!-- Step 3 -->
+            <div class="intro-x z-10 mt-5 flex flex-1 items-center lg:mt-0 lg:block lg:text-center">
+                <button data-tw-merge=""
+                        class="step-indicator transition duration-200 border shadow-sm inline-flex items-center justify-center py-2 px-3 font-medium cursor-pointer focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus-visible:outline-none dark:focus:ring-slate-700 dark:focus:ring-opacity-50 h-10 w-10 rounded-full">
+                    3
+                </button>
+                <div class="step-label ml-3 text-base text-slate-600 dark:text-slate-400 lg:mx-auto lg:mt-3 lg:w-32">
+                    Finalizing
+                </div>
+            </div>
+            <?php
+        }
+        ?>
     </div>
     <!-- Form Parts -->
     <div class="mt-10 border-t border-slate-200/60 px-5 pt-10 dark:border-darkmode-400 sm:px-20">
@@ -56,7 +91,7 @@
                                class="inline-block mb-2 group-[.form-inline]:mb-2 group-[.form-inline]:sm:mb-0 group-[.form-inline]:sm:mr-5 group-[.form-inline]:sm:text-right">
                             From
                         </label>
-                        <input data-tw-merge="" id="input-wizard-1" type="text" placeholder="example@gmail.com"
+                        <input data-tw-merge="" required id="input-wizard-1" type="email" placeholder="example@gmail.com"
                                class="form-input transition duration-200 ease-in-out w-full text-sm border-slate-200 shadow-sm rounded-md placeholder:text-slate-400/90 focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus:border-primary focus:border-opacity-40 dark:bg-darkmode-800 dark:border-transparent dark:focus:ring-slate-700 dark:focus:ring-opacity-50 dark:placeholder:text-slate-500/80 group-[.form-inline]:flex-1 group-[.input-group]:rounded-none group-[.input-group]:[&:not(:first-child)]:border-l-transparent group-[.input-group]:first:rounded-l group-[.input-group]:last:rounded-r group-[.input-group]:z-10">
                     </div>
                     <div class="intro-y col-span-12 sm:col-span-6">
