@@ -1,3 +1,10 @@
+<?php
+$session = session();
+$user = $session->get("user");
+$user_profile = json_decode($user["user_profile"], true);
+$user_level = $user["user_level"];
+?>
+
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" class="opacity-0" lang="en">
 <!-- BEGIN: Head -->
@@ -54,7 +61,12 @@
             <ul class="py-2">
                 <!-- BEGIN: First Child -->
                 <li>
-                    <a class="menu menu--active" href="/dashboard">
+                    <a class="menu
+                    <?php if ($_SERVER["REQUEST_URI"] === "dashboard" || str_contains($_SERVER["REQUEST_URI"], "dashboard")) {
+                        ?>menu--active<?php
+                    }
+                    ?>"
+                       href="/dashboard">
                         <div class="menu__icon">
                             <i data-tw-merge="" data-lucide="home" class="stroke-1.5 w-5 h-5"></i>
                         </div>
@@ -63,109 +75,153 @@
                         </div>
                     </a>
                 </li>
-                <li>
-                    <a class="menu" href="javascript:;">
-                        <div class="menu__icon">
-                            <i data-tw-merge="" data-lucide="trello" class="stroke-1.5 w-5 h-5"></i>
-                        </div>
-                        <div class="menu__title">
-                            Job Posts
-                            <div class="menu__sub-icon ">
-                                <i data-tw-merge="" data-lucide="chevron-down" class="stroke-1.5 w-5 h-5"></i>
+                <?php
+                if ($user_level < "3" && !empty($user_profile)) {
+                    ?>
+                    <li>
+                        <a class="menu
+                    <?php if ($_SERVER["REQUEST_URI"] === "employment-posts" || $_SERVER["REQUEST_URI"] === "internship-posts" || str_contains($_SERVER["REQUEST_URI"], "post")) {
+                            ?>menu--active<?php
+                        }
+                        ?>" href="javascript:;">
+                            <div class="menu__icon">
+                                <i data-tw-merge="" data-lucide="trello" class="stroke-1.5 w-5 h-5"></i>
                             </div>
-                        </div>
-                    </a>
-                    <ul class="">
-                        <li>
-                            <a class="menu" href="/employment-posts">
-                                <div class="menu__icon">
-                                    <i data-tw-merge="" data-lucide="activity" class="stroke-1.5 w-5 h-5"></i>
+                            <div class="menu__title">
+                                Job Posts
+                                <div class="menu__sub-icon ">
+                                    <i data-tw-merge="" data-lucide="chevron-down" class="stroke-1.5 w-5 h-5"></i>
                                 </div>
-                                <div class="menu__title">
-                                    Employment Posts
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="menu" href="/internship-posts">
-                                <div class="menu__icon">
-                                    <i data-tw-merge="" data-lucide="activity" class="stroke-1.5 w-5 h-5"></i>
-                                </div>
-                                <div class="menu__title">
-                                    Internship Posts
-                                </div>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a class="menu" href="javascript:;">
-                        <div class="menu__icon">
-                            <i data-tw-merge="" data-lucide="users" class="stroke-1.5 w-5 h-5"></i>
-                        </div>
-                        <div class="menu__title">
-                            Users
-                            <div class="menu__sub-icon ">
-                                <i data-tw-merge="" data-lucide="chevron-down" class="stroke-1.5 w-5 h-5"></i>
                             </div>
-                        </div>
-                    </a>
-                    <ul class="">
+                        </a>
+                        <ul class="">
+                            <li>
+                                <a class="menu" href="/employment-posts">
+                                    <div class="menu__icon">
+                                        <i data-tw-merge="" data-lucide="activity" class="stroke-1.5 w-5 h-5"></i>
+                                    </div>
+                                    <div class="menu__title">
+                                        Employment Posts
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="menu" href="/internship-posts">
+                                    <div class="menu__icon">
+                                        <i data-tw-merge="" data-lucide="activity" class="stroke-1.5 w-5 h-5"></i>
+                                    </div>
+                                    <div class="menu__title">
+                                        Internship Posts
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <?php
+                    if ($user_level < "3") {
+                        ?>
                         <li>
-                            <a class="menu" href="/view-employees">
+                            <a class="menu
+                        <?php if ($_SERVER["REQUEST_URI"] === "view-users-employees" || $_SERVER["REQUEST_URI"] === "view-users-job-seekers" || $_SERVER["REQUEST_URI"] === "view-users" || str_contains($_SERVER["REQUEST_URI"], "user")) {
+                                ?>menu--active<?php
+                            } ?>" href="javascript:;">
                                 <div class="menu__icon">
-                                    <i data-tw-merge="" data-lucide="activity" class="stroke-1.5 w-5 h-5"></i>
+                                    <i data-tw-merge="" data-lucide="users" class="stroke-1.5 w-5 h-5"></i>
                                 </div>
                                 <div class="menu__title">
-                                    Employees
+                                    Users
+                                    <div class="menu__sub-icon ">
+                                        <i data-tw-merge="" data-lucide="chevron-down" class="stroke-1.5 w-5 h-5"></i>
+                                    </div>
                                 </div>
                             </a>
+                            <ul class="">
+                                <li>
+                                    <a class="menu" href="/view-employees">
+                                        <div class="menu__icon">
+                                            <i data-tw-merge="" data-lucide="activity" class="stroke-1.5 w-5 h-5"></i>
+                                        </div>
+                                        <div class="menu__title">
+                                            Employees
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="menu" href="/view-job-seekers">
+                                        <div class="menu__icon">
+                                            <i data-tw-merge="" data-lucide="activity" class="stroke-1.5 w-5 h-5"></i>
+                                        </div>
+                                        <div class="menu__title">
+                                            Job Seekers
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="menu" href="/view-users">
+                                        <div class="menu__icon">
+                                            <i data-tw-merge="" data-lucide="activity" class="stroke-1.5 w-5 h-5"></i>
+                                        </div>
+                                        <div class="menu__title">
+                                            Others
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
-                        <li>
-                            <a class="menu" href="/view-job-seekers">
-                                <div class="menu__icon">
-                                    <i data-tw-merge="" data-lucide="activity" class="stroke-1.5 w-5 h-5"></i>
-                                </div>
-                                <div class="menu__title">
-                                    Job Seekers
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="menu" href="/view-users">
-                                <div class="menu__icon">
-                                    <i data-tw-merge="" data-lucide="activity" class="stroke-1.5 w-5 h-5"></i>
-                                </div>
-                                <div class="menu__title">
-                                    Others
-                                </div>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a class="menu" href="/feedback">
-                        <div class="menu__icon">
-                            <i data-tw-merge="" data-lucide="message-square" class="stroke-1.5 w-5 h-5"></i>
-                        </div>
-                        <div class="menu__title">
-                            Feedback
-                        </div>
-                    </a>
-                </li>
-                <li>
-                    <a class="menu" href="/view-applications">
-                        <div class="menu__icon">
-                            <i data-tw-merge="" data-lucide="file-text" class="stroke-1.5 w-5 h-5"></i>
-                        </div>
-                        <div class="menu__title">
-                            Applications
-                        </div>
-                    </a>
-                </li>
+                        <?php
+                    }
+                    ?>
+                    <li>
+                        <a class="menu
+                    <?php if ($_SERVER["REQUEST_URI"] === "feedback" || str_contains($_SERVER["REQUEST_URI"], "feedback")) {
+                            ?>menu--active<?php
+                        } ?>" href="/feedback">
+                            <div class="menu__icon">
+                                <i data-tw-merge="" data-lucide="message-square" class="stroke-1.5 w-5 h-5"></i>
+                            </div>
+                            <div class="menu__title">
+                                Feedback
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="menu
+                    <?php if ($_SERVER["REQUEST_URI"] === "view-applications" || str_contains($_SERVER["REQUEST_URI"], "application")) {
+                            ?>menu--active<?php
+                        } ?>" href="/view-applications">
+                            <div class="menu__icon">
+                                <i data-tw-merge="" data-lucide="file-text" class="stroke-1.5 w-5 h-5"></i>
+                            </div>
+                            <div class="menu__title">
+                                Applications
+                            </div>
+                        </a>
+                    </li>
+                    <?php
+                } else {
+                    ?>
+                    <li>
+                        <a class="menu
+                    <?php if ($_SERVER["REQUEST_URI"] === "profile-setup") {
+                            ?>menu--active<?php
+                        } ?>" href="/profile-setup">
+                            <div class="menu__icon">
+                                <i data-tw-merge="" data-lucide="user" class="stroke-1.5 w-5 h-5"></i>
+                            </div>
+                            <div class="menu__title">
+                                Profile Setup
+                            </div>
+                        </a>
+                    </li>
+                    <?php
+                }
+                ?>
                 <li class="menu__divider my-6"></li>
                 <li>
-                    <a class="menu" href="javascript:;">
+                    <a class="menu
+                    <?php if ($_SERVER["REQUEST_URI"] === "view-profile" || $_SERVER["REQUEST_URI"] === "change-password" || str_contains($_SERVER["REQUEST_URI"], "profile")) {
+                        ?>menu--active<?php
+                    } ?>" href="javascript:;">
                         <div class="menu__icon">
                             <i data-tw-merge="" data-lucide="user" class="stroke-1.5 w-5 h-5"></i>
                         </div>
@@ -226,7 +282,10 @@
             <div class="side-nav__divider my-6"></div>
             <ul>
                 <li>
-                    <a href="/dashboard" class="side-menu side-menu--active">
+                    <a href="/dashboard" class="side-menu
+                    <?php if ($_SERVER["REQUEST_URI"] === "dashboard" || str_contains($_SERVER["REQUEST_URI"], "dashboard")) {
+                        ?>side-menu--active<?php
+                    } ?>">
                         <div class="side-menu__icon">
                             <i data-tw-merge="" data-lucide="home" class="stroke-1.5 w-5 h-5"></i>
                         </div>
@@ -235,109 +294,153 @@
                         </div>
                     </a>
                 </li>
-                <li>
-                    <a href="javascript:;" class="side-menu">
-                        <div class="side-menu__icon">
-                            <i data-tw-merge="" data-lucide="trello" class="stroke-1.5 w-5 h-5"></i>
-                        </div>
-                        <div class="side-menu__title">
-                            Job Posts
-                            <div class="side-menu__sub-icon ">
-                                <i data-tw-merge="" data-lucide="chevron-down" class="stroke-1.5 w-5 h-5"></i>
+                <?php
+                if ($user_level < "3" && !empty($user_profile)) {
+                    ?>
+                    <li>
+                        <a href="javascript:;" class="side-menu
+                    <?php if ($_SERVER["REQUEST_URI"] === "employment-posts" || $_SERVER["REQUEST_URI"] === "internship-posts" || str_contains($_SERVER["REQUEST_URI"], "post")) {
+                            ?>side-menu--active<?php
+                        }
+                        ?>">
+                            <div class="side-menu__icon">
+                                <i data-tw-merge="" data-lucide="trello" class="stroke-1.5 w-5 h-5"></i>
                             </div>
-                        </div>
-                    </a>
-                    <ul class="">
-                        <li>
-                            <a href="/employment-posts" class="side-menu">
-                                <div class="side-menu__icon">
-                                    <i data-tw-merge="" data-lucide="activity" class="stroke-1.5 w-5 h-5"></i>
+                            <div class="side-menu__title">
+                                Job Posts
+                                <div class="side-menu__sub-icon ">
+                                    <i data-tw-merge="" data-lucide="chevron-down" class="stroke-1.5 w-5 h-5"></i>
                                 </div>
-                                <div class="side-menu__title">
-                                    Employment Posts
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/internship-posts" class="side-menu">
-                                <div class="side-menu__icon">
-                                    <i data-tw-merge="" data-lucide="activity" class="stroke-1.5 w-5 h-5"></i>
-                                </div>
-                                <div class="side-menu__title">
-                                    Internship Posts
-                                </div>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="javascript:;" class="side-menu">
-                        <div class="side-menu__icon">
-                            <i data-tw-merge="" data-lucide="users" class="stroke-1.5 w-5 h-5"></i>
-                        </div>
-                        <div class="side-menu__title">
-                            Users
-                            <div class="side-menu__sub-icon ">
-                                <i data-tw-merge="" data-lucide="chevron-down" class="stroke-1.5 w-5 h-5"></i>
                             </div>
-                        </div>
-                    </a>
-                    <ul class="">
+                        </a>
+                        <ul class="">
+                            <li>
+                                <a href="/employment-posts" class="side-menu">
+                                    <div class="side-menu__icon">
+                                        <i data-tw-merge="" data-lucide="activity" class="stroke-1.5 w-5 h-5"></i>
+                                    </div>
+                                    <div class="side-menu__title">
+                                        Employment Posts
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/internship-posts" class="side-menu">
+                                    <div class="side-menu__icon">
+                                        <i data-tw-merge="" data-lucide="activity" class="stroke-1.5 w-5 h-5"></i>
+                                    </div>
+                                    <div class="side-menu__title">
+                                        Internship Posts
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <?php
+                    if ($user_level < "3") {
+                        ?>
                         <li>
-                            <a href="/view-employers" class="side-menu">
+                            <a href="javascript:;" class="side-menu
+                        <?php if ($_SERVER["REQUEST_URI"] === "view-users-employees" || $_SERVER["REQUEST_URI"] === "view-users-job-seekers" || $_SERVER["REQUEST_URI"] === "view-users" || str_contains($_SERVER["REQUEST_URI"], "user")) {
+                                ?>side-menu--active<?php
+                            } ?>">
                                 <div class="side-menu__icon">
-                                    <i data-tw-merge="" data-lucide="activity" class="stroke-1.5 w-5 h-5"></i>
+                                    <i data-tw-merge="" data-lucide="users" class="stroke-1.5 w-5 h-5"></i>
                                 </div>
                                 <div class="side-menu__title">
-                                    Employers
+                                    Users
+                                    <div class="side-menu__sub-icon ">
+                                        <i data-tw-merge="" data-lucide="chevron-down" class="stroke-1.5 w-5 h-5"></i>
+                                    </div>
                                 </div>
                             </a>
+                            <ul class="">
+                                <li>
+                                    <a href="/view-employers" class="side-menu">
+                                        <div class="side-menu__icon">
+                                            <i data-tw-merge="" data-lucide="activity" class="stroke-1.5 w-5 h-5"></i>
+                                        </div>
+                                        <div class="side-menu__title">
+                                            Employers
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/view-job-seekers" class="side-menu">
+                                        <div class="side-menu__icon">
+                                            <i data-tw-merge="" data-lucide="activity" class="stroke-1.5 w-5 h-5"></i>
+                                        </div>
+                                        <div class="side-menu__title">
+                                            Job Seekers
+                                        </div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/view-users" class="side-menu">
+                                        <div class="side-menu__icon">
+                                            <i data-tw-merge="" data-lucide="activity" class="stroke-1.5 w-5 h-5"></i>
+                                        </div>
+                                        <div class="side-menu__title">
+                                            Others
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
-                        <li>
-                            <a href="/view-job-seekers" class="side-menu">
-                                <div class="side-menu__icon">
-                                    <i data-tw-merge="" data-lucide="activity" class="stroke-1.5 w-5 h-5"></i>
-                                </div>
-                                <div class="side-menu__title">
-                                    Job Seekers
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/view-users" class="side-menu">
-                                <div class="side-menu__icon">
-                                    <i data-tw-merge="" data-lucide="activity" class="stroke-1.5 w-5 h-5"></i>
-                                </div>
-                                <div class="side-menu__title">
-                                    Others
-                                </div>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
-                <li>
-                    <a href="/feedback" class="side-menu">
-                        <div class="side-menu__icon">
-                            <i data-tw-merge="" data-lucide="message-square" class="stroke-1.5 w-5 h-5"></i>
-                        </div>
-                        <div class="side-menu__title">
-                            Feedback
-                        </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="/view-applications" class="side-menu">
-                        <div class="side-menu__icon">
-                            <i data-tw-merge="" data-lucide="file-text" class="stroke-1.5 w-5 h-5"></i>
-                        </div>
-                        <div class="side-menu__title">
-                            Applications
-                        </div>
-                    </a>
-                </li>
+                        <?php
+                    }
+                    ?>
+                    <li>
+                        <a href="/feedback" class="side-menu
+                    <?php if ($_SERVER["REQUEST_URI"] === "feedback" || str_contains($_SERVER["REQUEST_URI"], "feedback")) {
+                            ?>side-menu--active<?php
+                        } ?>">
+                            <div class="side-menu__icon">
+                                <i data-tw-merge="" data-lucide="message-square" class="stroke-1.5 w-5 h-5"></i>
+                            </div>
+                            <div class="side-menu__title">
+                                Feedback
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/view-applications" class="side-menu
+                    <?php if ($_SERVER["REQUEST_URI"] === "view-applications" || str_contains($_SERVER["REQUEST_URI"], "application")) {
+                            ?>side-menu--active<?php
+                        } ?>">
+                            <div class="side-menu__icon">
+                                <i data-tw-merge="" data-lucide="file-text" class="stroke-1.5 w-5 h-5"></i>
+                            </div>
+                            <div class="side-menu__title">
+                                Applications
+                            </div>
+                        </a>
+                    </li>
+                    <?php
+                } else {
+                    ?>
+                    <li>
+                        <a href="/profile-setup" class="side-menu
+                        <?php if ($_SERVER["REQUEST_URI"] === "profile-setup") {
+                            ?>side-menu--active<?php
+                        } ?>">
+                            <div class="side-menu__icon">
+                                <i data-tw-merge="" data-lucide="user" class="stroke-1.5 w-5 h-5"></i>
+                            </div>
+                            <div class="side-menu__title">
+                                Profile Setup
+                            </div>
+                        </a>
+                    </li>
+                    <?php
+                }
+                ?>
                 <li class="side-nav__divider my-6"></li>
                 <li>
-                    <a href="javascript:;" class="side-menu">
+                    <a href="javascript:;" class="side-menu
+                    <?php if ($_SERVER["REQUEST_URI"] === "view-profile" || $_SERVER["REQUEST_URI"] === "change-password" || str_contains($_SERVER["REQUEST_URI"], "profile")) {
+                        ?>side-menu--active<?php
+                    } ?>">
                         <div class="side-menu__icon">
                             <i data-tw-merge="" data-lucide="user" class="stroke-1.5 w-5 h-5"></i>
                         </div>
@@ -396,7 +499,7 @@
                             <a href="#">Application</a>
                         </li>
                         <li class="relative ml-5 pl-0.5 before:content-[''] before:w-[14px] before:h-[14px] before:bg-chevron-black before:transform before:rotate-[-90deg] before:bg-[length:100%] before:-ml-[1.125rem] before:absolute before:my-auto before:inset-y-0 dark:before:bg-chevron-white text-slate-800 cursor-text dark:text-slate-400">
-                            <a href="#">Dashboard</a>
+                            <a href="#"><?= ucwords(str_replace(["/", "-"], " ", $_SERVER["REQUEST_URI"])) ?></a>
                         </li>
                     </ol>
                 </nav>
