@@ -31,3 +31,7 @@ $routes->post('/password-recovery-3', 'Authentication::setNewPassword');
 
 //Dashboard
 $routes->get('/dashboard', 'Dashboard::dashboard');
+
+
+//User Profile
+$routes->get('/profile-setup', 'Profile::profileSetup');

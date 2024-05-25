@@ -610,7 +610,13 @@ class Authentication extends BaseController
                                     ];
                                     $session->setFlashdata("success", $message);
                                     $session->set('user', $result);
-                                    return redirect()->to("dashboard");
+                                    $user_profile = json_decode($result['user_profile'], true);
+                                    if (empty($user_profile)) {
+                                        return redirect()->to("profile-setup");
+                                    } else {
+                                        return redirect()->to("dashboard");
+                                    }
+
                                 }
                                 $message = [
                                     "message" => "Incorrect Password or Username."
