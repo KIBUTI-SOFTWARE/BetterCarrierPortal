@@ -91,7 +91,8 @@ $user_level = $user["user_level"];
                                class="inline-block mb-2 group-[.form-inline]:mb-2 group-[.form-inline]:sm:mb-0 group-[.form-inline]:sm:mr-5 group-[.form-inline]:sm:text-right">
                             From
                         </label>
-                        <input data-tw-merge="" required id="input-wizard-1" type="email" placeholder="example@gmail.com"
+                        <input data-tw-merge="" required id="input-wizard-1" type="email"
+                               placeholder="example@gmail.com"
                                class="form-input transition duration-200 ease-in-out w-full text-sm border-slate-200 shadow-sm rounded-md placeholder:text-slate-400/90 focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus:border-primary focus:border-opacity-40 dark:bg-darkmode-800 dark:border-transparent dark:focus:ring-slate-700 dark:focus:ring-opacity-50 dark:placeholder:text-slate-500/80 group-[.form-inline]:flex-1 group-[.input-group]:rounded-none group-[.input-group]:[&:not(:first-child)]:border-l-transparent group-[.input-group]:first:rounded-l group-[.input-group]:last:rounded-r group-[.input-group]:z-10">
                     </div>
                     <div class="intro-y col-span-12 sm:col-span-6">
@@ -191,14 +192,18 @@ $user_level = $user["user_level"];
         const nextBtn = document.getElementById('next');
         let currentStep = 0;
 
+        const passedStepClasses = '[&:hover:not(:disabled)]:bg-opacity-90 [&:hover:not(:disabled)]:border-opacity-90 [&:not(button)]:text-center disabled:opacity-70 disabled:cursor-not-allowed bg-primary border-primary text-white dark:border-primary';
+
         function updateStep(step) {
             steps.forEach((indicator, index) => {
                 if (index <= step) {
                     indicator.classList.add('active');
                     labels[index].classList.add('active');
+                    indicator.classList.add(...passedStepClasses.split(' '));
                 } else {
                     indicator.classList.remove('active');
                     labels[index].classList.remove('active');
+                    indicator.classList.remove(...passedStepClasses.split(' '));
                 }
             });
             formParts.forEach((part, index) => {
@@ -216,6 +221,23 @@ $user_level = $user["user_level"];
             }
         }
 
+        function validateFormPart() {
+            const currentFormPart = formParts[currentStep];
+            const inputs = currentFormPart.querySelectorAll('input[required]');
+            let valid = true;
+
+            inputs.forEach(input => {
+                if (input.value.trim() === '') {
+                    input.classList.add('invalid');
+                    valid = false;
+                } else {
+                    input.classList.remove('invalid');
+                }
+            });
+
+            return valid;
+        }
+
         backBtn.addEventListener('click', function (event) {
             event.preventDefault();
             if (currentStep > 0) {
@@ -227,17 +249,21 @@ $user_level = $user["user_level"];
         nextBtn.addEventListener('click', function (event) {
             event.preventDefault();
             if (currentStep < steps.length - 1) {
-                currentStep++;
-                updateStep(currentStep);
+                if (validateFormPart()) {
+                    currentStep++;
+                    updateStep(currentStep);
+                }
             } else {
-                // Handle form submission
-                document.querySelector('form').submit();
+                if (validateFormPart()) {
+                    // Handle form submission
+                    document.querySelector('form').submit();
+                }
             }
         });
 
         updateStep(currentStep);
     });
-</script>
 
+</script>
 <?= $this->endSection('content') ?>
 

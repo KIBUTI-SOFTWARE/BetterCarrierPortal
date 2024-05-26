@@ -36,6 +36,12 @@ $user_level = $user["user_level"];
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href=" https://cdn.jsdelivr.net/npm/sweetalert2@11.10.7/dist/sweetalert2.min.css " rel="stylesheet">
     <script src=" https://cdn.jsdelivr.net/npm/sweetalert2@11.10.7/dist/sweetalert2.all.min.js "></script>
+    <style>
+        .invalid {
+            border-color: red;
+        }
+
+    </style>
     <!-- END: CSS Assets-->
 </head>
 <!-- END: Head -->
