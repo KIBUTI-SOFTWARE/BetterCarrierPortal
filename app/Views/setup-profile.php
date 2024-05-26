@@ -84,7 +84,7 @@ $user_level = $user["user_level"];
         <form name="profile-setup" class="" action="/" method="post">
             <!-- Step 1 Form Part -->
             <div class="form-part" id="form-part-1">
-                <div class="text-base font-medium">Profile Settings</div>
+                <div class="text-base font-medium">Your Personal Profile</div>
                 <div class="mt-5 grid grid-cols-12 gap-4 gap-y-5">
                     <div class="intro-y col-span-12 sm:col-span-6">
                         <label data-tw-merge="" for="input-wizard-1"
@@ -140,21 +140,16 @@ $user_level = $user["user_level"];
                                id="input-wizard-3" required
                                class="form-input w-full disabled:bg-slate-100 disabled:cursor-not-allowed dark:disabled:bg-darkmode-800/50 dark:disabled:border-transparent [&[readonly]]:bg-slate-100 [&[readonly]]:cursor-not-allowed [&[readonly]]:dark:bg-darkmode-800/50 [&[readonly]]:dark:border-transparent transition duration-200 ease-in-out w-full text-sm border-slate-200 shadow-sm rounded-md placeholder:text-slate-400/90 focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus:border-primary focus:border-opacity-40 dark:bg-darkmode-800 dark:border-transparent dark:focus:ring-slate-700 dark:focus:ring-opacity-50 dark:placeholder:text-slate-500/80 group-[.form-inline]:flex-1 group-[.input-group]:rounded-none group-[.input-group]:[&:not(:first-child)]:border-l-transparent group-[.input-group]:first:rounded-l group-[.input-group]:last:rounded-r group-[.input-group]:z-10 datepicker "/>
                     </div>
-                    <div class="intro-y col-span-12 sm:col-span-12">
-                        <div class="fallback">
-                            <input name="file" type="file">
-                        </div>
-                    </div>
                 </div>
             </div>
             <!-- Step 2 Form Part -->
             <div class="form-part hidden" id="form-part-2">
-                <div class="text-base font-medium">Business Details</div>
+                <div class="text-base font-medium">Professional Details</div>
                 <div class="mt-5 grid grid-cols-12 gap-4 gap-y-5">
                     <div class="intro-y col-span-12 sm:col-span-6">
                         <label data-tw-merge="" for="input-wizard-5"
                                class="inline-block mb-2 group-[.form-inline]:mb-2 group-[.form-inline]:sm:mb-0 group-[.form-inline]:sm:mr-5 group-[.form-inline]:sm:text-right">
-                            Business Name
+                            What is your working experience (Highlight your Key Achievements)?
                         </label>
                         <input data-tw-merge="" id="input-wizard-5" type="text" placeholder="Business Name"
                                class="form-input transition duration-200 ease-in-out w-full text-sm border-slate-200 shadow-sm rounded-md placeholder:text-slate-400/90 focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus:border-primary focus:border-opacity-40 dark:bg-darkmode-800 dark:border-transparent dark:focus:ring-slate-700 dark:focus:ring-opacity-50 dark:placeholder:text-slate-500/80 group-[.form-inline]:flex-1 group-[.input-group]:rounded-none group-[.input-group]:[&:not(:first-child)]:border-l-transparent group-[.input-group]:first:rounded-l group-[.input-group]:last:rounded-r group-[.input-group]:z-10">
