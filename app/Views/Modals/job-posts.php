@@ -20,7 +20,8 @@
                         Post Title
                     </label>
                     <input data-tw-merge="" id="modal-form-1"
-                           type="text" placeholder="Job Post Title"
+                           type="text" name="job_post_title"
+                           placeholder="Job Post Title"
                            required value="<?=$form_data['job_post_title'] ?? ""?>"
                            class="disabled:bg-slate-100 disabled:cursor-not-allowed dark:disabled:bg-darkmode-800/50 dark:disabled:border-transparent [&[readonly]]:bg-slate-100 [&[readonly]]:cursor-not-allowed [&[readonly]]:dark:bg-darkmode-800/50 [&[readonly]]:dark:border-transparent transition duration-200 ease-in-out w-full text-sm border-slate-200 shadow-sm rounded-md placeholder:text-slate-400/90 focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus:border-primary focus:border-opacity-40 dark:bg-darkmode-800 dark:border-transparent dark:focus:ring-slate-700 dark:focus:ring-opacity-50 dark:placeholder:text-slate-500/80 group-[.form-inline]:flex-1 group-[.input-group]:rounded-none group-[.input-group]:[&:not(:first-child)]:border-l-transparent group-[.input-group]:first:rounded-l group-[.input-group]:last:rounded-r group-[.input-group]:z-10">
                 </div>
@@ -76,7 +77,7 @@
                         <div data-single="true"
                              class="[&.dropzone]:border-2 [&.dropzone]:border-dashed dropzone [&.dropzone]:border-darkmode-200/60 [&.dropzone]:dark:bg-darkmode-600 [&.dropzone]:dark:border-white/5">
                             <div class="fallback">
-                                <input name="job_post_attachment_file" type="file" class="form-input">
+                                <input name="job_post_attachment_file" type="file" class="form-input" required>
                             </div>
                             <div class="dz-message" data-dz-message="">
                                 <div class="text-lg font-medium">
