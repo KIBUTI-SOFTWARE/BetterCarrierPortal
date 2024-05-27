@@ -305,7 +305,7 @@ $user_level = $user["user_level"];
                     </a>
                 </li>
                 <?php
-                if ($user_level < "3" && !empty($user_profile)) {
+                if (!empty($user_profile)) {
                     ?>
                     <li>
                         <a href="javascript:;" class="side-menu

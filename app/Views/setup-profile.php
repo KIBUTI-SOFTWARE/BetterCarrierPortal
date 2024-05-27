@@ -8,6 +8,9 @@ $user_level = $user["user_level"];
 <?= $this->section('content') ?>
 <!-- BEGIN: Wizard Layout -->
 <div class="intro-y box mt-5 py-10 sm:py-20">
+    <?php
+        print_r($user_profile)
+    ?>
     <div class="relative flex flex-col justify-center px-5 before:absolute before:bottom-0 before:top-0 before:mt-4 before:hidden before:h-[3px] before:w-[69%] before:bg-slate-100 before:dark:bg-darkmode-400 sm:px-20 lg:flex-row before:lg:block">
         <!-- Step 1 -->
         <div class="intro-x z-10 flex flex-1 items-center lg:block lg:text-center">
@@ -81,7 +84,7 @@ $user_level = $user["user_level"];
     </div>
     <!-- Form Parts -->
     <div class="mt-10 border-t border-slate-200/60 px-5 pt-10 dark:border-darkmode-400 sm:px-20">
-        <form name="profile-setup" class="" action="/profile-setup" method="post">
+        <form name="profile-setup" class="" action="/profile-setup" method="post" enctype="multipart/form-data">
             <!-- Step 1 Form Part -->
             <div class="form-part" id="form-part-1">
                 <div class="text-base font-medium">Your Personal Profile</div>
@@ -116,7 +119,7 @@ $user_level = $user["user_level"];
                         <input data-tw-merge="" name="user_surname"
                                id="input-wizard-1" type="text"
                                placeholder="Your Surname"
-                               value="<?= $user['user_surname'] ?? "" ?>"
+                               value="<?= $user_profile['user_surname'] ?? "" ?>"
                                class="form-input transition duration-200 ease-in-out w-full text-sm border-slate-200 shadow-sm rounded-md placeholder:text-slate-400/90 focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus:border-primary focus:border-opacity-40 dark:bg-darkmode-800 dark:border-transparent dark:focus:ring-slate-700 dark:focus:ring-opacity-50 dark:placeholder:text-slate-500/80 group-[.form-inline]:flex-1 group-[.input-group]:rounded-none group-[.input-group]:[&:not(:first-child)]:border-l-transparent group-[.input-group]:first:rounded-l group-[.input-group]:last:rounded-r group-[.input-group]:z-10">
                     </div>
                     <div class="intro-y col-span-12 sm:col-span-6">
@@ -430,7 +433,7 @@ $user_level = $user["user_level"];
                                    class="inline-block mb-2 group-[.form-inline]:mb-2 group-[.form-inline]:sm:mb-0 group-[.form-inline]:sm:mr-5 group-[.form-inline]:sm:text-right">
                                 Company Contact Person Email
                             </label>
-                            <input data-tw-merge="" id="input-wizard-1" type="text"
+                            <input data-tw-merge="" id="input-wizard-1" type="email"
                                    name="user_company_contact_person_email"
                                    value="<?= $user_profile['user_company_contact_person_email'] ?? "" ?>"
                                    placeholder="Company Contact Person Email" required

@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\UsersModel;
+use Config\MyFunctions as CustomFunctions;
 
 class Profile extends BaseController
 {
@@ -22,7 +23,7 @@ class Profile extends BaseController
             $session = \Config\Services::session();
 
             $user = $session->get('user');
-            $user_level = $user['_id'];
+            $user_id = $user['_id'];
             $user_level = $user['user_level'];
             $user_profile = json_decode($user['user_level'], true);
 
@@ -92,69 +93,36 @@ class Profile extends BaseController
                             ]
                         ],
 
-                        'user_company_name' => [
+                        'user_company_contact_person_role' => [
                             'rules' => 'required',
-                            'label' => 'Company Name',
+                            'label' => 'Company Contact Person Name',
                             'errors' => [
-                                'required' => 'Company Name Field Cannot be Empty.',
+                                'required' => 'Company Contact Person Name Field Cannot be Empty.',
                             ]
                         ],
 
-                        'user_company_email' => [
+                        'user_company_contact_person' => [
+                            'rules' => 'required',
+                            'label' => 'Company Contact Person Name',
+                            'errors' => [
+                                'required' => 'Company Contact Person Name Field Cannot be Empty.',
+                            ]
+                        ],
+
+                        'user_company_contact_person_email' => [
                             'rules' => 'required|valid_email',
-                            'label' => 'Company Email',
+                            'label' => 'Company Contact Person Email',
                             'errors' => [
-                                'required' => 'Company Email Profile Field Cannot be Empty.',
-                                'valid_email' => "Company Email Field must contain a valid Email.",
+                                'required' => 'Company Contact Person Email Profile Field Cannot be Empty.',
+                                'valid_email' => "Company Contact Person Email Field must contain a valid Email.",
                             ]
                         ],
 
-                        'user_company_phone' => [
-                            'rules' => 'required|exact_length[10]',
-                            'label' => 'Phone',
+                        'company_logo_file' => [
+                            'rules' => 'uploaded[company_logo_file]',
+                            'label' => 'Company Photo',
                             'errors' => [
-                                'required' => 'Company Phone Field Cannot be Empty.',
-                                'exact_length' => 'Please Enter a valid Company Phone Number.'
-                            ]
-                        ],
-
-                        'user_company_location' => [
-                            'rules' => 'required',
-                            'label' => 'Company Location',
-                            'errors' => [
-                                'required' => 'Company Location Field Cannot be Empty.',
-                            ]
-                        ],
-
-                        'user_company_employees' => [
-                            'rules' => 'required',
-                            'label' => 'Company Employees',
-                            'errors' => [
-                                'required' => 'Company Employees Field Cannot be Empty.',
-                            ]
-                        ],
-
-                        'user_company_industry' => [
-                            'rules' => 'required',
-                            'label' => 'Company Employees',
-                            'errors' => [
-                                'required' => 'Company Employees Field Cannot be Empty.',
-                            ]
-                        ],
-
-                        'photo_file' => [
-                            'rules' => 'uploaded[photo_file]',
-                            'label' => 'User Photo',
-                            'errors' => [
-                                'required' => 'User Photo Field Cannot be Empty.',
-                            ]
-                        ],
-
-                        'cv_file' => [
-                            'rules' => 'uploaded[cv_file]',
-                            'label' => 'User CV',
-                            'errors' => [
-                                'required' => 'User CV Field Cannot be Empty.',
+                                'required' => 'Company Photo Field Cannot be Empty.',
                             ]
                         ],
                     ]);
@@ -218,78 +186,64 @@ class Profile extends BaseController
                             ]
                         ],
 
-                        'user_company_name' => [
+                        'photo_file' => [
+                            'rules' => 'uploaded[photo_file]',
+                            'label' => 'User Photo',
+                            'errors' => [
+                                'required' => 'User Photo Field Cannot be Empty.',
+                            ]
+                        ],
+
+                        'cv_file' => [
+                            'rules' => 'uploaded[cv_file]',
+                            'label' => 'User CV',
+                            'errors' => [
+                                'required' => 'User CV Field Cannot be Empty.',
+                            ]
+                        ],
+                    ]);
+                }
+                else {
+                    $validation->setRules([
+                        'user_firstname' => [
                             'rules' => 'required',
-                            'label' => 'Company Name',
+                            'label' => "First Name",
                             'errors' => [
-                                'required' => 'Company Name Field Cannot be Empty.',
+                                'required' => "First Name Field Cannot be Empty.",
                             ]
                         ],
 
-                        'user_company_email' => [
+                        'user_lastname' => [
+                            'rules' => 'required',
+                            'label' => "Last Name",
+                            'errors' => [
+                                'required' => "Last Name Field Cannot be Empty.",
+                            ]
+                        ],
+
+                        'user_email' => [
                             'rules' => 'required|valid_email',
-                            'label' => 'Company Email',
+                            'label' => "User Email",
                             'errors' => [
-                                'required' => 'Company Email Profile Field Cannot be Empty.',
-                                'valid_email' => "Company Email Field must contain a valid Email.",
+                                'required' => "User Email Field Cannot be Empty.",
+                                'valid_email' => "User Email Field must contain a valid Email.",
                             ]
                         ],
 
-                        'user_company_phone' => [
+                        'user_phone' => [
                             'rules' => 'required|exact_length[10]',
                             'label' => 'Phone',
                             'errors' => [
-                                'required' => 'Company Phone Field Cannot be Empty.',
-                                'exact_length' => 'Please Enter a valid Company Phone Number.'
+                                'required' => 'Phone Field Cannot be Empty.',
+                                'exact_length' => 'Please Enter a valid Phone Number.'
                             ]
                         ],
 
-                        'user_company_location' => [
+                        'user_dob' => [
                             'rules' => 'required',
-                            'label' => 'Company Location',
+                            'label' => 'Date of Birth',
                             'errors' => [
-                                'required' => 'Company Location Field Cannot be Empty.',
-                            ]
-                        ],
-
-                        'user_company_employees' => [
-                            'rules' => 'required',
-                            'label' => 'Company Employees',
-                            'errors' => [
-                                'required' => 'Company Employees Field Cannot be Empty.',
-                            ]
-                        ],
-
-                        'user_company_industry' => [
-                            'rules' => 'required',
-                            'label' => 'Company Employees',
-                            'errors' => [
-                                'required' => 'Company Employees Field Cannot be Empty.',
-                            ]
-                        ],
-
-                        'user_company_contact_person' => [
-                            'rules' => 'required',
-                            'label' => 'Company Contact Person Name',
-                            'errors' => [
-                                'required' => 'Company Contact Person Name Field Cannot be Empty.',
-                            ]
-                        ],
-
-                        'user_company_contact_person_email' => [
-                            'rules' => 'required|valid_email',
-                            'label' => 'Company Contact Person Email',
-                            'errors' => [
-                                'required' => 'Company Contact Person Email Profile Field Cannot be Empty.',
-                                'valid_email' => "Company Contact Person Email Field must contain a valid Email.",
-                            ]
-                        ],
-
-                        'company_logo_file' => [
-                            'rules' => 'uploaded[company_logo_file]',
-                            'label' => 'Company Photo',
-                            'errors' => [
-                                'required' => 'Company Photo Field Cannot be Empty.',
+                                'required' => 'Date of Birth Field Cannot be Empty.'
                             ]
                         ],
                     ]);
@@ -297,46 +251,115 @@ class Profile extends BaseController
 
                 if ($validation->run($data)) {
 
-                    $username = $data['username'];
-                    $password = $data['user_password'];
+                    $user_firstname = $data['user_firstname'];
+                    $user_lastname = $data['user_lastname'];
+                    $user_surname = $data['user_surname'] ?? "";
+                    $user_dob = date("Y-m-d", strtotime($data['user_dob']));
+                    $user_experience = $data['user_experience'] ?? "";
+                    $user_preferred_industries = $data['user_preferred_industries'] ?? "";
+                    $user_projects = $data['user_projects'] ?? "";
+                    $user_github = $data['user_github'] ?? "";
+                    $user_linkedin = $data['user_linkedin'] ?? "";
+                    $user_other_socials = $data['user_other_socials'] ?? "";
+                    $user_company_name = $data['user_company_name'] ?? "";
+                    $user_company_email = $data['user_company_email'] ?? "";
+                    $user_company_phone = $data['user_company_phone'] ?? "";
+                    $user_company_location = $data['user_company_location'] ?? "";
+                    $user_company_employees = $data['user_company_employees'] ?? "";
+                    $user_company_industry = $data['user_company_industry'] ?? "";
+                    $user_company_github = $data['user_company_github'] ?? "";
+                    $user_company_linkedin = $data['user_company_linkedin'] ?? "";
+                    $user_company_other_socials = $data['user_company_other_socials'] ?? "";
+                    $user_company_contact_person = $data['user_company_contact_person'] ?? "";
+                    $user_company_contact_person_role = $data['user_company_contact_person_role'] ?? "";
+                    $user_company_contact_person_email = $data['user_company_contact_person_email'] ?? "";
 
                     $model = new UsersModel();
 
-                    $result = $model->searchUser($username);
+                    $result = $model->searchUser($user_id);
 
                     if (empty($result)) {
                         $message = [
-                            "message" => "Could not Find user with the username."
+                            "message" => "Could not Find user."
                         ];
                     } else {
-                        if ($result['user_deleted_flag'] === true) {
-                            $message = [
-                                "message" => "Account Not Found."
+                        $profileData = array();
+
+                        if ($user_level === "3") {
+                            $logo_file_url = $this->saveFile('company_logo_file');
+                            $profileData = [
+                                'user_surname' => $user_surname,
+                                'user_dob' => $user_dob,
+                                'user_experience' => $user_experience,
+                                'user_preferred_industries' => $user_preferred_industries,
+                                'user_projects' => $user_projects,
+                                'user_github' => $user_github,
+                                'user_linkedin' => $user_linkedin,
+                                'user_other_socials' => $user_other_socials,
+                                'user_company_name' => $user_company_name,
+                                'user_company_email' => $user_company_email,
+                                'user_company_phone' => $user_company_phone,
+                                'user_company_location' => $user_company_location,
+                                'user_company_employees' => $user_company_employees,
+                                'user_company_industry' => $user_company_industry,
+                                'user_company_contact_person' => $user_company_contact_person,
+                                'user_company_contact_person_role' => $user_company_contact_person_role,
+                                'user_company_contact_person_email' => $user_company_contact_person_email,
+                                'user_company_github' => $user_company_github,
+                                'user_company_linkedin' => $user_company_linkedin,
+                                'user_company_other_socials' => $user_company_other_socials,
+                                'user_company_logo' => $logo_file_url,
+                            ];
+                        }
+                        else if ($user_level === "4") {
+                            $photo_file_url = $this->saveFile('photo_file');
+                            $cv_file_url = $this->saveFile('cv_file');
+                            $profileData = [
+                                'user_surname' => $user_surname,
+                                'user_dob' => $user_dob,
+                                'user_experience' => $user_experience,
+                                'user_preferred_industries' => $user_preferred_industries,
+                                'user_projects' => $user_projects,
+                                'user_github' => $user_github,
+                                'user_linkedin' => $user_linkedin,
+                                'user_other_socials' => $user_other_socials,
+                                'user_photo' => $photo_file_url,
+                                'user_cv' => $cv_file_url,
                             ];
                         } else {
-                            if ($result['user_account_activated'] === true) {
-                                if (password_verify($password, $result['user_password'])) {
-                                    $message = [
-                                        "message" => "Logged in Successfully."
-                                    ];
-                                    $session->setFlashdata("success", $message);
-                                    $session->set('user', $result);
-                                    $user_profile = json_decode($result['user_profile'], true);
-                                    if (empty($user_profile)) {
-                                        return redirect()->to("profile-setup");
-                                    } else {
-                                        return redirect()->to("dashboard");
-                                    }
+                            $profileData = [
+                                'user_surname' => $user_surname,
+                                'user_dob' => $user_dob
+                            ];
+                        }
 
-                                }
-                                $message = [
-                                    "message" => "Incorrect Password or Username."
-                                ];
+                        $insertionData = [
+                            'user_firstname' => $user_firstname,
+                            'user_lastname' => $user_lastname,
+                            'user_profile' => json_encode($profileData),
+                            'user_updated_by' => $user_id,
+                            'user_updated_on' => CustomFunctions::getDate(),
+                        ];
+
+                        $update_profile = $model->updateUser($insertionData, $user_id);
+
+                        if (empty($update_profile)) {
+                            $message = [
+                                "message" => "Could Not Update User Profile, Please Try Again."
+                            ];
+                        } else {
+                            $user_new_profile = $model->getUserByID($user_id);
+                            if (empty($user_new_profile)) {
+                               exit();
                             } else {
-                                $message = [
-                                    "message" => "Account is Disabled."
-                                ];
+                                $session->set('user', "");
+                                $session->set('user', $user_new_profile);
                             }
+                            $message = [
+                                "message" => "User Profile Updated Successfully."
+                            ];
+                            $session->setFlashdata("success", $message);
+                            return redirect()->to("dashboard");
                         }
                     }
                     $session->setFlashdata("error", $message);
@@ -351,7 +374,7 @@ class Profile extends BaseController
 
             } else {
                 $message = [
-                    "message" => "Invalid Username or Password."
+                    "message" => "Invalid Form Data/Fields."
                 ];
                 $session->setFlashdata("error", $message);
             }
@@ -359,5 +382,21 @@ class Profile extends BaseController
         }
 
         return redirect()->back();
+    }
+
+    private function saveFile(string $identifier): string
+    {
+        $file = $this->request->getFile($identifier);
+        $file_url = '';
+        if ($file->isValid() && !$file->hasMoved()) {
+            $name = $file->getRandomName();
+            $file->move('uploads/files/', "$name");
+
+            $filename = $file->getName();
+            if ($filename !== '') {
+                $file_url = base_url("uploads/files/$filename");
+            }
+        }
+        return $file_url;
     }
 }
