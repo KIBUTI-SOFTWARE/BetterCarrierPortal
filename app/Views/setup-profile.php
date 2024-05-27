@@ -178,7 +178,7 @@ $user_level = $user["user_level"];
                         </label>
                         <div class="preview relative [&.hide]:overflow-hidden [&.hide]:h-0">
                             <select data-placeholder="Select your favorite industry(ies)"
-                                    name="user_preferred_industries"
+                                    name="user_preferred_industries[]"
                                     multiple="multiple" id="input-wizard-5" class="tom-select w-full" required>
                                 <option value="1">IT</option>
                                 <option value="2">Energy</option>
