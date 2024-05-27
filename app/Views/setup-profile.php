@@ -245,11 +245,11 @@ $user_level = $user["user_level"];
 
         function validateFormPart() {
             const currentFormPart = formParts[currentStep];
-            const inputs = currentFormPart.querySelectorAll('input[required]');
+            const inputs = currentFormPart.querySelectorAll('input[required], input:not([required])');
             let valid = true;
 
             inputs.forEach(input => {
-                if (input.value.trim() === '') {
+                if (!input.checkValidity()) {
                     input.classList.add('invalid');
                     valid = false;
                 } else {
