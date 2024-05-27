@@ -166,9 +166,11 @@ $user_level = $user["user_level"];
                             What is your working experience?
                         </label>
 
-                            <textarea id="input-wizard-5" name="user_experience"
-                                   data-value="<?= $user_profile['user_experience'] ?? "" ?>" class="editor form-input transition duration-200 ease-in-out w-full text-sm border-slate-200 shadow-sm rounded-md placeholder:text-slate-400/90 focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus:border-primary focus:border-opacity-40 dark:bg-darkmode-800 dark:border-transparent dark:focus:ring-slate-700 dark:focus:ring-opacity-50 dark:placeholder:text-slate-500/80 group-[.form-inline]:flex-1 group-[.input-group]:rounded-none group-[.input-group]:[&:not(:first-child)]:border-l-transparent group-[.input-group]:first:rounded-l group-[.input-group]:last:rounded-r group-[.input-group]:z-10"
-                                      required placeholder="Highlight your Key Achievements." style="height: 100px"></textarea>
+                        <textarea id="input-wizard-5" name="user_experience"
+                                  data-value="<?= $user_profile['user_experience'] ?? "" ?>"
+                                  class="editor form-input transition duration-200 ease-in-out w-full text-sm border-slate-200 shadow-sm rounded-md placeholder:text-slate-400/90 focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus:border-primary focus:border-opacity-40 dark:bg-darkmode-800 dark:border-transparent dark:focus:ring-slate-700 dark:focus:ring-opacity-50 dark:placeholder:text-slate-500/80 group-[.form-inline]:flex-1 group-[.input-group]:rounded-none group-[.input-group]:[&:not(:first-child)]:border-l-transparent group-[.input-group]:first:rounded-l group-[.input-group]:last:rounded-r group-[.input-group]:z-10"
+                                  required placeholder="Highlight your Key Achievements."
+                                  style="height: 100px"></textarea>
 
                     </div>
                     <div class="intro-y col-span-12 sm:col-span-12">
