@@ -25,6 +25,10 @@ $user_level = $user["user_level"];
     <link rel="stylesheet" href="dist/css/vendors/simplebar.css">
     <link rel="stylesheet" href="dist/css/components/mobile-menu.css">
     <link rel="stylesheet" href="dist/css/app.css">
+    <link rel="stylesheet" href="dist/css/vendors/tom-select.css">
+    <link rel="stylesheet" href="dist/css/vendors/ckeditor.css">
+    <link rel="stylesheet" href="dist/css/vendors/dropzone.css">
+    <link rel="stylesheet" href="dist/css/vendors/highlight.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.2.0/remixicon.css"
           integrity="sha512-OQDNdI5rpnZ0BRhhJc+btbbtnxaj+LdQFeh0V9/igiEPDiWE2fG+ZsXl0JEH+bjXKPJ3zcXqNyP4/F/NegVdZg=="
           crossorigin="anonymous" referrerpolicy="no-referrer"/>
@@ -630,6 +634,10 @@ $user_level = $user["user_level"];
 <!-- BEGIN: Vendor JS Assets-->
 <script src="dist/js/vendors/dom.js"></script>
 <script src="dist/js/vendors/tailwind-merge.js"></script>
+<script src="dist/js/vendors/dropzone.js"></script>
+<script src="dist/js/vendors/tom-select.js"></script>
+<script src="dist/js/vendors/ckeditor/inline.js"></script>
+<script src="dist/js/vendors/highlight.js"></script>
 <script src="dist/js/vendors/lucide.js"></script>
 <script src="dist/js/vendors/tippy.js"></script>
 <script src="dist/js/vendors/dayjs.js"></script>
@@ -645,6 +653,9 @@ $user_level = $user["user_level"];
 <script src="dist/js/utils/helper.js"></script>
 <script src="dist/js/vendors/simplebar.js"></script>
 <script src="dist/js/vendors/modal.js"></script>
+<script src="dist/js/components/base/inline-editor.js"></script>
+<script src="dist/js/components/base/tom-select.js"></script>
+<script src="dist/js/components/base/dropzone.js"></script>
 <script src="dist/js/components/base/theme-color.js"></script>
 <script src="dist/js/components/base/lucide.js"></script>
 <script src="dist/js/components/base/tippy.js"></script>
