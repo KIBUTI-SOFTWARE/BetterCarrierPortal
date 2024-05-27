@@ -296,32 +296,63 @@ $user_level = $user["user_level"];
                                 <input data-tw-merge="" required name="user_company_name"
                                        id="input-wizard-1" type="text"
                                        placeholder="Your Company Name"
-                                       value="<?=$user['user_company_name'] ?? ""?>"
+                                       value="<?=$user_profile['user_company_name'] ?? ""?>"
+                                       class="form-input transition duration-200 ease-in-out w-full text-sm border-slate-200 shadow-sm rounded-md placeholder:text-slate-400/90 focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus:border-primary focus:border-opacity-40 dark:bg-darkmode-800 dark:border-transparent dark:focus:ring-slate-700 dark:focus:ring-opacity-50 dark:placeholder:text-slate-500/80 group-[.form-inline]:flex-1 group-[.input-group]:rounded-none group-[.input-group]:[&:not(:first-child)]:border-l-transparent group-[.input-group]:first:rounded-l group-[.input-group]:last:rounded-r group-[.input-group]:z-10">
+                            </div>
+                            <div class="intro-y col-span-12 sm:col-span-6">
+                                <label data-tw-merge="" for="input-wizard-1"
+                                       class="inline-block mb-2 group-[.form-inline]:mb-2 group-[.form-inline]:sm:mb-0 group-[.form-inline]:sm:mr-5 group-[.form-inline]:sm:text-right">
+                                    Company Email
+                                </label>
+                                <input data-tw-merge="" required name="user_company_email"
+                                       id="input-wizard-1" type="email"
+                                       placeholder="example@gmail.com"
+                                       value="<?=$user_profile['user_company_email'] ?? ""?>"
+                                       readonly
+                                       class="form-input transition duration-200 ease-in-out w-full text-sm border-slate-200 shadow-sm rounded-md placeholder:text-slate-400/90 focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus:border-primary focus:border-opacity-40 dark:bg-darkmode-800 dark:border-transparent dark:focus:ring-slate-700 dark:focus:ring-opacity-50 dark:placeholder:text-slate-500/80 group-[.form-inline]:flex-1 group-[.input-group]:rounded-none group-[.input-group]:[&:not(:first-child)]:border-l-transparent group-[.input-group]:first:rounded-l group-[.input-group]:last:rounded-r group-[.input-group]:z-10">
+                            </div>
+                            <div class="intro-y col-span-12 sm:col-span-6">
+                                <label data-tw-merge="" for="input-wizard-2"
+                                       class="inline-block mb-2 group-[.form-inline]:mb-2 group-[.form-inline]:sm:mb-0 group-[.form-inline]:sm:mr-5 group-[.form-inline]:sm:text-right">
+                                    Company Phone
+                                </label>
+                                <input data-tw-merge="" id="input-wizard-2" name="user_company_phone"
+                                       type="text" placeholder="07xxxxxxxx"
+                                       required maxlength="10" minlength="10"
+                                       value="<?=$user_profile['user_company_phone'] ?? ""?>"
+                                       readonly
                                        class="form-input transition duration-200 ease-in-out w-full text-sm border-slate-200 shadow-sm rounded-md placeholder:text-slate-400/90 focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus:border-primary focus:border-opacity-40 dark:bg-darkmode-800 dark:border-transparent dark:focus:ring-slate-700 dark:focus:ring-opacity-50 dark:placeholder:text-slate-500/80 group-[.form-inline]:flex-1 group-[.input-group]:rounded-none group-[.input-group]:[&:not(:first-child)]:border-l-transparent group-[.input-group]:first:rounded-l group-[.input-group]:last:rounded-r group-[.input-group]:z-10">
                             </div>
                             <div class="intro-y col-span-12 sm:col-span-12">
-                                <div class="preview relative [&.hide]:overflow-hidden [&.hide]:h-0">
-                                    <div data-single="true" class="[&.dropzone]:border-2 [&.dropzone]:border-dashed dropzone [&.dropzone]:border-darkmode-200/60 [&.dropzone]:dark:bg-darkmode-600 [&.dropzone]:dark:border-white/5">
-                                        <div class="fallback">
-                                            <input name="company_logo_file" type="file" class="form-input" accept="image/*" required>
-                                        </div>
-                                        <div class="dz-message" data-dz-message="">
-                                            <div class="text-lg font-medium">
-                                                Click to upload your Company Logo here.
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                <label data-tw-merge="" for="input-wizard-5"
+                                       class="inline-block mb-2 group-[.form-inline]:mb-2 group-[.form-inline]:sm:mb-0 group-[.form-inline]:sm:mr-5 group-[.form-inline]:sm:text-right">
+                                    Company Location
+                                </label>
+                                <input data-tw-merge="" required name="user_company_location"
+                                       id="input-wizard-1" type="text"
+                                       placeholder="Your Company Location"
+                                       value="<?=$user_profile['user_company_location'] ?? ""?>"
+                                       class="form-input transition duration-200 ease-in-out w-full text-sm border-slate-200 shadow-sm rounded-md placeholder:text-slate-400/90 focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus:border-primary focus:border-opacity-40 dark:bg-darkmode-800 dark:border-transparent dark:focus:ring-slate-700 dark:focus:ring-opacity-50 dark:placeholder:text-slate-500/80 group-[.form-inline]:flex-1 group-[.input-group]:rounded-none group-[.input-group]:[&:not(:first-child)]:border-l-transparent group-[.input-group]:first:rounded-l group-[.input-group]:last:rounded-r group-[.input-group]:z-10">
                             </div>
-                            <br>
                             <div class="intro-y col-span-12 sm:col-span-12">
                                 <label data-tw-merge="" for="input-wizard-5"
                                        class="inline-block mb-2 group-[.form-inline]:mb-2 group-[.form-inline]:sm:mb-0 group-[.form-inline]:sm:mr-5 group-[.form-inline]:sm:text-right">
-                                    What is your Favourite Industry(ies)?
+                                    Company Organizational Size
+                                </label>
+                                <input data-tw-merge="" required name="user_company_employees"
+                                       id="input-wizard-5" type="number" min="1"
+                                       placeholder="Your Company Organizational Size"
+                                       value="<?=$user_profile['user_company_employees'] ?? ""?>"
+                                       class="form-input transition duration-200 ease-in-out w-full text-sm border-slate-200 shadow-sm rounded-md placeholder:text-slate-400/90 focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus:border-primary focus:border-opacity-40 dark:bg-darkmode-800 dark:border-transparent dark:focus:ring-slate-700 dark:focus:ring-opacity-50 dark:placeholder:text-slate-500/80 group-[.form-inline]:flex-1 group-[.input-group]:rounded-none group-[.input-group]:[&:not(:first-child)]:border-l-transparent group-[.input-group]:first:rounded-l group-[.input-group]:last:rounded-r group-[.input-group]:z-10">
+                            </div>
+                            <div class="intro-y col-span-12 sm:col-span-12">
+                                <label data-tw-merge="" for="input-wizard-5"
+                                       class="inline-block mb-2 group-[.form-inline]:mb-2 group-[.form-inline]:sm:mb-0 group-[.form-inline]:sm:mr-5 group-[.form-inline]:sm:text-right">
+                                   Company Industry
                                 </label>
                                 <div class="preview relative [&.hide]:overflow-hidden [&.hide]:h-0">
-                                    <select data-placeholder="Select your favorite industry(ies)" name="user_preferred_industries"
-                                            multiple="multiple" id="input-wizard-5" class="tom-select w-full" required>
+                                    <select data-placeholder="Select the Company industry" name="user_company_industry"
+                                            id="input-wizard-5" class="tom-select w-full" required>
                                         <option value="1">IT</option>
                                         <option value="2">Energy</option>
                                     </select>
@@ -331,21 +362,10 @@ $user_level = $user["user_level"];
                             <div class="intro-y col-span-12 sm:col-span-6">
                                 <label data-tw-merge="" for="input-wizard-1"
                                        class="inline-block mb-2 group-[.form-inline]:mb-2 group-[.form-inline]:sm:mb-0 group-[.form-inline]:sm:mr-5 group-[.form-inline]:sm:text-right">
-                                    Link to Recent Project Worked On
+                                    Company Github Profile
                                 </label>
                                 <input data-tw-merge="" id="input-wizard-1" type="url"
-                                       name="user_projects" value="<?=$user_profile['user_projects'] ?? ""?>"
-                                       placeholder="Link to Recent Project Worked On (If Any)"
-                                       class="form-input transition duration-200 ease-in-out w-full text-sm border-slate-200 shadow-sm rounded-md placeholder:text-slate-400/90 focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus:border-primary focus:border-opacity-40 dark:bg-darkmode-800 dark:border-transparent dark:focus:ring-slate-700 dark:focus:ring-opacity-50 dark:placeholder:text-slate-500/80 group-[.form-inline]:flex-1 group-[.input-group]:rounded-none group-[.input-group]:[&:not(:first-child)]:border-l-transparent group-[.input-group]:first:rounded-l group-[.input-group]:last:rounded-r group-[.input-group]:z-10">
-                            </div>
-
-                            <div class="intro-y col-span-12 sm:col-span-6">
-                                <label data-tw-merge="" for="input-wizard-1"
-                                       class="inline-block mb-2 group-[.form-inline]:mb-2 group-[.form-inline]:sm:mb-0 group-[.form-inline]:sm:mr-5 group-[.form-inline]:sm:text-right">
-                                    Github Profile
-                                </label>
-                                <input data-tw-merge="" id="input-wizard-1" type="url"
-                                       name="user_github" value="<?=$user_profile['user_github'] ?? ""?>"
+                                       name="user_company_github" value="<?=$user_profile['user_company_github'] ?? ""?>"
                                        placeholder="Link to your Github Profile"
                                        class="form-input transition duration-200 ease-in-out w-full text-sm border-slate-200 shadow-sm rounded-md placeholder:text-slate-400/90 focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus:border-primary focus:border-opacity-40 dark:bg-darkmode-800 dark:border-transparent dark:focus:ring-slate-700 dark:focus:ring-opacity-50 dark:placeholder:text-slate-500/80 group-[.form-inline]:flex-1 group-[.input-group]:rounded-none group-[.input-group]:[&:not(:first-child)]:border-l-transparent group-[.input-group]:first:rounded-l group-[.input-group]:last:rounded-r group-[.input-group]:z-10">
                             </div>
@@ -353,10 +373,10 @@ $user_level = $user["user_level"];
                             <div class="intro-y col-span-12 sm:col-span-6">
                                 <label data-tw-merge="" for="input-wizard-1"
                                        class="inline-block mb-2 group-[.form-inline]:mb-2 group-[.form-inline]:sm:mb-0 group-[.form-inline]:sm:mr-5 group-[.form-inline]:sm:text-right">
-                                    LinkedIn Profile
+                                    Company LinkedIn Profile
                                 </label>
                                 <input data-tw-merge="" id="input-wizard-1" type="url"
-                                       name="user_linkedin" value="<?=$user_profile['user_linkedin'] ?? ""?>"
+                                       name="user_company_linkedin" value="<?=$user_profile['user_company_linkedin'] ?? ""?>"
                                        placeholder="Link to your Linkedin Profile"
                                        class="form-input transition duration-200 ease-in-out w-full text-sm border-slate-200 shadow-sm rounded-md placeholder:text-slate-400/90 focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus:border-primary focus:border-opacity-40 dark:bg-darkmode-800 dark:border-transparent dark:focus:ring-slate-700 dark:focus:ring-opacity-50 dark:placeholder:text-slate-500/80 group-[.form-inline]:flex-1 group-[.input-group]:rounded-none group-[.input-group]:[&:not(:first-child)]:border-l-transparent group-[.input-group]:first:rounded-l group-[.input-group]:last:rounded-r group-[.input-group]:z-10">
                             </div>
@@ -364,10 +384,10 @@ $user_level = $user["user_level"];
                             <div class="intro-y col-span-12 sm:col-span-6">
                                 <label data-tw-merge="" for="input-wizard-1"
                                        class="inline-block mb-2 group-[.form-inline]:mb-2 group-[.form-inline]:sm:mb-0 group-[.form-inline]:sm:mr-5 group-[.form-inline]:sm:text-right">
-                                    Other Social Profile
+                                    Company Other Social Profile
                                 </label>
                                 <input data-tw-merge="" id="input-wizard-1" type="url"
-                                       name="user_other_socials" value="<?=$user_profile['user_other_socials'] ?? ""?>"
+                                       name="user_company_other_socials" value="<?=$user_profile['user_company_other_socials'] ?? ""?>"
                                        placeholder="Link to your Other Social Profile eg. X, Instagram, etc"
                                        class="form-input transition duration-200 ease-in-out w-full text-sm border-slate-200 shadow-sm rounded-md placeholder:text-slate-400/90 focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus:border-primary focus:border-opacity-40 dark:bg-darkmode-800 dark:border-transparent dark:focus:ring-slate-700 dark:focus:ring-opacity-50 dark:placeholder:text-slate-500/80 group-[.form-inline]:flex-1 group-[.input-group]:rounded-none group-[.input-group]:[&:not(:first-child)]:border-l-transparent group-[.input-group]:first:rounded-l group-[.input-group]:last:rounded-r group-[.input-group]:z-10">
                             </div>
@@ -376,35 +396,53 @@ $user_level = $user["user_level"];
                     <!-- Step 4 Form Part -->
                     <div class="form-part hidden" id="form-part-4">
                         <div class="text-base font-medium">Final Step</div>
+                        <div class="intro-y col-span-12 sm:col-span-6">
+                            <label data-tw-merge="" for="input-wizard-1"
+                                   class="inline-block mb-2 group-[.form-inline]:mb-2 group-[.form-inline]:sm:mb-0 group-[.form-inline]:sm:mr-5 group-[.form-inline]:sm:text-right">
+                                Company Contact Person Name
+                            </label>
+                            <input data-tw-merge="" id="input-wizard-1" type="text"
+                                   name="user_projects" value="<?=$user_profile['user_company_contact_person'] ?? ""?>"
+                                   placeholder="Company Contact Person Name" required
+                                   class="form-input transition duration-200 ease-in-out w-full text-sm border-slate-200 shadow-sm rounded-md placeholder:text-slate-400/90 focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus:border-primary focus:border-opacity-40 dark:bg-darkmode-800 dark:border-transparent dark:focus:ring-slate-700 dark:focus:ring-opacity-50 dark:placeholder:text-slate-500/80 group-[.form-inline]:flex-1 group-[.input-group]:rounded-none group-[.input-group]:[&:not(:first-child)]:border-l-transparent group-[.input-group]:first:rounded-l group-[.input-group]:last:rounded-r group-[.input-group]:z-10">
+                        </div>
+
+                        <div class="intro-y col-span-12 sm:col-span-6">
+                            <label data-tw-merge="" for="input-wizard-1"
+                                   class="inline-block mb-2 group-[.form-inline]:mb-2 group-[.form-inline]:sm:mb-0 group-[.form-inline]:sm:mr-5 group-[.form-inline]:sm:text-right">
+                                Company Contact Person Role
+                            </label>
+                            <input data-tw-merge="" id="input-wizard-1" type="text"
+                                   name="user_projects" value="<?=$user_profile['user_company_contact_person_role'] ?? ""?>"
+                                   placeholder="Company Contact Person Role" required
+                                   class="form-input transition duration-200 ease-in-out w-full text-sm border-slate-200 shadow-sm rounded-md placeholder:text-slate-400/90 focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus:border-primary focus:border-opacity-40 dark:bg-darkmode-800 dark:border-transparent dark:focus:ring-slate-700 dark:focus:ring-opacity-50 dark:placeholder:text-slate-500/80 group-[.form-inline]:flex-1 group-[.input-group]:rounded-none group-[.input-group]:[&:not(:first-child)]:border-l-transparent group-[.input-group]:first:rounded-l group-[.input-group]:last:rounded-r group-[.input-group]:z-10">
+                        </div>
+
+                        <div class="intro-y col-span-12 sm:col-span-12">
+                            <label data-tw-merge="" for="input-wizard-1"
+                                   class="inline-block mb-2 group-[.form-inline]:mb-2 group-[.form-inline]:sm:mb-0 group-[.form-inline]:sm:mr-5 group-[.form-inline]:sm:text-right">
+                                Company Contact Person Email
+                            </label>
+                            <input data-tw-merge="" id="input-wizard-1" type="text"
+                                   name="user_projects" value="<?=$user_profile['user_company_contact_person_email'] ?? ""?>"
+                                   placeholder="Company Contact Person Email" required
+                                   class="form-input transition duration-200 ease-in-out w-full text-sm border-slate-200 shadow-sm rounded-md placeholder:text-slate-400/90 focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus:border-primary focus:border-opacity-40 dark:bg-darkmode-800 dark:border-transparent dark:focus:ring-slate-700 dark:focus:ring-opacity-50 dark:placeholder:text-slate-500/80 group-[.form-inline]:flex-1 group-[.input-group]:rounded-none group-[.input-group]:[&:not(:first-child)]:border-l-transparent group-[.input-group]:first:rounded-l group-[.input-group]:last:rounded-r group-[.input-group]:z-10">
+                        </div>
                         <div class="intro-y col-span-12 sm:col-span-12">
                             <div class="preview relative [&.hide]:overflow-hidden [&.hide]:h-0">
                                 <div data-single="true" class="[&.dropzone]:border-2 [&.dropzone]:border-dashed dropzone [&.dropzone]:border-darkmode-200/60 [&.dropzone]:dark:bg-darkmode-600 [&.dropzone]:dark:border-white/5">
                                     <div class="fallback">
-                                        <input name="photo_file" type="file" class="form-input" accept="image/*" required>
+                                        <input name="company_logo_file" type="file" class="form-input" accept="image/*" required>
                                     </div>
                                     <div class="dz-message" data-dz-message="">
                                         <div class="text-lg font-medium">
-                                            Click to upload your Photo here.
+                                            Click to upload your Company Logo here.
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <br>
-                        <div class="intro-y col-span-12 sm:col-span-12">
-                            <div class="preview relative [&.hide]:overflow-hidden [&.hide]:h-0">
-                                <div data-single="true" class="[&.dropzone]:border-2 [&.dropzone]:border-dashed dropzone [&.dropzone]:border-darkmode-200/60 [&.dropzone]:dark:bg-darkmode-600 [&.dropzone]:dark:border-white/5">
-                                    <div class="fallback">
-                                        <input name="cv_file" type="file" class="form-input" accept="application/pdf" required>
-                                    </div>
-                                    <div class="dz-message" data-dz-message="">
-                                        <div class="text-lg font-medium">
-                                            Click to upload your CV file here.
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                         <div class="intro-y col-span-12 sm:col-span-12">
                             <div class="intro-x mt-4 flex items-center text-xs text-slate-600 dark:text-slate-500 sm:text-sm">
                                 <input data-tw-merge="" type="checkbox"
