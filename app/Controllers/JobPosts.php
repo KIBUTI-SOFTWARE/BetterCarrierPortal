@@ -13,9 +13,22 @@ class JobPosts extends BaseController
         //Reserved
     }
 
-    public function employmentPosts(): string
+    public function jobPosts(): string
     {
-        return view('employment-posts');
+        $session = \Config\Services::session();
+
+        $user = $session->get('user');
+        $user_id = $user['_id'];
+        $user_level = $user['user_level'];
+
+        $model = new JobsModel();
+
+        $job_posts = $model->getJobPosts($user_level, $user_id);
+
+        $data = [
+            'job_posts' => $job_posts
+        ];
+        return view('job-posts', $data);
     }
 
     public function newJobPost(): \CodeIgniter\HTTP\RedirectResponse

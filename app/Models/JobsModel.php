@@ -43,16 +43,23 @@ class JobsModel extends MongoConnectionModel
         return $user ? $this->convertDocumentToArray($user) : null;
     }
 
-    public function getUsers($user_level): array
+    public function getJobPosts($user_level, $user_id): array
     {
         $collection = $this->connectToDatabase()->selectCollection($this->users_collection);
 
-        $query = $user_level === '1' ? [] : ['user_deleted_flag' => false, 'user_level' => ['$gt' => 1]];
+        if ($user_level === '3') {
+            // Query for user level 3: Return posts created by the given user_id and not deleted
+            $query = ['job_post_deleted_flag' => false, 'job_post_created_by' => $user_id];
+        } else {
+            // Query for other user levels: Return posts not deleted
+            $query = ['job_post_deleted_flag' => false];
+        }
 
         $users = iterator_to_array($collection->find($query));
 
         return array_map([$this, 'convertDocumentToArray'], $users);
     }
+
 
     public function getUsersByLevel($user_level): array
     {

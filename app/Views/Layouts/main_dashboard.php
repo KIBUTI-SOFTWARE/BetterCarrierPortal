@@ -106,6 +106,17 @@ $user_level = $user["user_level"];
                         </a>
                         <ul class="">
                             <li>
+                                <a href="/view-job-posts" class="menu">
+                                    <div class="menu__icon">
+                                        <i data-tw-merge="" data-lucide="activity" class="stroke-1.5 w-5 h-5"></i>
+                                    </div>
+                                    <div class="menu__title">
+                                        All Posts
+                                    </div>
+                                </a>
+                            </li>
+
+                            <li>
                                 <a class="menu" href="/employment-posts">
                                     <div class="menu__icon">
                                         <i data-tw-merge="" data-lucide="activity" class="stroke-1.5 w-5 h-5"></i>
@@ -324,6 +335,17 @@ $user_level = $user["user_level"];
                             </div>
                         </a>
                         <ul class="">
+                            <li>
+                                <a href="/view-job-posts" class="side-menu">
+                                    <div class="side-menu__icon">
+                                        <i data-tw-merge="" data-lucide="activity" class="stroke-1.5 w-5 h-5"></i>
+                                    </div>
+                                    <div class="side-menu__title">
+                                        All Posts
+                                    </div>
+                                </a>
+                            </li>
+
                             <li>
                                 <a href="/employment-posts" class="side-menu">
                                     <div class="side-menu__icon">

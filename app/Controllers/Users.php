@@ -5,9 +5,6 @@ namespace App\Controllers;
 use CodeIgniter\API\ResponseTrait;
 use App\Models\UsersModel;
 use Exception;
-use Firebase\JWT\JWT;
-use Config\MyFunctions as CustomFunctions;
-use Firebase\JWT\Key;
 
 class Users extends BaseController
 {
@@ -16,6 +13,13 @@ class Users extends BaseController
     public function index()
     {
         //Reserved
+    }
+
+    public function getUser($user_id): ?array
+    {
+        $model = new UsersModel();
+
+        return $model->getUserByID($user_id);
     }
 
     public function getProfile(): \CodeIgniter\HTTP\ResponseInterface
@@ -237,31 +241,6 @@ class Users extends BaseController
                 } else {
                     unset($result['user_password']);
                     return $this->respond(['status' => 'success', 'message' => 'User Accounts Retrieved Successfully.', 'data' => $result], 200);
-                }
-            }
-            return $this->respond(['status' => 'failure', 'message' => 'Unauthorized Access.', 'data' => ''], 401);
-        }
-        return $this->respond(['status' => 'failure', 'message' => 'The Requested URL could not be Found.', 'data' => ''], 404);
-    }
-
-    public function getUser($identifier): \CodeIgniter\HTTP\ResponseInterface
-    {
-        if ($this->request->is('get')) {
-            $authHeader = $this->request->getHeaderLine('Authorization');
-            $user_token = (new Authentication)->getTokenData($authHeader);
-            $token_data = json_decode($user_token, true);
-
-            if (!is_null($token_data)) {
-
-                $model = new UsersModel();
-
-                $result = $model->searchUser($identifier);
-
-                if (empty($result)) {
-                    return $this->respond(['status' => 'failure', 'message' => 'Could not Find User with the Specified Identifier.', 'data' => ''], 500);
-                } else {
-                    unset($result['user_password']);
-                    return $this->respond(['status' => 'success', 'message' => 'User Account(s) Retrieved Successfully.', 'data' => $result], 200);
                 }
             }
             return $this->respond(['status' => 'failure', 'message' => 'Unauthorized Access.', 'data' => ''], 401);
