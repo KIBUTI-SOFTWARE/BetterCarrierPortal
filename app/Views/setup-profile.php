@@ -300,6 +300,21 @@ $user_level = $user["user_level"];
                                        class="form-input transition duration-200 ease-in-out w-full text-sm border-slate-200 shadow-sm rounded-md placeholder:text-slate-400/90 focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus:border-primary focus:border-opacity-40 dark:bg-darkmode-800 dark:border-transparent dark:focus:ring-slate-700 dark:focus:ring-opacity-50 dark:placeholder:text-slate-500/80 group-[.form-inline]:flex-1 group-[.input-group]:rounded-none group-[.input-group]:[&:not(:first-child)]:border-l-transparent group-[.input-group]:first:rounded-l group-[.input-group]:last:rounded-r group-[.input-group]:z-10">
                             </div>
                             <div class="intro-y col-span-12 sm:col-span-12">
+                                <div class="preview relative [&.hide]:overflow-hidden [&.hide]:h-0">
+                                    <div data-single="true" class="[&.dropzone]:border-2 [&.dropzone]:border-dashed dropzone [&.dropzone]:border-darkmode-200/60 [&.dropzone]:dark:bg-darkmode-600 [&.dropzone]:dark:border-white/5">
+                                        <div class="fallback">
+                                            <input name="company_logo_file" type="file" class="form-input" accept="image/*" required>
+                                        </div>
+                                        <div class="dz-message" data-dz-message="">
+                                            <div class="text-lg font-medium">
+                                                Click to upload your Company Logo here.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="intro-y col-span-12 sm:col-span-12">
                                 <label data-tw-merge="" for="input-wizard-5"
                                        class="inline-block mb-2 group-[.form-inline]:mb-2 group-[.form-inline]:sm:mb-0 group-[.form-inline]:sm:mr-5 group-[.form-inline]:sm:text-right">
                                     What is your Favourite Industry(ies)?
