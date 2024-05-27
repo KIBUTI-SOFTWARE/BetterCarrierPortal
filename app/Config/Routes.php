@@ -40,5 +40,7 @@ $routes->post('/profile-setup', 'Profile::profileSetupAction');
 
 //Job Posts
 $routes->get('/view-job-posts', 'JobPosts::jobPosts');
+$routes->get('/internship-posts', 'JobPosts::jobPosts');
+$routes->get('/employment-posts', 'JobPosts::jobPosts');
 $routes->get('/employment-posts', 'JobPosts::employmentPosts');
 $routes->post('/new-job-post', 'JobPosts::newJobPost');

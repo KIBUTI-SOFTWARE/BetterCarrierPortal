@@ -13,7 +13,7 @@ class JobPosts extends BaseController
         //Reserved
     }
 
-    public function jobPosts(): string
+    public function jobPosts()
     {
         $session = \Config\Services::session();
 
@@ -23,7 +23,14 @@ class JobPosts extends BaseController
 
         $model = new JobsModel();
 
-        $job_posts = $model->getJobPosts($user_level, $user_id);
+
+        if ($this->request->getUri()->getPath() === '/employment-posts') {
+            $job_posts = $model->getJobPostsByCategory("1", $user_level, $user_id);
+        } else if ($this->request->getUri()->getPath()=== '/internship-posts') {
+            $job_posts = $model->getJobPostsByCategory("2", $user_level, $user_id);
+        } else {
+            $job_posts = $model->getJobPosts($user_level, $user_id);
+        }
 
         $data = [
             'job_posts' => $job_posts
