@@ -8,9 +8,6 @@ $user_level = $user["user_level"];
 <?= $this->section('content') ?>
 <!-- BEGIN: Wizard Layout -->
 <div class="intro-y box mt-5 py-10 sm:py-20">
-    <?php
-        print_r($user_profile)
-    ?>
     <div class="relative flex flex-col justify-center px-5 before:absolute before:bottom-0 before:top-0 before:mt-4 before:hidden before:h-[3px] before:w-[69%] before:bg-slate-100 before:dark:bg-darkmode-400 sm:px-20 lg:flex-row before:lg:block">
         <!-- Step 1 -->
         <div class="intro-x z-10 flex flex-1 items-center lg:block lg:text-center">
