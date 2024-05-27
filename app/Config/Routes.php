@@ -35,3 +35,4 @@ $routes->get('/dashboard', 'Dashboard::dashboard');
 
 //User Profile
 $routes->get('/profile-setup', 'Profile::profileSetup');
+$routes->post('/profile-setup', 'Profile::profileSetupAction');
