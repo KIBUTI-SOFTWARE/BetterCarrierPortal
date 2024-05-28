@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-class JobsModel extends MongoConnectionModel
+class JobPostsModel extends MongoConnectionModel
 {
     protected string $users_collection = 'job_posts';
 

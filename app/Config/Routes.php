@@ -38,9 +38,12 @@ $routes->get('/profile-setup', 'Profile::profileSetup');
 $routes->post('/profile-setup', 'Profile::profileSetupAction');
 
 
-//Job Posts
+//Job Posts && Applications
+    //Job Posts
 $routes->get('/view-job-posts', 'JobPosts::jobPosts');
 $routes->get('/internship-posts', 'JobPosts::jobPosts');
 $routes->get('/employment-posts', 'JobPosts::jobPosts');
 $routes->get('/employment-posts', 'JobPosts::employmentPosts');
 $routes->post('/new-job-post', 'JobPosts::newJobPost');
+    //Applications
+$routes->post('/apply-job', 'JobApplications::newJobApplication');

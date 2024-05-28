@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-use App\Models\JobsModel;
+use App\Models\JobPostsModel;
 use App\Models\UsersModel;
 use Config\MyFunctions as CustomFunctions;
 
@@ -21,7 +21,7 @@ class JobPosts extends BaseController
         $user_id = $user['_id'];
         $user_level = $user['user_level'];
 
-        $model = new JobsModel();
+        $model = new JobPostsModel();
 
 
         if ($this->request->getUri()->getPath() === '/employment-posts') {
@@ -130,7 +130,7 @@ class JobPosts extends BaseController
                         'job_post_deleted_on' => ""
                     ];
 
-                    $model = new JobsModel();
+                    $model = new JobPostsModel();
 
                     $result = $model->addJobPost($insertionData);
 
