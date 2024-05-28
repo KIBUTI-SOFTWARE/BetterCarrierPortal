@@ -33,9 +33,14 @@ $routes->post('/password-recovery-3', 'Authentication::setNewPassword');
 $routes->get('/dashboard', 'Dashboard::dashboard');
 
 
-//User Profile
+//Users
+    //User Profile
 $routes->get('/profile-setup', 'Profile::profileSetup');
 $routes->post('/profile-setup', 'Profile::profileSetupAction');
+    //Users Management
+$routes->get('/view-users', 'Users::viewUsers');
+$routes->get('/view-employers', 'Users::viewUsers');
+$routes->get('/view-job-seekers', 'Users::viewUsers');
 
 
 //Job Posts && Applications

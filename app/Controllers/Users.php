@@ -22,6 +22,31 @@ class Users extends BaseController
         return $model->getUserByID($user_id);
     }
 
+    public function viewUsers(): string
+    {
+        $session = \Config\Services::session();
+
+        $user = $session->get('user');
+        $user_id = $user['_id'];
+        $user_level = $user['user_level'];
+
+        $model = new UsersModel();
+
+
+        if ($this->request->getUri()->getPath() === '/view-employers') {
+            $users = $model->getUsersByLevel("3");
+        } else if ($this->request->getUri()->getPath()=== '/view-job-seekers') {
+            $users = $model->getUsersByLevel("4");
+        } else {
+            $users = $model->getUsers($user_level);
+        }
+
+        $data = [
+            'users' => $users
+        ];
+        return view('users', $data);
+    }
+
     public function getProfile(): \CodeIgniter\HTTP\ResponseInterface
     {
         if ($this->request->is('get')) {

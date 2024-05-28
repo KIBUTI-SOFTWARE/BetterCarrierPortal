@@ -173,4 +173,15 @@ class MyFunctions extends BaseConfig
             return $interval->s . ' second' . ($interval->s > 1 ? 's' : '') . ' ago';
         }
     }
+
+    public static function getUserLevel($user_level): string
+    {
+        return match ($user_level) {
+            '1' => 'Super Admin',
+            '2' => 'System Admin',
+            '3' => 'Employer/Talent Seeker',
+            '4' => 'Talent/Job Seeker',
+            default => 'Undefined Level',
+        };
+    }
 }
