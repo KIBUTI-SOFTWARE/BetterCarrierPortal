@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Models\JobApplicationsModel;
 use App\Models\JobPostsModel;
 use App\Models\UsersModel;
 use Config\MyFunctions as CustomFunctions;
@@ -51,7 +52,7 @@ class JobApplications extends BaseController
             $data = $this->request->getPost();
             helper(['form']);
 
-            if (!is_null($data) && $user_level < "4") {
+            if (!is_null($data)) {
 
                 $validation->setRules([
                     'job_post_id' => [
@@ -68,35 +69,33 @@ class JobApplications extends BaseController
                     $job_post_id = $data['job_post_id'];
                     $job_application_description = $data['job_application_description'] ?? "";
 
+                    $job_post_attachment_file = "";
                     $insertionData = [
                         'job_post_id' => $job_post_id,
                         'job_application_description' => $job_application_description,
-                        'job_post_description' => $job_post_description,
-                        'job_post_from' => $job_post_from,
-                        'job_post_to' => $job_post_to,
-                        'job_post_attachment_file' => $job_post_attachment_file,
-                        'job_post_active' => true,
-                        'job_post_created_by' => $user_id,
-                        'job_post_created_on' => CustomFunctions::getDate(),
-                        'job_post_deleted_flag' => false,
-                        'job_post_updated_by' => "",
-                        'job_post_updated_on' => "",
-                        'job_post_deleted_by' => "",
-                        'job_post_deleted_on' => ""
+                        'job_application_attachment_file' => $job_post_attachment_file,
+                        'job_application_status' => false,
+                        'job_application_created_by' => $user_id,
+                        'job_application_created_on' => CustomFunctions::getDate(),
+                        'job_application_deleted_flag' => false,
+                        'job_application_updated_by' => "",
+                        'job_application_updated_on' => "",
+                        'job_application_deleted_by' => "",
+                        'job_application_deleted_on' => ""
                     ];
 
-                    $model = new JobPostsModel();
+                    $model = new JobApplicationsModel();
 
-                    $result = $model->addJobPost($insertionData);
+                    $result = $model->addJobApplication($insertionData);
 
                     if (empty($result)) {
                         $message = [
-                            "message" => "Could not Create Job Post, Please Try Again."
+                            "message" => "Could not Send Job Application, Please Try Again."
                         ];
                         $session->setFlashdata("error", $message);
                     } else {
                         $message = [
-                            "message" => "Job Post Created Successfully."
+                            "message" => "Job Application Submitted Successfully."
                         ];
                         $session->setFlashdata("success", $message);
                     }

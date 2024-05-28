@@ -4,12 +4,12 @@ namespace App\Models;
 
 class JobApplicationsModel extends MongoConnectionModel
 {
-    protected string $users_collection = 'job_posts';
+    protected string $job_applications_collection = 'job_applications';
 
-    public function addJobPost(array $user_data): ?array
+    public function addJobApplication(array $user_data): ?array
     {
         $database = $this->connectToDatabase();
-        $collection = $database->selectCollection($this->users_collection);
+        $collection = $database->selectCollection($this->job_applications_collection);
         $insert_result = $collection->insertOne($user_data);
 
         if ($insert_result->getInsertedCount() === 1) {
@@ -19,36 +19,11 @@ class JobApplicationsModel extends MongoConnectionModel
         }
     }
 
-    public function isUserWithEmailExisting(string $email): ?array
+    public function getJobApplications($user_level, $user_id): array
     {
-        $collection = $this->connectToDatabase()->selectCollection($this->users_collection);
-
-        $user = $collection->findOne([
-            'user_email' => $email,
-            'user_deleted_flag' => false
-        ]);
-
-        return $user ? $this->convertDocumentToArray($user) : null;
-    }
-
-    public function isUserWithPhoneExisting(string $phone): ?array
-    {
-        $collection = $this->connectToDatabase()->selectCollection($this->users_collection);
-
-        $user = $collection->findOne([
-            'user_phone' => $phone,
-            'user_deleted_flag' => false
-        ]);
-
-        return $user ? $this->convertDocumentToArray($user) : null;
-    }
-
-    public function getJobPosts($user_level, $user_id): array
-    {
-        $collection = $this->connectToDatabase()->selectCollection($this->users_collection);
+        $collection = $this->connectToDatabase()->selectCollection($this->job_applications_collection);
 
         if ($user_level === '3') {
-            // Query for user level 3: Return posts created by the given user_id and not deleted
             $query = ['job_post_deleted_flag' => false, 'job_post_created_by' => $user_id];
         } else {
             // Query for other user levels: Return posts not deleted
@@ -60,75 +35,31 @@ class JobApplicationsModel extends MongoConnectionModel
         return array_map([$this, 'convertDocumentToArray'], $users);
     }
 
-    public function getJobPostsByCategory($category, $user_level, $user_id): array
+    public function getJobPostApplications($post_id): array
     {
-        $collection = $this->connectToDatabase()->selectCollection($this->users_collection);
+        $collection = $this->connectToDatabase()->selectCollection($this->job_applications_collection);
 
-        if ($user_level === '3') {
-            // Query for user level 3: Return posts created by the given user_id and not deleted
-            $query = ['job_post_deleted_flag' => false, 'job_post_created_by' => $user_id, 'job_post_category' => $category];
-        } else {
-            // Query for other user levels: Return posts not deleted
-            $query = ['job_post_deleted_flag' => false, 'job_post_category' => $category];
-        }
+        $query = ['job_post_deleted_flag' => false, 'job_post_id' => $post_id];
 
         $users = iterator_to_array($collection->find($query));
 
         return array_map([$this, 'convertDocumentToArray'], $users);
     }
 
-
-    public function getUsersByLevel($user_level): array
+    public function getUsersJobPostApplications($user_id): array
     {
-        $collection = $this->connectToDatabase()->selectCollection($this->users_collection);
+        $collection = $this->connectToDatabase()->selectCollection($this->job_applications_collection);
 
-        $users = iterator_to_array($collection->find([
-            'user_deleted_flag' => false,
-            'user_level' => $user_level
-        ]));
+        $query = ['job_post_deleted_flag' => false, 'job_application_created_by' => $user_id];
+
+        $users = iterator_to_array($collection->find($query));
 
         return array_map([$this, 'convertDocumentToArray'], $users);
     }
 
-    public function getUserByID($user_id): ?array
+    public function updateJobApplication(array $data, $id): ?int
     {
-        $collection = $this->connectToDatabase()->selectCollection($this->users_collection);
-
-        $user = $collection->findOne([
-            '_id' => new \MongoDB\BSON\ObjectId($user_id),
-            'user_deleted_flag' => false
-        ]);
-
-        return $user ? $this->convertDocumentToArray($user) : null;
-    }
-
-    public function searchUser($identifier): ?array
-    {
-        $collection = $this->connectToDatabase()->selectCollection($this->users_collection);
-
-        try {
-            $objectId = new \MongoDB\BSON\ObjectId($identifier);
-            $query = ['_id' => $objectId];
-        } catch (\Throwable $e) {
-            // Identifier is not a valid ObjectId, then it's an email or phone
-            $query = [
-                '$or' => [
-                    ['user_email' => $identifier],
-                    ['user_phone' => $identifier]
-                ]
-            ];
-        }
-
-        $query['user_deleted_flag'] = false;
-
-        $user = $collection->findOne($query);
-
-        return $user ? $this->convertDocumentToArray($user) : null;
-    }
-
-    public function updateUser(array $data, $id): ?int
-    {
-        $collection = $this->connectToDatabase()->selectCollection($this->users_collection);
+        $collection = $this->connectToDatabase()->selectCollection($this->job_applications_collection);
 
         $updateResult = $collection->updateOne(
             ['_id' => new \MongoDB\BSON\ObjectId($id)],
@@ -138,54 +69,9 @@ class JobApplicationsModel extends MongoConnectionModel
         return $updateResult->getModifiedCount();
     }
 
-    public function getUserByEmail(string $email): ?array
+    public function deleteJobApplication($id): ?int
     {
-        $collection = $this->connectToDatabase()->selectCollection($this->users_collection);
-
-        $user = $collection->findOne([
-            'user_email' => $email,
-            'user_deleted_flag' => false
-        ]);
-
-        return $user ? $this->convertDocumentToArray($user) : null;
-    }
-
-    public function getOTP(string $otp_code): ?array
-    {
-        $collection = $this->connectToDatabase()->selectCollection($this->otp_collection);
-
-        $otp = $collection->findOne([
-            'otp_code' => $otp_code,
-            'otp_status' => false
-        ]);
-
-        return $otp ? $this->convertDocumentToArray($otp) : null;
-    }
-
-    public function saveSentOTP(array $data): bool
-    {
-        $collection = $this->connectToDatabase()->selectCollection($this->otp_collection);
-
-        $insertResult = $collection->insertOne($data);
-
-        return $insertResult->getInsertedCount() > 0;
-    }
-
-    public function updateOTP(array $data, $id): ?int
-    {
-        $collection = $this->connectToDatabase()->selectCollection($this->otp_collection);
-
-        $updateResult = $collection->updateOne(
-            ['_id' => new \MongoDB\BSON\ObjectId($id)],
-            ['$set' => $data]
-        );
-
-        return $updateResult->getModifiedCount();
-    }
-
-    public function deleteOTP($id): ?int
-    {
-        $collection = $this->connectToDatabase()->selectCollection($this->otp_collection);
+        $collection = $this->connectToDatabase()->selectCollection($this->job_applications_collection);
 
         $deleteResult = $collection->deleteOne(['_id' => new \MongoDB\BSON\ObjectId($id)]);
 

@@ -4,12 +4,12 @@ namespace App\Models;
 
 class JobPostsModel extends MongoConnectionModel
 {
-    protected string $users_collection = 'job_posts';
+    protected string $job_posts_collection = 'job_posts';
 
     public function addJobPost(array $user_data): ?array
     {
         $database = $this->connectToDatabase();
-        $collection = $database->selectCollection($this->users_collection);
+        $collection = $database->selectCollection($this->job_posts_collection);
         $insert_result = $collection->insertOne($user_data);
 
         if ($insert_result->getInsertedCount() === 1) {
@@ -21,7 +21,7 @@ class JobPostsModel extends MongoConnectionModel
 
     public function getJobPosts($user_level, $user_id): array
     {
-        $collection = $this->connectToDatabase()->selectCollection($this->users_collection);
+        $collection = $this->connectToDatabase()->selectCollection($this->job_posts_collection);
 
         if ($user_level === '3') {
             // Query for user level 3: Return posts created by the given user_id and not deleted
@@ -38,7 +38,7 @@ class JobPostsModel extends MongoConnectionModel
 
     public function getJobPostsByCategory($category, $user_level, $user_id): array
     {
-        $collection = $this->connectToDatabase()->selectCollection($this->users_collection);
+        $collection = $this->connectToDatabase()->selectCollection($this->job_posts_collection);
 
         if ($user_level === '3') {
             // Query for user level 3: Return posts created by the given user_id and not deleted
@@ -51,5 +51,26 @@ class JobPostsModel extends MongoConnectionModel
         $users = iterator_to_array($collection->find($query));
 
         return array_map([$this, 'convertDocumentToArray'], $users);
+    }
+
+    public function updateJobPost(array $data, $id): ?int
+    {
+        $collection = $this->connectToDatabase()->selectCollection($this->job_posts_collection);
+
+        $updateResult = $collection->updateOne(
+            ['_id' => new \MongoDB\BSON\ObjectId($id)],
+            ['$set' => $data]
+        );
+
+        return $updateResult->getModifiedCount();
+    }
+
+    public function deleteJobPost($id): ?int
+    {
+        $collection = $this->connectToDatabase()->selectCollection($this->job_posts_collection);
+
+        $deleteResult = $collection->deleteOne(['_id' => new \MongoDB\BSON\ObjectId($id)]);
+
+        return $deleteResult->getDeletedCount();
     }
 }
