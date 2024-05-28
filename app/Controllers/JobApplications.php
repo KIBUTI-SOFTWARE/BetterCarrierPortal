@@ -25,7 +25,7 @@ class JobApplications extends BaseController
         $model = new JobApplicationsModel();
 
         if ($user_level < "4") {
-            $job_applications = $model->getJobPostApplications($post_id);
+            $job_applications = $model->getJobApplications();
         } else {
             $job_applications = $model->getUsersJobPostApplications($user_id);
         }

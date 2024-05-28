@@ -19,16 +19,11 @@ class JobApplicationsModel extends MongoConnectionModel
         }
     }
 
-    public function getJobApplications($user_level, $user_id): array
+    public function getJobApplications(): array
     {
         $collection = $this->connectToDatabase()->selectCollection($this->job_applications_collection);
 
-        if ($user_level === '3') {
-            $query = ['job_post_deleted_flag' => false, 'job_post_created_by' => $user_id];
-        } else {
-            // Query for other user levels: Return posts not deleted
-            $query = ['job_post_deleted_flag' => false];
-        }
+        $query = ['job_application_deleted_flag' => false];
 
         $users = iterator_to_array($collection->find($query));
 
@@ -39,7 +34,7 @@ class JobApplicationsModel extends MongoConnectionModel
     {
         $collection = $this->connectToDatabase()->selectCollection($this->job_applications_collection);
 
-        $query = ['job_post_deleted_flag' => false, 'job_post_id' => $post_id];
+        $query = ['job_application_deleted_flag' => false, 'job_post_id' => $post_id];
 
         $users = iterator_to_array($collection->find($query));
 
@@ -50,7 +45,7 @@ class JobApplicationsModel extends MongoConnectionModel
     {
         $collection = $this->connectToDatabase()->selectCollection($this->job_applications_collection);
 
-        $query = ['job_post_deleted_flag' => false, 'job_application_created_by' => $user_id];
+        $query = ['job_application_deleted_flag' => false, 'job_application_created_by' => $user_id];
 
         $users = iterator_to_array($collection->find($query));
 
