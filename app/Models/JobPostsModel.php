@@ -19,6 +19,18 @@ class JobPostsModel extends MongoConnectionModel
         }
     }
 
+    public function getJobPostByID($post_id): ?array
+    {
+        $collection = $this->connectToDatabase()->selectCollection($this->job_posts_collection);
+
+        $user = $collection->findOne([
+            '_id' => new \MongoDB\BSON\ObjectId($post_id),
+            'job_post_deleted_flag' => false
+        ]);
+
+        return $user ? $this->convertDocumentToArray($user) : null;
+    }
+
     public function getJobPosts($user_level, $user_id): array
     {
         $collection = $this->connectToDatabase()->selectCollection($this->job_posts_collection);

@@ -13,6 +13,13 @@ class JobPosts extends BaseController
         //Reserved
     }
 
+    public function getJobPost($post_id): ?array
+    {
+        $model = new JobPostsModel();
+
+        return $model->getJobPostByID($post_id);
+    }
+
     public function jobPosts(): string
     {
         $session = \Config\Services::session();
