@@ -142,8 +142,9 @@ $job_posts = $job_posts ?? array();
                     <?php
                     if ($user_level === "4") {
                         ?>
-                        <a data-placement="top" title="Apply Now" href="#"
-                           class="tooltip cursor-pointer intro-x ml-2 flex h-8 w-8 items-center justify-center rounded-full bg-primary text-white"><i
+                        <a data-placement="top" title="Apply Now" href="#" data-tw-toggle="modal" data-tw-target="#apply-now"
+                           data-post-id="<?=$post_id?>"
+                           class="apply-now tooltip cursor-pointer intro-x ml-2 flex h-8 w-8 items-center justify-center rounded-full bg-primary text-white"><i
                                     data-tw-merge="" data-lucide="file-text" class="stroke-1.5 h-3 w-3"></i></a>
                         <?php
                     }
@@ -224,6 +225,28 @@ $job_posts = $job_posts ?? array();
             }
         });
     });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const applyButtons = document.querySelectorAll('.apply-now');
+
+        applyButtons.forEach(function (button) {
+            button.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                const postID = button.getAttribute('data-post-id');
+                const modalInput = document.querySelector('#apply-now .postID');
+
+                if (modalInput) {
+                    modalInput.value = postID;
+                }
+
+                // Show the modal
+                const applyModal = new bootstrap.Modal(document.getElementById('apply-now'));
+                applyModal.show();
+            });
+        });
+    });
+
 </script>
 <?= $this->endSection('content') ?>
 
