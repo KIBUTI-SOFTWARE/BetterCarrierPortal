@@ -13,7 +13,7 @@ class JobPosts extends BaseController
         //Reserved
     }
 
-    public function jobPosts()
+    public function jobPosts(): string
     {
         $session = \Config\Services::session();
 
