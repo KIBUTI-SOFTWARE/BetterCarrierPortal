@@ -14,7 +14,7 @@ class JobApplications extends BaseController
         //Reserved
     }
 
-    public function jobPosts(): string
+    public function jobPostApplications(): string
     {
         $session = \Config\Services::session();
 
@@ -22,21 +22,18 @@ class JobApplications extends BaseController
         $user_id = $user['_id'];
         $user_level = $user['user_level'];
 
-        $model = new JobPostsModel();
+        $model = new JobApplicationsModel();
 
-
-        if ($this->request->getUri()->getPath() === '/employment-posts') {
-            $job_posts = $model->getJobPostsByCategory("1", $user_level, $user_id);
-        } else if ($this->request->getUri()->getPath()=== '/internship-posts') {
-            $job_posts = $model->getJobPostsByCategory("2", $user_level, $user_id);
+        if ($user_level < "4") {
+            $job_applications = $model->getJobPostApplications($post_id);
         } else {
-            $job_posts = $model->getJobPosts($user_level, $user_id);
+            $job_applications = $model->getUsersJobPostApplications($user_id);
         }
 
         $data = [
-            'job_posts' => $job_posts
+            'job_applications' => $job_applications
         ];
-        return view('job-posts', $data);
+        return view('job-applications', $data);
     }
 
     public function newJobApplication(): \CodeIgniter\HTTP\RedirectResponse

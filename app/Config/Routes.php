@@ -46,4 +46,5 @@ $routes->get('/employment-posts', 'JobPosts::jobPosts');
 $routes->get('/employment-posts', 'JobPosts::employmentPosts');
 $routes->post('/new-job-post', 'JobPosts::newJobPost');
     //Applications
+$routes->get('/view-applications', 'JobApplications::jobPostApplications');
 $routes->post('/apply-job', 'JobApplications::newJobApplication');
