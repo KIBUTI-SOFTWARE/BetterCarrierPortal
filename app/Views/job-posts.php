@@ -3,27 +3,57 @@ $session = session();
 $user = $session->get("user");
 $user_profile = json_decode($user["user_profile"], true);
 $user_level = $user["user_level"];
-$users = $users ?? array();
+$job_posts = $job_posts ?? array();
+$total_posts = count($job_posts);
+
+$job_posts_with_users = array_map(function ($job_post) {
+    $usersController = new \App\Controllers\Users();
+    $job_post['job_posted_by'] = $usersController->getUser($job_post['job_post_created_by']);
+    return $job_post;
+}, $job_posts);
 ?>
 <?= $this->extend('Layouts/main_dashboard.php') ?>
 <?= $this->section('content') ?>
 <!-- BEGIN: Content -->
-<h2 class="intro-y mt-10 text-lg font-medium">Job Posts (<?= number_format(count($job_posts)) ?>)</h2>
+<h2 class="intro-y mt-10 text-lg font-medium">Job Posts (<?= number_format($total_posts) ?>)</h2>
 <br>
 <div class="intro-y col-span-12 mt-2 flex flex-wrap items-center sm:flex-nowrap">
-    <!-- Add new post button -->
-    <?php if ($user_level < "4"): ?>
+    <?php if ($user_level < "4") { ?>
         <button data-tw-merge="" data-tw-toggle="modal" data-tw-target="#new-job-post"
                 class="transition duration-200 border inline-flex items-center justify-center py-2 px-3 rounded-md font-medium cursor-pointer focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus-visible:outline-none dark:focus:ring-slate-700 dark:focus:ring-opacity-50 [&:hover:not(:disabled)]:bg-opacity-90 [&:hover:not(:disabled)]:border-opacity-90 [&:not(button)]:text-center disabled:opacity-70 disabled:cursor-not-allowed bg-primary border-primary text-white dark:border-primary mr-2 shadow-md">
             Add New Post
         </button>
-    <?php endif; ?>
-    <!-- Filter dropdown -->
-    <!-- Pagination Info -->
+    <?php } ?>
+    <div data-tw-merge="" data-tw-placement="bottom-end" class="dropdown relative ml-auto sm:ml-0">
+        <button data-tw-merge="" data-tw-toggle="dropdown" aria-expanded="false"
+                class="transition duration-200 border shadow-sm inline-flex items-center justify-center py-2 rounded-md font-medium cursor-pointer focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus-visible:outline-none dark:focus:ring-slate-700 dark:focus:ring-opacity-50 [&:hover:not(:disabled)]:bg-opacity-90 [&:hover:not(:disabled)]:border-opacity-90 [&:not(button)]:text-center disabled:opacity-70 disabled:cursor-not-allowed !box px-2"><span
+                    class="flex h-5 w-5 items-center justify-center">
+                                    <i data-tw-merge="" data-lucide="filter" class="stroke-1.5 h-4 w-4"></i>
+                                </span></button>
+        <div data-transition="" data-selector=".show"
+             data-enter="transition-all ease-linear duration-150"
+             data-enter-from="absolute !mt-5 invisible opacity-0 translate-y-1"
+             data-enter-to="!mt-1 visible opacity-100 translate-y-0"
+             data-leave="transition-all ease-linear duration-150"
+             data-leave-from="!mt-1 visible opacity-100 translate-y-0"
+             data-leave-to="absolute !mt-5 invisible opacity-0 translate-y-1"
+             class="dropdown-menu absolute z-[9999] hidden">
+            <div data-tw-merge=""
+                 class="dropdown-content rounded-md border-transparent bg-white p-2 shadow-[0px_3px_10px_#00000017] dark:border-transparent dark:bg-darkmode-600 w-40">
+                <a href="/internship-posts"
+                   class="cursor-pointer flex items-center p-2 transition duration-300 ease-in-out rounded-md hover:bg-slate-200/60 dark:bg-darkmode-600 dark:hover:bg-darkmode-400 dropdown-item"><i
+                            data-tw-merge="" data-lucide="activity" class="stroke-1.5 mr-2 h-4 w-4"></i>
+                    Internship</a>
+                <a href="/employment-posts"
+                   class="cursor-pointer flex items-center p-2 transition duration-300 ease-in-out rounded-md hover:bg-slate-200/60 dark:bg-darkmode-600 dark:hover:bg-darkmode-400 dropdown-item"><i
+                            data-tw-merge="" data-lucide="activity" class="stroke-1.5 mr-2 h-4 w-4"></i>
+                    Employment</a>
+            </div>
+        </div>
+    </div>
     <div class="mx-auto hidden text-slate-500 md:block" id="entries-info">
         <!-- Entries info will be updated by JavaScript -->
     </div>
-    <!-- Search input -->
     <div class="mt-3 w-full sm:ml-auto sm:mt-0 sm:w-auto md:ml-0">
         <div class="relative w-56 text-slate-500">
             <label>
@@ -36,11 +66,15 @@ $users = $users ?? array();
         </div>
     </div>
 </div>
-<!-- Job Posts Container -->
 <div class="intro-y mt-5 grid grid-cols-12 gap-6" id="posts-container">
-    <!-- Job Posts will be rendered by JavaScript -->
+    <!-- BEGIN: Blog Layout -->
+    <?php
+    // Rendering the job posts through JavaScript
+    ?>
+    <!-- END: Blog Layout -->
 </div>
-<!-- Pagination -->
+<br>
+<!-- BEGIN: Pagination -->
 <div class="intro-y col-span-12 flex flex-wrap items-center sm:flex-row sm:flex-nowrap">
     <nav class="w-full sm:mr-auto sm:w-auto">
         <ul id="pagination-controls" class="flex w-full mr-0 sm:mr-auto sm:w-auto">
@@ -56,13 +90,13 @@ $users = $users ?? array();
         <option value="100">100</option>
     </select>
 </div>
-<!-- Modals -->
+<!-- END: Pagination -->
 <?php include "Modals/job-posts.php"; ?>
 <!-- END: Content -->
 <script>
-    const jobPosts = <?= json_encode($job_posts) ?>;
+    const job_posts = <?= json_encode($job_posts_with_users) ?>;
     let currentPage = 1;
-    let itemsPerPage = 10;
+    let itemsPerPage = 1;
 
     document.getElementById('items-per-page').addEventListener('change', (event) => {
         itemsPerPage = parseInt(event.target.value);
@@ -79,9 +113,11 @@ $users = $users ?? array();
 
     function renderResults() {
         const searchQuery = document.getElementById('search-input').value.toLowerCase();
-        const filteredPosts = jobPosts.filter(post => {
-            // Filter Condition
-            return post.job_post_title.toLowerCase().includes(searchQuery);
+        const filteredPosts = job_posts.filter(post => {
+            const job_posted_by = post.job_posted_by;
+            return job_posted_by.user_firstname.toLowerCase().includes(searchQuery) ||
+                job_posted_by.user_lastname.toLowerCase().includes(searchQuery) ||
+                post.job_post_title.toLowerCase().includes(searchQuery);
         });
 
         const startIndex = (currentPage - 1) * itemsPerPage;
@@ -90,40 +126,100 @@ $users = $users ?? array();
 
         const postsContainer = document.getElementById('posts-container');
         postsContainer.innerHTML = '';
-
         paginatedPosts.forEach(post => {
-            // Adjust this HTML template based on your job post card structure
-            postsContainer.innerHTML += `
-                <div class="intro-y box col-span-12 md:col-span-6 xl:col-span-4">
+            const postLink = `<?= base_url() ?>/view-job-post/` + post._id; // Dynamically construct the post link
+            const jobCategory = `<?= $job_post['job_post_category'] === "1" ? "Employment" : "Internship"; ?>`
+            const jobPostedOn = `<?= \Config\MyFunctions::timeAgo($job_post['job_post_created_on']); ?>`
+            const job_posted_by = post.job_posted_by;
+            const postHTML = `
+                <div class="intro-y col-span-12 md:col-span-6 xl:col-span-4 box">
                     <div class="flex items-center border-b border-slate-200/60 px-5 py-4 dark:border-darkmode-400">
                         <div class="image-fit h-10 w-10 flex-none">
                             <img class="rounded-full" src="dist/images/fakers/profile-7.jpg"
                                  alt="Post">
                         </div>
-                    </div>
-                    <div class="ml-3 mr-auto">
-                        <a class="font-medium" href="#">
-                            <?= $job_posted_by['user_firstname'] . " " . $job_posted_by['user_lastname'] ?>
-                        </a>
-                        <div class="mt-0.5 flex truncate text-xs text-slate-500">
-                            <a class="inline-block truncate text-primary" href="#">
-                                <?= $job_post['job_post_category'] === "1" ? "Employment" : "Internship"; ?>
-                            </a>
-                            <span class="mx-1">•</span> <?= \Config\MyFunctions::timeAgo($job_post['job_post_created_on']); ?>
+                        <div class="ml-3 mr-auto">
+                            <a class="font-medium" href="#">${job_posted_by.user_firstname} ${job_posted_by.user_lastname}</a>
+                            <div class="mt-0.5 flex truncate text-xs text-slate-500">
+                                <a class="inline-block truncate text-primary" href="#">
+                                    ${jobCategory}
+                                </a>
+                                <span class="mx-1">•</span> ${jobPostedOn}
+                            </div>
+                        </div>
+                        <div data-tw-merge="" data-tw-placement="bottom-end" class="dropdown relative ml-3">
+                                <button data-tw-toggle="dropdown" aria-expanded="false"
+                                        class="cursor-pointer h-5 w-5 text-slate-500" tag="a">
+                                    <i data-tw-merge=""
+                                       data-lucide="more-vertical"
+                                       class="stroke-1.5 w-5 h-5"></i>
+                                </button>
+                                <div data-transition="" data-selector=".show"
+                                     data-enter="transition-all ease-linear duration-150"
+                                     data-enter-from="absolute !mt-5 invisible opacity-0 translate-y-1"
+                                     data-enter-to="!mt-1 visible opacity-100 translate-y-0"
+                                     data-leave="transition-all ease-linear duration-150"
+                                     data-leave-from="!mt-1 visible opacity-100 translate-y-0"
+                                     data-leave-to="absolute !mt-5 invisible opacity-0 translate-y-1"
+                                     class="dropdown-menu absolute z-[9999] hidden">
+                                    <div data-tw-merge=""
+                                         class="dropdown-content rounded-md border-transparent bg-white p-2 shadow-[0px_3px_10px_#00000017] dark:border-transparent dark:bg-darkmode-600 w-40">
+                                        <a href="/edit-job-post/${post._id}"
+                                           class="cursor-pointer flex items-center p-2 transition duration-300 ease-in-out rounded-md hover:bg-slate-200/60 dark:bg-darkmode-600 dark:hover:bg-darkmode-400 dropdown-item"><i
+                                                    data-tw-merge="" data-lucide="edit" class="stroke-1.5 mr-2 h-4 w-4"></i>
+                                            Edit Post</a>
+                                        <a href="/delete-job-post/${post._id}"
+                                           class="cursor-pointer flex items-center p-2 transition duration-300 ease-in-out rounded-md hover:bg-slate-200/60 dark:bg-darkmode-600 dark:hover:bg-darkmode-400 dropdown-item"><i
+                                                    data-tw-merge="" data-lucide="trash"
+                                                    class="stroke-1.5 mr-2 h-4 w-4"></i>
+                                            Delete Post</a>
+                                    </div>
+                                </div>
                         </div>
                     </div>
+                    <div class="p-5">
+                        <div class="image-fit h-40 2xl:h-56">
+                            <img class="rounded-md" src="dist/images/fakers/preview-2.jpg"
+                                 alt="Post">
+                        </div>
+                        <a class="mt-5 block text-base font-medium" href="#">
+                            ${post.job_post_title}
+                        </a>
+                        <div class="mt-2 text-slate-600 dark:text-slate-500">
+                            ${post.job_post_title}
+                        </div>
+                    </div>
+                    <div class="flex items-center border-t border-slate-200/60 px-5 py-3 dark:border-darkmode-400">
+                    Applications: <span class="font-medium">75k</span>
+                    <a data-placement="top" title="Share" href="#"
+                       data-post-link="${postLink}"
+                       class="share-link tooltip cursor-pointer intro-x ml-auto flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-primary dark:bg-darkmode-300 dark:text-slate-300"><i
+                                data-tw-merge="" data-lucide="share" class="stroke-1.5 h-3 w-3"></i></a>
+                                <a data-placement="top" title="Apply Now" href="#" data-tw-toggle="modal"
+                           data-tw-target="#apply-now"
+                           data-post-id="${post._id}"
+                           class="apply-now tooltip cursor-pointer intro-x ml-2 flex h-8 w-8 items-center justify-center rounded-full bg-primary text-white"><i
+                                    data-tw-merge="" data-lucide="file-text" class="stroke-1.5 h-3 w-3"></i></a>
+                </div>
                 </div>
             `;
+            postsContainer.insertAdjacentHTML('beforeend', postHTML);
         });
 
-        document.getElementById('entries-info').innerText = `Showing ${startIndex + 1} to ${Math.min(endIndex, filteredPosts.length)} of ${filteredPosts.length} entries`;
+        const entriesInfo = document.getElementById('entries-info');
+        const totalEntries = filteredPosts.length;
+        const startEntry = startIndex + 1;
+        const endEntry = Math.min(endIndex, totalEntries);
+        entriesInfo.textContent = `Showing ${startEntry} to ${endEntry} of ${totalEntries} entries`;
     }
 
     function renderPagination() {
         const searchQuery = document.getElementById('search-input').value.toLowerCase();
-        const filteredPosts = jobPosts.filter(post => {
-            // Adjust this filter condition based on your job post data structure
-            return post.job_post_title.toLowerCase().includes(searchQuery);
+        const filteredPosts = job_posts.filter(post => {
+            const job_posted_by = post.job_posted_by;
+            return job_posted_by.user_firstname.toLowerCase().includes(searchQuery) ||
+                job_posted_by.user_lastname.toLowerCase().includes(searchQuery) ||
+                post.job_post_title.toLowerCase().includes(searchQuery);
         });
 
         const totalPages = Math.ceil(filteredPosts.length / itemsPerPage);
@@ -132,24 +228,33 @@ $users = $users ?? array();
 
         if (currentPage > 1) {
             paginationControls.innerHTML += `
-                <li class="page-item">
-                    <a class="page-link" href="#" onclick="goToPage(${currentPage - 1})">Previous</a>
+                <li class="flex-1 sm:flex-initial">
+                    <a data-tw-merge=""
+                       class="transition duration-200 border items-center justify-center py-2 rounded-md cursor-pointer focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus-visible:outline-none dark:focus:ring-slate-700 dark:focus:ring-opacity-50 [&:hover:not(:disabled)]:bg-opacity-90 [&:hover:not(:disabled)]:border-opacity-90 [&:not(button)]:text-center disabled:opacity-70 disabled:cursor-not-allowed min-w-0 sm:min-w-[40px] shadow-none font-normal flex border-transparent text-slate-800 sm:mr-2 dark:text-slate-300 px-1 sm:px-3" onclick="goToPage(${currentPage - 1})">
+                        <i data-tw-merge="" data-lucide="chevron-left" class="stroke-1.5 h-4 w-4"></i>
+                    </a>
                 </li>
             `;
         }
 
         for (let i = 1; i <= totalPages; i++) {
             paginationControls.innerHTML += `
-                <li class="page-item ${i === currentPage ? 'active' : ''}">
-                    <a class="page-link" href="#" onclick="goToPage(${i})">${i}</a>
+                <li class="flex-1 sm:flex-initial">
+                    <a data-tw-merge=""
+                       class="transition duration-200 border items-center justify-center py-2 rounded-md cursor-pointer focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus-visible:outline-none dark:focus:ring-slate-700 dark:focus:ring-opacity-50 [&:hover:not(:disabled)]:bg-opacity-90 [&:hover:not(:disabled)]:border-opacity-90 [&:not(button)]:text-center disabled:opacity-70 disabled:cursor-not-allowed min-w-0 sm:min-w-[40px] shadow-none font-normal flex border-transparent text-slate-800 sm:mr-2 dark:text-slate-300 px-1 sm:px-3 ${i === currentPage ? '!box dark:bg-darkmode-400' : ''}" onclick="goToPage(${i})">
+                        ${i}
+                    </a>
                 </li>
             `;
         }
 
         if (currentPage < totalPages) {
             paginationControls.innerHTML += `
-                <li class="page-item">
-                    <a class="page-link" href="#" onclick="goToPage(${currentPage + 1})">Next</a>
+                <li class="flex-1 sm:flex-initial">
+                    <a data-tw-merge=""
+                       class="transition duration-200 border items-center justify-center py-2 rounded-md cursor-pointer focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus-visible:outline-none dark:focus:ring-slate-700 dark:focus:ring-opacity-50 [&:hover:not(:disabled)]:bg-opacity-90 [&:hover:not(:disabled)]:border-opacity-90 [&:not(button)]:text-center disabled:opacity-70 disabled:cursor-not-allowed min-w-0 sm:min-w-[40px] shadow-none font-normal flex border-transparent text-slate-800 sm:mr-2 dark:text-slate-300 px-1 sm:px-3" onclick="goToPage(${currentPage + 1})">
+                        <i data-tw-merge="" data-lucide="chevron-right" class="stroke-1.5 h-4 w-4"></i>
+                    </a>
                 </li>
             `;
         }
@@ -164,6 +269,55 @@ $users = $users ?? array();
     // Initial render
     renderPagination();
     renderResults();
-</script>
 
-<?= $this->endSection('content') ?>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.body.addEventListener('click', function (event) {
+            if (event.target.closest('.share-link')) {
+                event.preventDefault(); // Prevent the default anchor behavior
+
+                const shareLink = event.target.closest('.share-link');
+                const postLink = shareLink.getAttribute('data-post-link'); // Get the link from data-post-link attribute
+
+                // Copy the link to the clipboard
+                navigator.clipboard.writeText(postLink).then(function () {
+                    Swal.fire({
+                        position: "top-end",
+                        timer: 10000,
+                        text: "Link to the Post Copied to Clipboard.",
+                        icon: "info"
+                    });
+                }).catch(function (err) {
+                    Swal.fire({
+                        position: "top-end",
+                        timer: 10000,
+                        text: "'Failed to copy the link: '" + err,
+                        icon: "error"
+                    });
+                    console.error('Failed to copy the link: ', err);
+                });
+            }
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const applyButtons = document.querySelectorAll('.apply-now');
+
+        applyButtons.forEach(function (button) {
+            button.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                const postID = button.getAttribute('data-post-id');
+                const modalInput = document.querySelector('#apply-now .postID');
+
+                if (modalInput) {
+                    modalInput.value = postID;
+                }
+
+                // Show the modal
+                const applyModal = new bootstrap.Modal(document.getElementById('apply-now'));
+                applyModal.show();
+            });
+        });
+    });
+</script>
+<?= $this->endSection() ?>
