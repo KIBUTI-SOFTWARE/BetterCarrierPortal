@@ -16,7 +16,7 @@ $users = $users ?? array();
             Add New User
         </button>
         <div class="mx-auto hidden text-slate-500 md:block" id="entries-info">
-            <!-- Entries info will be updated by JavaScript -->
+            <!-- Entries info will be updated by JavaScript '-->
         </div>
         <div class="mt-3 w-full sm:ml-auto sm:mt-0 sm:w-auto md:ml-0">
             <div class="relative w-56 text-slate-500">
