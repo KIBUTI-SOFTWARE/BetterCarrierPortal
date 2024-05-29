@@ -14,7 +14,7 @@
         "ext-mongodb": "*",
         "codeigniter4/framework": "^4.0",
         "codeigniter4/queue": "dev-develop",
-        "mongodb/mongodb": "^1.19",
+        "mongodb/mongodb": "^1.0",
         "predis/predis": "^2.2"
     },
     "require-dev": {
