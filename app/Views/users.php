@@ -8,7 +8,7 @@ $users = $users ?? array();
 <?= $this->extend('Layouts/main_dashboard.php') ?>
 <?= $this->section('content') ?>
 <!-- BEGIN: Content -->
-<h2 class="intro-y mt-10 text-lg font-medium">Users (<?= count($users) ?>)</h2>
+<h2 class="intro-y mt-10 text-lg font-medium">Users (<?= number_format(count($users)) ?>)</h2>
 <div class="mt-5 grid grid-cols-12 gap-6">
     <div class="intro-y col-span-12 mt-2 flex flex-wrap items-center sm:flex-nowrap">
         <button data-tw-merge="" data-tw-toggle="modal" data-tw-target="#"
@@ -43,6 +43,7 @@ $users = $users ?? array();
                 <!-- Pagination controls will be updated by JavaScript -->
             </ul>
         </nav>
+        <label for="items-per-page"></label>
         <select id="items-per-page" data-tw-merge=""
                 class="disabled:bg-slate-100 disabled:cursor-not-allowed disabled:dark:bg-darkmode-800/50 [&[readonly]]:bg-slate-100 [&[readonly]]:cursor-not-allowed [&[readonly]]:dark:bg-darkmode-800/50 transition duration-200 ease-in-out text-sm border-slate-200 shadow-sm rounded-md py-2 px-3 pr-8 focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus:border-primary focus:border-opacity-40 dark:bg-darkmode-800 dark:border-transparent dark:focus:ring-slate-700 dark:focus:ring-opacity-50 group-[.form-inline]:flex-1 !box mt-3 w-20 sm:mt-0">
             <option value="10">10</option>
@@ -56,7 +57,7 @@ $users = $users ?? array();
 <script>
     const users = <?= json_encode($users) ?>;
     let currentPage = 1;
-    let itemsPerPage = 9;
+    let itemsPerPage = 10;
 
     document.getElementById('items-per-page').addEventListener('change', (event) => {
         itemsPerPage = parseInt(event.target.value);
