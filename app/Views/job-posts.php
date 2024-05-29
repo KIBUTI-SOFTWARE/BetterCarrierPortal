@@ -96,7 +96,7 @@ $job_posts_with_users = array_map(function ($job_post) {
 <script>
     const job_posts = <?= json_encode($job_posts_with_users) ?>;
     let currentPage = 1;
-    let itemsPerPage = 1;
+    let itemsPerPage = 9;
 
     document.getElementById('items-per-page').addEventListener('change', (event) => {
         itemsPerPage = parseInt(event.target.value);
@@ -127,9 +127,9 @@ $job_posts_with_users = array_map(function ($job_post) {
         const postsContainer = document.getElementById('posts-container');
         postsContainer.innerHTML = '';
         paginatedPosts.forEach(post => {
-            const postLink = `<?= base_url() ?>/view-job-post/` + post._id; // Dynamically construct the post link
-            const jobCategory = `<?= $job_post['job_post_category'] === "1" ? "Employment" : "Internship"; ?>`
-            const jobPostedOn = `<?= \Config\MyFunctions::timeAgo($job_post['job_post_created_on']); ?>`
+            const postLink = `<?= base_url() ?>view-job-post/` + post._id; // Dynamically construct the post link
+            const jobCategory = getPostCategory(post.job_post_category);
+            const jobPostedOn = timeAgo(post.job_post_created_on);
             const job_posted_by = post.job_posted_by;
             const postHTML = `
                 <div class="intro-y col-span-12 md:col-span-6 xl:col-span-4 box">
@@ -264,6 +264,39 @@ $job_posts_with_users = array_map(function ($job_post) {
         currentPage = page;
         renderPagination();
         renderResults();
+    }
+
+    function timeAgo(timestamp) {
+        const time = new Date(timestamp);
+        const now = new Date();
+
+        const diff = Math.abs(now - time) / 1000; // Difference in seconds
+
+        const intervals = {
+            year: 31536000,
+            month: 2592000,
+            day: 86400,
+            hour: 3600,
+            minute: 60,
+            second: 1
+        };
+
+        for (const [unit, seconds] of Object.entries(intervals)) {
+            const count = Math.floor(diff / seconds);
+            if (count > 0) {
+                return count + ' ' + unit + (count > 1 ? 's' : '') + ' ago';
+            }
+        }
+        return 'just now';
+    }
+
+    function getPostCategory(category) {
+        const post_category = new Map([
+            ["1", "Employment"],
+            ["2", "Internship"],
+        ]);
+
+        return post_category.get(category) || "Undefined Category";
     }
 
     // Initial render
