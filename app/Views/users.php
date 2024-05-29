@@ -63,22 +63,21 @@ $users = $users ?? array();
         itemsPerPage = parseInt(event.target.value);
         currentPage = 1; // Reset to first page
         renderPagination();
-        renderUsers();
+        renderResults();
     });
 
     document.getElementById('search-input').addEventListener('input', () => {
         currentPage = 1; // Reset to first page on search
         renderPagination();
-        renderUsers();
+        renderResults();
     });
 
-    function renderUsers() {
+    function renderResults() {
         const searchQuery = document.getElementById('search-input').value.toLowerCase();
         const filteredUsers = users.filter(user => {
             const profile = JSON.parse(user.user_profile);
             return user.user_firstname.toLowerCase().includes(searchQuery) ||
-                user.user_lastname.toLowerCase().includes(searchQuery) ||
-                profile.user_photo.toLowerCase().includes(searchQuery);
+                user.user_lastname.toLowerCase().includes(searchQuery);
         });
 
         const startIndex = (currentPage - 1) * itemsPerPage;
@@ -143,8 +142,7 @@ $users = $users ?? array();
         const filteredUsers = users.filter(user => {
             const profile = JSON.parse(user.user_profile);
             return user.user_firstname.toLowerCase().includes(searchQuery) ||
-                user.user_lastname.toLowerCase().includes(searchQuery) ||
-                profile.user_photo.toLowerCase().includes(searchQuery);
+                user.user_lastname.toLowerCase().includes(searchQuery);
         });
 
         const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
@@ -188,11 +186,11 @@ $users = $users ?? array();
     function goToPage(page) {
         currentPage = page;
         renderPagination();
-        renderUsers();
+        renderResults();
     }
 
     // Initial render
     renderPagination();
-    renderUsers();
+    renderResults();
 </script>
 <?= $this->endSection('content') ?>
