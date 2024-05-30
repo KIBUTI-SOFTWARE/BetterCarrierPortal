@@ -242,39 +242,14 @@ $user_level = $user["user_level"];
                     <a class="menu
                     <?php if ($_SERVER["REQUEST_URI"] === "view-profile" || $_SERVER["REQUEST_URI"] === "change-password" || str_contains($_SERVER["REQUEST_URI"], "profile")) {
                         ?>menu--active<?php
-                    } ?>" href="javascript:;">
+                    } ?>" href="/view-profile">
                         <div class="menu__icon">
                             <i data-tw-merge="" data-lucide="user" class="stroke-1.5 w-5 h-5"></i>
                         </div>
                         <div class="menu__title">
                             Profile
-                            <div class="menu__sub-icon ">
-                                <i data-tw-merge="" data-lucide="chevron-down" class="stroke-1.5 w-5 h-5"></i>
-                            </div>
                         </div>
                     </a>
-                    <ul class="">
-                        <li>
-                            <a class="menu" href="/view-profile">
-                                <div class="menu__icon">
-                                    <i data-tw-merge="" data-lucide="activity" class="stroke-1.5 w-5 h-5"></i>
-                                </div>
-                                <div class="menu__title">
-                                    My Profile
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="menu" href="/change-password">
-                                <div class="menu__icon">
-                                    <i data-tw-merge="" data-lucide="activity" class="stroke-1.5 w-5 h-5"></i>
-                                </div>
-                                <div class="menu__title">
-                                    Change Password
-                                </div>
-                            </a>
-                        </li>
-                    </ul>
                 </li>
                 <li>
                     <a class="menu menu--active" href="/logout">
@@ -469,7 +444,7 @@ $user_level = $user["user_level"];
                 ?>
                 <li class="side-nav__divider my-6"></li>
                 <li>
-                    <a href="javascript:;" class="side-menu
+                    <a href="/view-profile" class="side-menu
                     <?php if ($_SERVER["REQUEST_URI"] === "view-profile" || $_SERVER["REQUEST_URI"] === "change-password" || str_contains($_SERVER["REQUEST_URI"], "profile")) {
                         ?>side-menu--active<?php
                     } ?>">
@@ -478,33 +453,8 @@ $user_level = $user["user_level"];
                         </div>
                         <div class="side-menu__title">
                             Profile
-                            <div class="side-menu__sub-icon ">
-                                <i data-tw-merge="" data-lucide="chevron-down" class="stroke-1.5 w-5 h-5"></i>
-                            </div>
                         </div>
                     </a>
-                    <ul class="">
-                        <li>
-                            <a href="/view-profile" class="side-menu">
-                                <div class="side-menu__icon">
-                                    <i data-tw-merge="" data-lucide="activity" class="stroke-1.5 w-5 h-5"></i>
-                                </div>
-                                <div class="side-menu__title">
-                                    My Profile
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/change-password" class="side-menu">
-                                <div class="side-menu__icon">
-                                    <i data-tw-merge="" data-lucide="activity" class="stroke-1.5 w-5 h-5"></i>
-                                </div>
-                                <div class="side-menu__title">
-                                    Change Password
-                                </div>
-                            </a>
-                        </li>
-                    </ul>
                 </li>
                 <li>
                     <a href="/logout" class="side-menu">
