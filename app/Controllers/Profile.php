@@ -19,6 +19,15 @@ class Profile extends BaseController
 
     public function myProfile(): string
     {
+//        $session = session();
+//        $user = $session->get('user');
+//        $user_id = $user['_id'];
+//        $model = new UsersModel();
+//        $data = [
+//            "user_profile" => $model->getUserByID($user_id)
+//        ];
+//        return view('view-profile', $data);
+
         return view('view-profile');
     }
 

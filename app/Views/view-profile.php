@@ -1,15 +1,17 @@
 <?php
 $session = session();
 $user = $session->get("user");
-$user_id = $user["_id"];
 $user_profile = json_decode($user["user_profile"], true);
 $user_level = $user["user_level"];
+
 ?>
 <?= $this->extend('Layouts/main_dashboard.php') ?>
 <?= $this->section('content') ?>
 <!-- BEGIN: Content -->
 <div class="mt-8 flex items-center">
     <h2 class="intro-y mr-auto text-lg font-medium">Profile</h2>
+    <?php
+    print_r($user_profile)?>
 </div>
 <div>
     <!-- BEGIN: Profile Info -->
@@ -17,14 +19,15 @@ $user_level = $user["user_level"];
         <div class="-mx-5 flex flex-col border-b border-slate-200/60 pb-5 dark:border-darkmode-400 lg:flex-row">
             <div class="flex flex-1 items-center justify-center px-5 lg:justify-start">
                 <div class="image-fit relative h-20 w-20 flex-none sm:h-24 sm:w-24 lg:h-32 lg:w-32">
-                    <img class="rounded-full" src="dist/images/fakers/profile-15.jpg"
-                         alt="Midone - Tailwind Admin Dashboard Template">
+                    <img class="rounded-full" src="<?=$user_profile['user_photo'] ?? ""?>"
+                         onerror="this.onerror=null; this.src='dist/images/fakers/profile-9.jpg';"
+                         alt="User">
                 </div>
                 <div class="ml-5">
                     <div class="w-24 truncate text-lg font-medium sm:w-40 sm:whitespace-normal">
-                        Denzel Washington
+                        <?=ucwords($user['user_firstname'] ." ". $user['user_lastname'])?>
                     </div>
-                    <div class="text-slate-500">DevOps Engineer</div>
+                    <div class="text-slate-500"><?=\Config\MyFunctions::getUserLevel($user_level)?></div>
                 </div>
             </div>
             <div class="mt-6 flex-1 border-l border-r border-t border-slate-200/60 px-5 pt-5 dark:border-darkmode-400 lg:mt-0 lg:border-t-0 lg:pt-0">
@@ -34,30 +37,45 @@ $user_level = $user["user_level"];
                 <div class="mt-4 flex flex-col items-center justify-center lg:items-start">
                     <div class="flex items-center truncate sm:whitespace-normal">
                         <i data-tw-merge="" data-lucide="mail" class="stroke-1.5 mr-2 h-4 w-4"></i>
-                        denzelwashington@left4code.com
+                        <?=$user['user_email']?>
                     </div>
                     <div class="mt-3 flex items-center truncate sm:whitespace-normal">
-                        <i data-tw-merge="" data-lucide="instagram" class="stroke-1.5 mr-2 h-4 w-4"></i>
-                        Instagram
-                        Denzel Washington
+                        <i data-tw-merge="" data-lucide="phone" class="stroke-1.5 mr-2 h-4 w-4"></i>
+                        <?=$user['user_phone']?>
                     </div>
                     <div class="mt-3 flex items-center truncate sm:whitespace-normal">
-                        <i data-tw-merge="" data-lucide="twitter" class="stroke-1.5 mr-2 h-4 w-4"></i>
-                        Twitter
-                        Denzel Washington
+                        <i data-tw-merge="" data-lucide="github" class="stroke-1.5 mr-2 h-4 w-4"></i>
+                        <?=$user_profile['user_github'] ?? "Not Set"?>
+                    </div>
+                    <div class="mt-3 flex items-center truncate sm:whitespace-normal">
+                        <i data-tw-merge="" data-lucide="linkedin" class="stroke-1.5 mr-2 h-4 w-4"></i>
+                        <?=$user_profile['user_linkedin'] ?? "Not Set"?>
                     </div>
                 </div>
             </div>
             <div class="mt-6 flex flex-1 items-center justify-center border-t border-slate-200/60 px-5 pt-5 dark:border-darkmode-400 lg:mt-0 lg:border-0 lg:pt-0">
                 <div class="w-20 rounded-md py-3 text-center">
-                    <div class="text-xl font-medium text-primary">201</div>
-                    <div class="text-slate-500">Posts</div>
+                    <div class="mt-4 flex justify-end">
+                        <?php
+                            if ($user_level > "3") {
+                                ?>
+                                <a class="flex items-center text-primary transition duration-200 border shadow-sm inline-flex items-center justify-center py-2 px-3 rounded-md font-medium cursor-pointer focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus-visible:outline-none dark:focus:ring-slate-700 dark:focus:ring-opacity-50 [&:hover:not(:disabled)]:bg-opacity-90 [&:hover:not(:disabled)]:border-opacity-90 [&:not(button)]:text-center disabled:opacity-70 disabled:cursor-not-allowed bg-primary border-primary text-white dark:border-primary mr-auto w-20"
+                                   href="<?=$user_profile['user_cv']?>">
+                                    <i data-tw-merge="" data-lucide="download" class="stroke-1.5 mr-1 h-4 w-4"></i>
+                                    CV
+                                </a>
+                                <?php
+                            } else {
+                                ?>
+                                <button disabled class="flex items-center text-primary transition duration-200 border shadow-sm inline-flex items-center justify-center py-2 px-3 rounded-md font-medium cursor-pointer focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus-visible:outline-none dark:focus:ring-slate-700 dark:focus:ring-opacity-50 [&:hover:not(:disabled)]:bg-opacity-90 [&:hover:not(:disabled)]:border-opacity-90 [&:not(button)]:text-center disabled:opacity-70 disabled:cursor-not-allowed bg-primary border-primary text-white dark:border-primary mr-auto w-20">
+                                    <i data-tw-merge="" data-lucide="download" class="stroke-1.5 mr-1 h-4 w-4"></i>
+                                    CV
+                                </button>
+                                <?php
+                            }
+                        ?>
+                    </div>
                 </div>
-                <div class="w-20 rounded-md py-3 text-center">
-                    <div class="text-xl font-medium text-primary">1k</div>
-                    <div class="text-slate-500">Applications</div>
-                </div>
-
             </div>
         </div>
         <ul data-tw-merge="" role="tablist"
