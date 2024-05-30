@@ -17,6 +17,11 @@ class Profile extends BaseController
         return view('setup-profile');
     }
 
+    public function myProfile(): string
+    {
+        return view('view-profile');
+    }
+
     public function profileSetupAction()
     {
         if ($this->request->is('post')) {

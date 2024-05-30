@@ -35,6 +35,7 @@ $routes->get('/dashboard', 'Dashboard::dashboard');
 
 //Users
     //User Profile
+$routes->get('/view-profile', 'Profile::myProfile');
 $routes->get('/profile-setup', 'Profile::profileSetup');
 $routes->post('/profile-setup', 'Profile::profileSetupAction');
     //Users Management
