@@ -398,6 +398,111 @@ class Profile extends BaseController
         return redirect()->back();
     }
 
+    public function updatePassword(): \CodeIgniter\HTTP\ResponseInterface
+    {
+        if ($this->request->is('post')) {
+            $session = \Config\Services::session();
+
+            $user = $session->get('user');
+            $user_id = $user['_id'];
+
+            $validation = \Config\Services::validation();
+            $data = $this->request->getPost();
+
+            if (!is_null($data)) {
+
+                $validation->setRules([
+                    'current_password' => [
+                        'rules' => 'required',
+                        'label' => "Current Password",
+                        'errors' => [
+                            'required' => "Current Password Field Cannot be Empty.",
+                        ]
+                    ],
+
+                    'new_password' => [
+                        'rules' => 'required',
+                        'label' => "New Password",
+                        'errors' => [
+                            'required' => "New Password Field Cannot be Empty.",
+                        ]
+                    ],
+
+                    'confirm_new_password' => [
+                        'rules' => 'required',
+                        'label' => "Confirm Password",
+                        'errors' => [
+                            'required' => "Confirm Password Field Cannot be Empty.",
+                        ]
+                    ],
+                ]);
+
+                if ($validation->run($data)) {
+
+                    $current_password = $data['current_password'];
+                    $new_password = $data['new_password'];
+                    $confirm_new_password = $data['confirm_new_password'];
+
+                    if ($new_password === $confirm_new_password) {
+
+                        $model = new UsersModel();
+
+                        $result = $model->getUserByID($user_id);
+
+                        if (empty($result)) {
+                            $message = [
+                                "message" => "Could not Find user."
+                            ];
+                        } else {
+                            if (password_verify($current_password, $result['user_password'])) {
+                                $update_data = [
+                                    'user_password' => password_hash($new_password, PASSWORD_DEFAULT)
+                                ];
+                                $update_password_result = $model->updateUser($update_data, $user_id);
+
+                                if (empty($update_password_result)) {
+                                    $message = [
+                                        "message" => "Could Not Update User Password, Please Try Again."
+                                    ];
+                                } else {
+                                    $message = [
+                                        "message" => "User Password Updated Successfully."
+                                    ];
+                                    $session->setFlashdata("success", $message);
+                                    return redirect()->back();
+                                }
+                            } else {
+                                $message = [
+                                    "message" => "Incorrect Current Password."
+                                ];
+                            }
+                        }
+                    } else {
+                        $message = [
+                            "message" => "The New Passwords Do Not Match."
+                        ];
+                    }
+                    $session->setFlashdata("error", $message);
+
+                } else {
+                    $_SESSION['validationErrors'] = $validation->getErrors();
+                    $message = [
+                        "message" => $validation->getErrors()
+                    ];
+                    $session->setFlashdata("validationErrors", $message);
+                }
+
+            } else {
+                $message = [
+                    "message" => "Invalid Form Data/Fields."
+                ];
+                $session->setFlashdata("error", $message);
+            }
+            $session->setFlashdata('form_data', $data);
+        }
+        return redirect()->back();
+    }
+
     private function saveFile(string $identifier): string
     {
         $file = $this->request->getFile($identifier);

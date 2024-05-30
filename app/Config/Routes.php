@@ -38,6 +38,7 @@ $routes->get('/dashboard', 'Dashboard::dashboard');
 $routes->get('/view-profile', 'Profile::myProfile');
 $routes->get('/profile-setup', 'Profile::profileSetup');
 $routes->post('/profile-setup', 'Profile::profileSetupAction');
+$routes->post('/change-password', 'Profile::updatePassword');
     //Users Management
 $routes->post('/ajax/get-user', 'Users::getAJAXUser');
 $routes->get('/view-users', 'Users::viewUsers');

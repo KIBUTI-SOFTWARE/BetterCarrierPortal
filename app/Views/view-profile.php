@@ -93,7 +93,7 @@ $user_level = $user["user_level"];
             </li>
             <li id="change-password-tab" data-tw-merge="" role="presentation"
                 class="focus-visible:outline-none">
-                <a data-tw-merge="" data-tw-target="#change-password" role="tab"
+                <a data-tw-merge="" data-tw-toggle="modal" data-tw-target="#change-password" role="tab"
                    class="cursor-pointer appearance-none px-5 border border-transparent text-slate-700 dark:text-slate-400 [&.active]:text-slate-800 [&.active]:dark:text-white border-b-2 dark:border-transparent [&.active]:border-b-primary [&.active]:font-medium [&.active]:dark:border-b-primary flex items-center py-4"><i
                             data-tw-merge="" data-lucide="lock" class="stroke-1.5 mr-2 h-4 w-4"></i>
                     Change Password</a>
@@ -385,6 +385,38 @@ $user_level = $user["user_level"];
     </div>
     <!-- END: Personal Information -->
 </div>
+<?php include "Modals/users.php"; ?>
 <!-- END: Content -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById('submit').disabled = true; // Disable the button by default
+    });
+
+    function validatePassword() {
+        const password = document.getElementById('new_password').value;
+        const confirmPassword = document.getElementById('confirm_password').value;
+
+        // Get the error message container
+        const errorMessages = document.getElementById('errorMessages');
+
+        // Reset previous error messages
+        errorMessages.innerHTML = '';
+
+        // Check if password and confirm password match
+        if (password === '' || confirmPassword === '') {
+            document.getElementById('submit').disabled = true;
+            errorMessages.innerHTML = 'Please enter both password and confirm password.';
+        } else if (password !== confirmPassword) {
+            document.getElementById('submit').disabled = true;
+            errorMessages.innerHTML = 'Password and Confirm Password do not match.';
+        } else {
+            document.getElementById('submit').disabled = false;
+        }
+    }
+
+    // Attach the validatePassword function to the input events of password and confirm password fields
+    document.getElementById('new_password').addEventListener('input', validatePassword);
+    document.getElementById('confirm_password').addEventListener('input', validatePassword);
+</script>
 <?= $this->endSection('content') ?>
 
