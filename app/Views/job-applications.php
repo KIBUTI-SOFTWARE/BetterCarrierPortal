@@ -1,6 +1,9 @@
 <?php
 $session = session();
 $user = $session->get("user");
+$user_profile = json_decode($user["user_profile"], true);
+$user_id = $user["_id"];
+$user_level = $user["user_level"];
 $job_applications = $job_applications ?? array();
 ?>
 <?= $this->extend('Layouts/main_dashboard.php') ?>
@@ -94,8 +97,16 @@ $job_applications = $job_applications ?? array();
 
     async function renderResults() {
         const searchQuery = document.getElementById('search-input').value.toLowerCase();
-        const filteredApplications = jobApplications.filter(application => {
-            return application._id.toLowerCase().includes(searchQuery);
+        const filteredApplications = jobApplications.filter(async application => {
+            const applicationSentOn = timeAgo(application.job_application_created_on);
+            const jobPost = await getJobPost(application.job_post_id);
+            const jobPostedBy = await getUser(jobPost.job_post_created_by);
+            const jobApplicant = await getUser(application.job_application_created_by);
+            return jobPost.job_post_title.toLowerCase().includes(searchQuery) ||
+                jobApplicant.user_firstname.toLowerCase().includes(searchQuery) ||
+                jobApplicant.user_lastname.toLowerCase().includes(searchQuery) ||
+                jobPostedBy.user_firstname.toLowerCase().includes(searchQuery) ||
+                jobPostedBy.user_lastname.toLowerCase().includes(searchQuery);
         });
 
         const startIndex = (currentPage - 1) * itemsPerPage;
@@ -106,6 +117,7 @@ $job_applications = $job_applications ?? array();
         const applicationsContainer = document.getElementById('job-applications-container');
         applicationsContainer.innerHTML = '';
 
+        let postHTML;
         for (const application of paginatedApplications) {
             ++sn
             const applicationSentOn = timeAgo(application.job_application_created_on);
@@ -113,8 +125,14 @@ $job_applications = $job_applications ?? array();
             const jobPostedBy = await getUser(jobPost.job_post_created_by);
             const jobApplicant = await getUser(application.job_application_created_by);
 
-            applicationsContainer.innerHTML += `
-                <tr data-tw-merge="" class="intro-x">
+            // Check if the logged-in user's level is the one who posted the job/is admin
+            const isJobEmployer = `<?=$user_id?>` === jobPost.job_post_created_by || `<?=$user_level?>` < "3";
+
+            // Check if the logged-in user is the creator of the post
+            const isApplicant = `<?=$user_id?>` === application.job_application_created_by || `<?=$user_level?>` < "3";
+
+            const userApplications = isApplicant ? `
+               <tr data-tw-merge="" class="intro-x">
                     <td data-tw-merge=""
                                 class="px-5 py-3 border-b dark:border-darkmode-300 box rounded-l-none rounded-r-none border-x-0 text-left shadow-[5px_3px_5px_#00000005] first:rounded-l-[0.6rem] first:border-l last:rounded-r-[0.6rem] last:border-r dark:bg-darkmode-600">
                         ${sn}
@@ -153,8 +171,52 @@ $job_applications = $job_applications ?? array();
                             </a>
                         </div>
                     </td>
-                </tr>
+                </tr>` : '';
+
+            const userJobPostApplications = isJobEmployer ? `
+               <tr data-tw-merge="" class="intro-x">
+                    <td data-tw-merge=""
+                                class="px-5 py-3 border-b dark:border-darkmode-300 box rounded-l-none rounded-r-none border-x-0 text-left shadow-[5px_3px_5px_#00000005] first:rounded-l-[0.6rem] first:border-l last:rounded-r-[0.6rem] last:border-r dark:bg-darkmode-600">
+                        ${sn}
+                    </td>
+                    <td data-tw-merge=""
+                                class="text-left px-5 py-3 border-b dark:border-darkmode-300 box rounded-l-none rounded-r-none border-x-0 shadow-[5px_3px_5px_#00000005] first:rounded-l-[0.6rem] first:border-l last:rounded-r-[0.6rem] last:border-r dark:bg-darkmode-600">
+                        <a class="whitespace-nowrap font-medium" href="#">
+                           ${jobPost.job_post_title}
+                        </a>
+                        <div class="mt-0.5 whitespace-nowrap text-xs text-slate-500">
+                           ${jobPostedBy.user_firstname} ${jobPostedBy.user_lastname}
+                        </div>
+                    </td>
+                    <td data-tw-merge=""
+                                class="text-left px-5 py-3 border-b dark:border-darkmode-300 box rounded-l-none rounded-r-none border-x-0 shadow-[5px_3px_5px_#00000005] first:rounded-l-[0.6rem] first:border-l last:rounded-r-[0.6rem] last:border-r dark:bg-darkmode-600">
+                        <a class="whitespace-nowrap font-medium" href="#">
+                           ${jobApplicant.user_firstname} ${jobApplicant.user_lastname}
+                        </a>
+                    </td>
+                    <td data-tw-merge=""
+                                class="text-left px-5 py-3 border-b dark:border-darkmode-300 box w-40 rounded-l-none rounded-r-none border-x-0 shadow-[5px_3px_5px_#00000005] first:rounded-l-[0.6rem] first:border-l last:rounded-r-[0.6rem] last:border-r dark:bg-darkmode-600">
+                        <div class="flex items-center justify-center text-success">
+                            ${applicationSentOn}
+                        </div>
+                    </td>
+                    <td data-tw-merge=""
+                                class="text-left px-5 py-3 border-b dark:border-darkmode-300 box w-56 rounded-l-none rounded-r-none border-x-0 shadow-[5px_3px_5px_#00000005] first:rounded-l-[0.6rem] first:border-l last:rounded-r-[0.6rem] last:border-r dark:bg-darkmode-600 before:absolute before:inset-y-0 before:left-0 before:my-auto before:block before:h-8 before:w-px before:bg-slate-200 before:dark:bg-darkmode-400">
+                        <div class="flex items-center justify-center">
+                            <a class="mr-3 flex items-center" href="#">
+                                <i data-tw-merge="" data-lucide="view" class="stroke-1.5 mr-1 h-4 w-4"></i>
+                                View
+                            </a>
+                        </div>
+                    </td>
+                </tr>` : '';
+
+            postHTML = `
+                ${userApplications}
+                ${userJobPostApplications}
             `;
+
+            applicationsContainer.insertAdjacentHTML('beforeend', postHTML);
         }
 
         document.getElementById('entries-info').innerText = `Showing ${startIndex + 1} to ${Math.min(endIndex, filteredApplications.length)} of ${filteredApplications.length} entries`;
@@ -162,8 +224,16 @@ $job_applications = $job_applications ?? array();
 
     function renderPagination() {
         const searchQuery = document.getElementById('search-input').value.toLowerCase();
-        const filteredApplications = jobApplications.filter(application => {
-            return application._id.toLowerCase().includes(searchQuery);
+        const filteredApplications = jobApplications.filter(async application => {
+            const applicationSentOn = timeAgo(application.job_application_created_on);
+            const jobPost = await getJobPost(application.job_post_id);
+            const jobPostedBy = await getUser(jobPost.job_post_created_by);
+            const jobApplicant = await getUser(application.job_application_created_by);
+            return jobPost.job_post_title.toLowerCase().includes(searchQuery) ||
+                jobApplicant.user_firstname.toLowerCase().includes(searchQuery) ||
+                jobApplicant.user_lastname.toLowerCase().includes(searchQuery) ||
+                jobPostedBy.user_firstname.toLowerCase().includes(searchQuery) ||
+                jobPostedBy.user_lastname.toLowerCase().includes(searchQuery);
         });
 
         const totalPages = Math.ceil(filteredApplications.length / itemsPerPage);
