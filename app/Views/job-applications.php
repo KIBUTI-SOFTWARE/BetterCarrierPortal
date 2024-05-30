@@ -27,7 +27,11 @@ $job_applications = $job_applications ?? array();
                 </th>
                 <th data-tw-merge=""
                     class="font-medium px-5 py-3 dark:border-darkmode-300 whitespace-nowrap border-b-0 text-left">
-                    APPLICATION ON
+                    APPLICANT
+                </th>
+                <th data-tw-merge=""
+                    class="font-medium px-5 py-3 dark:border-darkmode-300 whitespace-nowrap border-b-0 text-left">
+                    APPLICATION SENT ON
                 </th>
                 <th data-tw-merge=""
                     class="font-medium px-5 py-3 dark:border-darkmode-300 whitespace-nowrap border-b-0 text-left">
@@ -58,6 +62,12 @@ $job_applications = $job_applications ?? array();
                                 <div class="mt-0.5 whitespace-nowrap text-xs text-slate-500">
                                     <?= $job_posted_by['user_firstname'] . " " . $job_posted_by['user_lastname'] ?>
                                 </div>
+                            </td>
+                            <td data-tw-merge=""
+                                class="text-left px-5 py-3 border-b dark:border-darkmode-300 box rounded-l-none rounded-r-none border-x-0 shadow-[5px_3px_5px_#00000005] first:rounded-l-[0.6rem] first:border-l last:rounded-r-[0.6rem] last:border-r dark:bg-darkmode-600">
+                                <a class="whitespace-nowrap font-medium" href="#">
+                                    <?= $job_applicant['user_firstname'] . " " . $job_applicant['user_lastname'] ?>
+                                </a>
                             </td>
                             <td data-tw-merge=""
                                 class="text-left px-5 py-3 border-b dark:border-darkmode-300 box w-40 rounded-l-none rounded-r-none border-x-0 shadow-[5px_3px_5px_#00000005] first:rounded-l-[0.6rem] first:border-l last:rounded-r-[0.6rem] last:border-r dark:bg-darkmode-600">
@@ -92,6 +102,12 @@ $job_applications = $job_applications ?? array();
                                 <div class="mt-0.5 whitespace-nowrap text-xs text-slate-500">
                                     <?= $job_posted_by['user_firstname'] . " " . $job_posted_by['user_lastname'] ?>
                                 </div>
+                            </td>
+                            <td data-tw-merge=""
+                                class="text-left px-5 py-3 border-b dark:border-darkmode-300 box rounded-l-none rounded-r-none border-x-0 shadow-[5px_3px_5px_#00000005] first:rounded-l-[0.6rem] first:border-l last:rounded-r-[0.6rem] last:border-r dark:bg-darkmode-600">
+                                <a class="whitespace-nowrap font-medium" href="#">
+                                    <?= $job_applicant['user_firstname'] . " " . $job_applicant['user_lastname'] ?>
+                                </a>
                             </td>
                             <td data-tw-merge=""
                                 class="text-left px-5 py-3 border-b dark:border-darkmode-300 box w-40 rounded-l-none rounded-r-none border-x-0 shadow-[5px_3px_5px_#00000005] first:rounded-l-[0.6rem] first:border-l last:rounded-r-[0.6rem] last:border-r dark:bg-darkmode-600">
