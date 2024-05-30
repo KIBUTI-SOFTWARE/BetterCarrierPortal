@@ -181,9 +181,6 @@ $user_level = $user["user_level"];
                 <h2 class="mr-auto text-base font-medium">
                     Other Information
                 </h2>
-                <?php
-                print_r($user_profile)
-                ?>
             </div>
             <div class="p-5">
                 <div class="grid grid-cols-12 gap-x-5">
@@ -243,7 +240,7 @@ $user_level = $user["user_level"];
                                 if (isset($user_profile['user_preferred_industries']) && is_array($user_profile['user_preferred_industries']) && count($user_profile['user_preferred_industries']) > 0) {
                                     $sn = 0;
                                     foreach ($user_profile['user_preferred_industries'] as $user_preferred_industry) {
-                                        ?><?= ++$sn ?>: <?= \Config\MyFunctions::getIndustry($user_preferred_industry).PHP_EOL ?><?php
+                                        ?><?= ++$sn ?>: <?= \Config\MyFunctions::getIndustry($user_preferred_industry) . PHP_EOL ?><?php
                                     }
                                 }
                                 ?>
@@ -261,19 +258,130 @@ $user_level = $user["user_level"];
                         </div>
                     </div>
                 </div>
-                <div class="mt-4 flex justify-end">
-                    <button data-tw-merge="" type="button"
-                            class="transition duration-200 border shadow-sm inline-flex items-center justify-center py-2 px-3 rounded-md font-medium cursor-pointer focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus-visible:outline-none dark:focus:ring-slate-700 dark:focus:ring-opacity-50 [&:hover:not(:disabled)]:bg-opacity-90 [&:hover:not(:disabled)]:border-opacity-90 [&:not(button)]:text-center disabled:opacity-70 disabled:cursor-not-allowed bg-primary border-primary text-white dark:border-primary mr-auto w-20">
-                        Save
-                    </button>
-                    <a class="flex items-center text-danger" href="#">
-                        <i data-tw-merge="" data-lucide="trash" class="stroke-1.5 mr-1 h-4 w-4"></i>
-                        Delete
-                        Account
-                    </a>
-                </div>
             </div>
         </div>
+        <?php
+        if ($user_level === "3") {
+            ?>
+            <div class="intro-y box mt-5">
+                <div class="flex items-center border-b border-slate-200/60 p-5 dark:border-darkmode-400">
+                    <h2 class="mr-auto text-base font-medium">
+                        Company Information
+                    </h2>
+                    <div class="mt-4 flex justify-end">
+                        <div class="flex items-center text-danger image-fit relative h-10 w-10 flex-none sm:h-14 sm:w-20 lg:h-20 lg:w-20 ">
+                            <img class="rounded-full" src="<?= $user_profile['user_company_logo'] ?? "" ?>"
+                                 onerror="this.onerror=null; this.src='dist/images/fakers/profile-9.jpg';"
+                                 alt="User">
+                        </div>
+                    </div>
+                </div>
+                <div class="p-5">
+                    <div class="grid grid-cols-12 gap-x-5">
+                        <div class="col-span-12 xl:col-span-6">
+                            <div>
+                                <label data-tw-merge="" for="update-profile-form-7"
+                                       class="inline-block mb-2 group-[.form-inline]:mb-2 group-[.form-inline]:sm:mb-0 group-[.form-inline]:sm:mr-5 group-[.form-inline]:sm:text-right">
+                                    Company Name
+                                </label>
+                                <input data-tw-merge="" id="update-profile-form-7" type="text"
+                                       value="<?= $user_profile['user_company_name'] ?? "Not Set" ?>"
+                                       placeholder="Input text" disabled="disabled"
+                                       class="disabled:bg-slate-100 disabled:cursor-not-allowed dark:disabled:bg-darkmode-800/50 dark:disabled:border-transparent [&[readonly]]:bg-slate-100 [&[readonly]]:cursor-not-allowed [&[readonly]]:dark:bg-darkmode-800/50 [&[readonly]]:dark:border-transparent transition duration-200 ease-in-out w-full text-sm border-slate-200 shadow-sm rounded-md placeholder:text-slate-400/90 focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus:border-primary focus:border-opacity-40 dark:bg-darkmode-800 dark:border-transparent dark:focus:ring-slate-700 dark:focus:ring-opacity-50 dark:placeholder:text-slate-500/80 group-[.form-inline]:flex-1 group-[.input-group]:rounded-none group-[.input-group]:[&:not(:first-child)]:border-l-transparent group-[.input-group]:first:rounded-l group-[.input-group]:last:rounded-r group-[.input-group]:z-10">
+                            </div>
+                            <div class="mt-3">
+                                <label data-tw-merge="" for="update-profile-form-10"
+                                       class="inline-block mb-2 group-[.form-inline]:mb-2 group-[.form-inline]:sm:mb-0 group-[.form-inline]:sm:mr-5 group-[.form-inline]:sm:text-right">
+                                    Company Phone Number
+                                </label>
+                                <input data-tw-merge="" id="update-profile-form-10" type="text"
+                                       value="<?= $user_profile['user_company_phone'] ?? "Not Set" ?>" disabled="disabled" placeholder="Input text"
+                                       class="disabled:bg-slate-100 disabled:cursor-not-allowed dark:disabled:bg-darkmode-800/50 dark:disabled:border-transparent [&[readonly]]:bg-slate-100 [&[readonly]]:cursor-not-allowed [&[readonly]]:dark:bg-darkmode-800/50 [&[readonly]]:dark:border-transparent transition duration-200 ease-in-out w-full text-sm border-slate-200 shadow-sm rounded-md placeholder:text-slate-400/90 focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus:border-primary focus:border-opacity-40 dark:bg-darkmode-800 dark:border-transparent dark:focus:ring-slate-700 dark:focus:ring-opacity-50 dark:placeholder:text-slate-500/80 group-[.form-inline]:flex-1 group-[.input-group]:rounded-none group-[.input-group]:[&:not(:first-child)]:border-l-transparent group-[.input-group]:first:rounded-l group-[.input-group]:last:rounded-r group-[.input-group]:z-10">
+                            </div>
+                            <div class="mt-3">
+                                <label data-tw-merge="" for="update-profile-form-10"
+                                       class="inline-block mb-2 group-[.form-inline]:mb-2 group-[.form-inline]:sm:mb-0 group-[.form-inline]:sm:mr-5 group-[.form-inline]:sm:text-right">
+                                    Company Employees
+                                </label>
+                                <input data-tw-merge="" id="update-profile-form-10" type="text"
+                                       value="<?= $user_profile['user_company_employees'] ?? "Not Set" ?>" disabled="disabled" placeholder="Input text"
+                                       class="disabled:bg-slate-100 disabled:cursor-not-allowed dark:disabled:bg-darkmode-800/50 dark:disabled:border-transparent [&[readonly]]:bg-slate-100 [&[readonly]]:cursor-not-allowed [&[readonly]]:dark:bg-darkmode-800/50 [&[readonly]]:dark:border-transparent transition duration-200 ease-in-out w-full text-sm border-slate-200 shadow-sm rounded-md placeholder:text-slate-400/90 focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus:border-primary focus:border-opacity-40 dark:bg-darkmode-800 dark:border-transparent dark:focus:ring-slate-700 dark:focus:ring-opacity-50 dark:placeholder:text-slate-500/80 group-[.form-inline]:flex-1 group-[.input-group]:rounded-none group-[.input-group]:[&:not(:first-child)]:border-l-transparent group-[.input-group]:first:rounded-l group-[.input-group]:last:rounded-r group-[.input-group]:z-10">
+                            </div>
+                            <div class="mt-3">
+                                <label data-tw-merge="" for="update-profile-form-10"
+                                       class="inline-block mb-2 group-[.form-inline]:mb-2 group-[.form-inline]:sm:mb-0 group-[.form-inline]:sm:mr-5 group-[.form-inline]:sm:text-right">
+                                    Company Contact Person
+                                </label>
+                                <input data-tw-merge="" id="update-profile-form-10" type="text"
+                                       value="<?= $user_profile['user_company_contact_person'] ?? "Not Set" ?>" disabled="disabled" placeholder="Input text"
+                                       class="disabled:bg-slate-100 disabled:cursor-not-allowed dark:disabled:bg-darkmode-800/50 dark:disabled:border-transparent [&[readonly]]:bg-slate-100 [&[readonly]]:cursor-not-allowed [&[readonly]]:dark:bg-darkmode-800/50 [&[readonly]]:dark:border-transparent transition duration-200 ease-in-out w-full text-sm border-slate-200 shadow-sm rounded-md placeholder:text-slate-400/90 focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus:border-primary focus:border-opacity-40 dark:bg-darkmode-800 dark:border-transparent dark:focus:ring-slate-700 dark:focus:ring-opacity-50 dark:placeholder:text-slate-500/80 group-[.form-inline]:flex-1 group-[.input-group]:rounded-none group-[.input-group]:[&:not(:first-child)]:border-l-transparent group-[.input-group]:first:rounded-l group-[.input-group]:last:rounded-r group-[.input-group]:z-10">
+                            </div>
+                            <div class="mt-3">
+                                <label data-tw-merge="" for="update-profile-form-10"
+                                       class="inline-block mb-2 group-[.form-inline]:mb-2 group-[.form-inline]:sm:mb-0 group-[.form-inline]:sm:mr-5 group-[.form-inline]:sm:text-right">
+                                    Company Contact Email
+                                </label>
+                                <input data-tw-merge="" id="update-profile-form-10" type="text"
+                                       value="<?= $user_profile['user_company_contact_person_email'] ?? "Not Set" ?>" disabled="disabled" placeholder="Input text"
+                                       class="disabled:bg-slate-100 disabled:cursor-not-allowed dark:disabled:bg-darkmode-800/50 dark:disabled:border-transparent [&[readonly]]:bg-slate-100 [&[readonly]]:cursor-not-allowed [&[readonly]]:dark:bg-darkmode-800/50 [&[readonly]]:dark:border-transparent transition duration-200 ease-in-out w-full text-sm border-slate-200 shadow-sm rounded-md placeholder:text-slate-400/90 focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus:border-primary focus:border-opacity-40 dark:bg-darkmode-800 dark:border-transparent dark:focus:ring-slate-700 dark:focus:ring-opacity-50 dark:placeholder:text-slate-500/80 group-[.form-inline]:flex-1 group-[.input-group]:rounded-none group-[.input-group]:[&:not(:first-child)]:border-l-transparent group-[.input-group]:first:rounded-l group-[.input-group]:last:rounded-r group-[.input-group]:z-10">
+                            </div>
+                        </div>
+                        <div class="col-span-12 xl:col-span-6">
+                            <div class="mt-3 xl:mt-0">
+                                <label data-tw-merge="" for="update-profile-form-6"
+                                       class="inline-block mb-2 group-[.form-inline]:mb-2 group-[.form-inline]:sm:mb-0 group-[.form-inline]:sm:mr-5 group-[.form-inline]:sm:text-right">
+                                    Company Email
+                                </label>
+                                <input data-tw-merge="" id="update-profile-form-6" type="text"
+                                       value="<?= $user_profile['user_company_email'] ?? "Not Set" ?>" placeholder="Input text" disabled="disabled"
+                                       class="disabled:bg-slate-100 disabled:cursor-not-allowed dark:disabled:bg-darkmode-800/50 dark:disabled:border-transparent [&[readonly]]:bg-slate-100 [&[readonly]]:cursor-not-allowed [&[readonly]]:dark:bg-darkmode-800/50 [&[readonly]]:dark:border-transparent transition duration-200 ease-in-out w-full text-sm border-slate-200 shadow-sm rounded-md placeholder:text-slate-400/90 focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus:border-primary focus:border-opacity-40 dark:bg-darkmode-800 dark:border-transparent dark:focus:ring-slate-700 dark:focus:ring-opacity-50 dark:placeholder:text-slate-500/80 group-[.form-inline]:flex-1 group-[.input-group]:rounded-none group-[.input-group]:[&:not(:first-child)]:border-l-transparent group-[.input-group]:first:rounded-l group-[.input-group]:last:rounded-r group-[.input-group]:z-10">
+                            </div>
+                            <div class="mt-3">
+                                <label data-tw-merge="" for="update-profile-form-10"
+                                       class="inline-block mb-2 group-[.form-inline]:mb-2 group-[.form-inline]:sm:mb-0 group-[.form-inline]:sm:mr-5 group-[.form-inline]:sm:text-right">
+                                    Company Location
+                                </label>
+                                <input data-tw-merge="" id="update-profile-form-10" type="text"
+                                       value="<?= $user_profile['user_company_location'] ?? "Not Set" ?>"
+                                       disabled="disabled" placeholder="Input text"
+                                       class="disabled:bg-slate-100 disabled:cursor-not-allowed dark:disabled:bg-darkmode-800/50 dark:disabled:border-transparent [&[readonly]]:bg-slate-100 [&[readonly]]:cursor-not-allowed [&[readonly]]:dark:bg-darkmode-800/50 [&[readonly]]:dark:border-transparent transition duration-200 ease-in-out w-full text-sm border-slate-200 shadow-sm rounded-md placeholder:text-slate-400/90 focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus:border-primary focus:border-opacity-40 dark:bg-darkmode-800 dark:border-transparent dark:focus:ring-slate-700 dark:focus:ring-opacity-50 dark:placeholder:text-slate-500/80 group-[.form-inline]:flex-1 group-[.input-group]:rounded-none group-[.input-group]:[&:not(:first-child)]:border-l-transparent group-[.input-group]:first:rounded-l group-[.input-group]:last:rounded-r group-[.input-group]:z-10">
+                            </div>
+                            <div class="mt-3">
+                                <label data-tw-merge="" for="update-profile-form-10"
+                                       class="inline-block mb-2 group-[.form-inline]:mb-2 group-[.form-inline]:sm:mb-0 group-[.form-inline]:sm:mr-5 group-[.form-inline]:sm:text-right">
+                                    Company Industry
+                                </label>
+                                <input data-tw-merge="" id="update-profile-form-10" type="text"
+                                       value="<?= \Config\MyFunctions::getIndustry($user_profile['user_company_industry']) ?? "Not Set" ?>"
+                                       disabled="disabled" placeholder="Input text"
+                                       class="disabled:bg-slate-100 disabled:cursor-not-allowed dark:disabled:bg-darkmode-800/50 dark:disabled:border-transparent [&[readonly]]:bg-slate-100 [&[readonly]]:cursor-not-allowed [&[readonly]]:dark:bg-darkmode-800/50 [&[readonly]]:dark:border-transparent transition duration-200 ease-in-out w-full text-sm border-slate-200 shadow-sm rounded-md placeholder:text-slate-400/90 focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus:border-primary focus:border-opacity-40 dark:bg-darkmode-800 dark:border-transparent dark:focus:ring-slate-700 dark:focus:ring-opacity-50 dark:placeholder:text-slate-500/80 group-[.form-inline]:flex-1 group-[.input-group]:rounded-none group-[.input-group]:[&:not(:first-child)]:border-l-transparent group-[.input-group]:first:rounded-l group-[.input-group]:last:rounded-r group-[.input-group]:z-10">
+                            </div>
+                            <div class="mt-3">
+                                <label data-tw-merge="" for="update-profile-form-10"
+                                       class="inline-block mb-2 group-[.form-inline]:mb-2 group-[.form-inline]:sm:mb-0 group-[.form-inline]:sm:mr-5 group-[.form-inline]:sm:text-right">
+                                    Company Contact Person Role
+                                </label>
+                                <input data-tw-merge="" id="update-profile-form-10" type="text"
+                                       value="<?= $user_profile['user_company_contact_person_role'] ?? "Not Set" ?>"
+                                       disabled="disabled" placeholder="Input text"
+                                       class="disabled:bg-slate-100 disabled:cursor-not-allowed dark:disabled:bg-darkmode-800/50 dark:disabled:border-transparent [&[readonly]]:bg-slate-100 [&[readonly]]:cursor-not-allowed [&[readonly]]:dark:bg-darkmode-800/50 [&[readonly]]:dark:border-transparent transition duration-200 ease-in-out w-full text-sm border-slate-200 shadow-sm rounded-md placeholder:text-slate-400/90 focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus:border-primary focus:border-opacity-40 dark:bg-darkmode-800 dark:border-transparent dark:focus:ring-slate-700 dark:focus:ring-opacity-50 dark:placeholder:text-slate-500/80 group-[.form-inline]:flex-1 group-[.input-group]:rounded-none group-[.input-group]:[&:not(:first-child)]:border-l-transparent group-[.input-group]:first:rounded-l group-[.input-group]:last:rounded-r group-[.input-group]:z-10">
+                            </div>
+                            <div class="mt-3">
+                                <label data-tw-merge="" for="update-profile-form-10"
+                                       class="inline-block mb-2 group-[.form-inline]:mb-2 group-[.form-inline]:sm:mb-0 group-[.form-inline]:sm:mr-5 group-[.form-inline]:sm:text-right">
+                                    Company Linkedin
+                                </label>
+                                <input data-tw-merge="" id="update-profile-form-10" type="text"
+                                       value="<?= $user_profile['user_company_linked'] ?? "Not Set" ?>" disabled="disabled" placeholder="Not Set"
+                                       class="disabled:bg-slate-100 disabled:cursor-not-allowed dark:disabled:bg-darkmode-800/50 dark:disabled:border-transparent [&[readonly]]:bg-slate-100 [&[readonly]]:cursor-not-allowed [&[readonly]]:dark:bg-darkmode-800/50 [&[readonly]]:dark:border-transparent transition duration-200 ease-in-out w-full text-sm border-slate-200 shadow-sm rounded-md placeholder:text-slate-400/90 focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus:border-primary focus:border-opacity-40 dark:bg-darkmode-800 dark:border-transparent dark:focus:ring-slate-700 dark:focus:ring-opacity-50 dark:placeholder:text-slate-500/80 group-[.form-inline]:flex-1 group-[.input-group]:rounded-none group-[.input-group]:[&:not(:first-child)]:border-l-transparent group-[.input-group]:first:rounded-l group-[.input-group]:last:rounded-r group-[.input-group]:z-10">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <?php
+        }
+        ?>
     </div>
     <!-- END: Personal Information -->
 </div>
