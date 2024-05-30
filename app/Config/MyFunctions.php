@@ -184,4 +184,13 @@ class MyFunctions extends BaseConfig
             default => 'Undefined Level',
         };
     }
+
+    public static function getIndustry($industry): string
+    {
+        return match ($industry) {
+            '1' => 'IT',
+            '2' => 'Energy',
+            default => 'Undefined Industry',
+        };
+    }
 }
