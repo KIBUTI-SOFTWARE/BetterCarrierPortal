@@ -20,6 +20,15 @@ class JobPosts extends BaseController
         return $model->getJobPostByID($post_id);
     }
 
+    public function getAJAXJobPost(): \CodeIgniter\HTTP\ResponseInterface
+    {
+        $post_id = $this->request->getJsonVar('post_id');
+        $model = new JobPostsModel();
+
+        $post_data = $model->getJobPostByID($post_id);
+        return $this->response->setJSON($post_data);
+    }
+
     public function jobPosts(): string
     {
         $session = \Config\Services::session();

@@ -22,6 +22,15 @@ class Users extends BaseController
         return $model->getUserByID($user_id);
     }
 
+    public function getAJAXUser(): \CodeIgniter\HTTP\ResponseInterface
+    {
+        $user_id = $this->request->getJsonVar('user_id');
+        $model = new UsersModel();
+
+        $user_data = $model->getUserByID($user_id);
+        return $this->response->setJSON($user_data);
+    }
+
     public function viewUsers(): string
     {
         $session = \Config\Services::session();

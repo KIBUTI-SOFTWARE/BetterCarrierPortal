@@ -25,29 +25,14 @@ $job_applications = $job_applications ?? array();
     </div>
     <!-- BEGIN: Job Applications Layout -->
     <div class="intro-y col-span-12 overflow-auto lg:overflow-visible">
-        <table data-tw-merge="" class="w-full text-left -mt-2 border-separate border-spacing-y-[10px]">
-            <thead data-tw-merge="" class="">
-            <tr data-tw-merge="" class="">
-                <th data-tw-merge=""
-                    class="font-medium px-5 py-3 dark:border-darkmode-300 whitespace-nowrap border-b-0 text-left">
-                    S/N
-                </th>
-                <th data-tw-merge=""
-                    class="font-medium px-5 py-3 dark:border-darkmode-300 whitespace-nowrap border-b-0 text-left">
-                    JOB TITLE
-                </th>
-                <th data-tw-merge=""
-                    class="font-medium px-5 py-3 dark:border-darkmode-300 whitespace-nowrap border-b-0 text-left">
-                    APPLICANT
-                </th>
-                <th data-tw-merge=""
-                    class="font-medium px-5 py-3 dark:border-darkmode-300 whitespace-nowrap border-b-0 text-left">
-                    APPLICATION SENT ON
-                </th>
-                <th data-tw-merge=""
-                    class="font-medium px-5 py-3 dark:border-darkmode-300 whitespace-nowrap border-b-0 text-left">
-                    ACTIONS
-                </th>
+        <table class="table -mt-2">
+            <thead>
+            <tr>
+                <th class="whitespace-nowrap">Applicant</th>
+                <th class="whitespace-nowrap">Job Title</th>
+                <th class="whitespace-nowrap">Status</th>
+                <th class="whitespace-nowrap">Application Date</th>
+                <th class="whitespace-nowrap">Actions</th>
             </tr>
             </thead>
             <tbody id="job-applications-container">
@@ -92,7 +77,7 @@ $job_applications = $job_applications ?? array();
         renderResults();
     });
 
-    async function renderResults() {
+    function renderResults() {
         const searchQuery = document.getElementById('search-input').value.toLowerCase();
         const filteredApplications = jobApplications.filter(application => {
             return application._id.toLowerCase().includes(searchQuery);
@@ -101,47 +86,31 @@ $job_applications = $job_applications ?? array();
         const startIndex = (currentPage - 1) * itemsPerPage;
         const endIndex = startIndex + itemsPerPage;
         const paginatedApplications = filteredApplications.slice(startIndex, endIndex);
-        let sn = 0;
 
         const applicationsContainer = document.getElementById('job-applications-container');
         applicationsContainer.innerHTML = '';
 
-        for (const application of paginatedApplications) {
-            ++sn
+        paginatedApplications.forEach(application => {
+            const sn = 0;
             const applicationSentOn = timeAgo(application.job_application_created_on);
-            const jobPost = await getJobPost(application.job_post_id);
-            const jobPostedBy = await getUser(jobPost.job_post_created_by);
-            const jobApplicant = await getUser(application.job_application_created_by);
 
             applicationsContainer.innerHTML += `
-                <tr data-tw-merge="" class="intro-x">
-                    <td data-tw-merge=""
-                                class="px-5 py-3 border-b dark:border-darkmode-300 box rounded-l-none rounded-r-none border-x-0 text-left shadow-[5px_3px_5px_#00000005] first:rounded-l-[0.6rem] first:border-l last:rounded-r-[0.6rem] last:border-r dark:bg-darkmode-600">
-                        ${sn}
+                <tr>
+                    <td class="whitespace-nowrap">
+                        ++${sn}
                     </td>
-                    <td data-tw-merge=""
-                                class="text-left px-5 py-3 border-b dark:border-darkmode-300 box rounded-l-none rounded-r-none border-x-0 shadow-[5px_3px_5px_#00000005] first:rounded-l-[0.6rem] first:border-l last:rounded-r-[0.6rem] last:border-r dark:bg-darkmode-600">
-                        <a class="whitespace-nowrap font-medium" href="#">
-                           ${jobPost.job_post_title}
-                        </a>
-                        <div class="mt-0.5 whitespace-nowrap text-xs text-slate-500">
-                           ${jobPostedBy.user_firstname} ${jobPostedBy.user_lastname}
+                    <td class="whitespace-nowrap">${application._id}</td>
+                    <td class="whitespace-nowrap">
+                        <div class="flex items-center justify-center ${application._id == '1' ? 'text-success' : 'text-danger'}">
+                            ${application._id == '1' ? 'Active' : 'Inactive'}
                         </div>
                     </td>
-                    <td data-tw-merge=""
-                                class="text-left px-5 py-3 border-b dark:border-darkmode-300 box rounded-l-none rounded-r-none border-x-0 shadow-[5px_3px_5px_#00000005] first:rounded-l-[0.6rem] first:border-l last:rounded-r-[0.6rem] last:border-r dark:bg-darkmode-600">
-                        <a class="whitespace-nowrap font-medium" href="#">
-                           ${jobApplicant.user_firstname} ${jobApplicant.user_lastname}
-                        </a>
-                    </td>
-                    <td data-tw-merge=""
-                                class="text-left px-5 py-3 border-b dark:border-darkmode-300 box w-40 rounded-l-none rounded-r-none border-x-0 shadow-[5px_3px_5px_#00000005] first:rounded-l-[0.6rem] first:border-l last:rounded-r-[0.6rem] last:border-r dark:bg-darkmode-600">
+                    <td class="whitespace-nowrap">
                         <div class="flex items-center justify-center text-success">
-                            ${applicationSentOn}
+                            ${new Date(application.job_application_created_on).toLocaleDateString()}
                         </div>
                     </td>
-                    <td data-tw-merge=""
-                                class="text-left px-5 py-3 border-b dark:border-darkmode-300 box w-56 rounded-l-none rounded-r-none border-x-0 shadow-[5px_3px_5px_#00000005] first:rounded-l-[0.6rem] first:border-l last:rounded-r-[0.6rem] last:border-r dark:bg-darkmode-600 before:absolute before:inset-y-0 before:left-0 before:my-auto before:block before:h-8 before:w-px before:bg-slate-200 before:dark:bg-darkmode-400">
+                    <td class="whitespace-nowrap">
                         <div class="flex items-center justify-center">
                             <a class="mr-3 flex items-center" href="#">
                                 <i data-tw-merge="" data-lucide="view" class="stroke-1.5 mr-1 h-4 w-4"></i>
@@ -155,9 +124,33 @@ $job_applications = $job_applications ?? array();
                     </td>
                 </tr>
             `;
-        }
+        });
 
         document.getElementById('entries-info').innerText = `Showing ${startIndex + 1} to ${Math.min(endIndex, filteredApplications.length)} of ${filteredApplications.length} entries`;
+    }
+
+    function timeAgo(timestamp) {
+        const time = new Date(timestamp);
+        const now = new Date();
+
+        const diff = Math.abs(now - time) / 1000; // Difference in seconds
+
+        const intervals = {
+            year: 31536000,
+            month: 2592000,
+            day: 86400,
+            hour: 3600,
+            minute: 60,
+            second: 1
+        };
+
+        for (const [unit, seconds] of Object.entries(intervals)) {
+            const count = Math.floor(diff / seconds);
+            if (count > 0) {
+                return count + ' ' + unit + (count > 1 ? 's' : '') + ' ago';
+            }
+        }
+        return 'just now';
     }
 
     function renderPagination() {
@@ -213,83 +206,5 @@ $job_applications = $job_applications ?? array();
     // Initial render
     renderPagination();
     renderResults();
-
-    async function getUser(user_id) {
-        try {
-            const data = {
-                user_id: user_id
-            };
-            const jsonData = JSON.stringify(data);
-
-            let response = await fetch('/ajax/get-user', {
-                method: 'POST',
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-Requested-With": "XMLHttpRequest"
-                },
-                body: jsonData
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to fetch user data');
-            }
-
-            return await response.json();
-        } catch (error) {
-            console.error('Error fetching user details:', error);
-            throw error; // Re-throw the error to handle it elsewhere if needed
-        }
-    }
-
-    async function getJobPost(post_id) {
-        try {
-            const data = {
-                post_id: post_id
-            };
-            const jsonData = JSON.stringify(data);
-
-            let response = await fetch('/ajax/get-job-post', {
-                method: 'POST',
-                headers: {
-                    "Content-Type": "application/json",
-                    "X-Requested-With": "XMLHttpRequest"
-                },
-                body: jsonData
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to fetch post data');
-            }
-
-            return await response.json();
-        } catch (error) {
-            console.error('Error fetching post details:', error);
-            throw error; // Re-throw the error to handle it elsewhere if needed
-        }
-    }
-
-    function timeAgo(timestamp) {
-        const time = new Date(timestamp);
-        const now = new Date();
-
-        const diff = Math.abs(now - time) / 1000; // Difference in seconds
-
-        const intervals = {
-            year: 31536000,
-            month: 2592000,
-            day: 86400,
-            hour: 3600,
-            minute: 60,
-            second: 1
-        };
-
-        for (const [unit, seconds] of Object.entries(intervals)) {
-            const count = Math.floor(diff / seconds);
-            if (count > 0) {
-                return count + ' ' + unit + (count > 1 ? 's' : '') + ' ago';
-            }
-        }
-        return 'just now';
-    }
 </script>
 <?= $this->endSection('content') ?>

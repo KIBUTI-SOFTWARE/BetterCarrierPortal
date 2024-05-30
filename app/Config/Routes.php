@@ -38,6 +38,7 @@ $routes->get('/dashboard', 'Dashboard::dashboard');
 $routes->get('/profile-setup', 'Profile::profileSetup');
 $routes->post('/profile-setup', 'Profile::profileSetupAction');
     //Users Management
+$routes->post('/ajax/get-user', 'Users::getAJAXUser');
 $routes->get('/view-users', 'Users::viewUsers');
 $routes->get('/view-employers', 'Users::viewUsers');
 $routes->get('/view-job-seekers', 'Users::viewUsers');
@@ -45,6 +46,7 @@ $routes->get('/view-job-seekers', 'Users::viewUsers');
 
 //Job Posts && Applications
     //Job Posts
+$routes->post('/ajax/get-job-post', 'JobPosts::getAJAXJobPost');
 $routes->get('/view-job-posts', 'JobPosts::jobPosts');
 $routes->get('/internship-posts', 'JobPosts::jobPosts');
 $routes->get('/employment-posts', 'JobPosts::jobPosts');
