@@ -14,14 +14,18 @@
 # ENVIRONMENT
 #--------------------------------------------------------------------
 
-# CI_ENVIRONMENT = production
+CI_ENVIRONMENT = production
 
 #--------------------------------------------------------------------
 # APP
 #--------------------------------------------------------------------
 
-# app.baseURL = ''
-# If you have trouble with `.`, you could also use `_`.
+# app.baseURL = 'https://better.carrier.kibuti.co.tz'
+system_name = 'Better Carrier Portal';
+system_email = 'noreply@kibuti.co.tz';
+mongodb_database = 'better_carrier_portal';
+mongodb_connection_uri = 'mongodb://143.198.232.68:4999/';
+# If you have trouble with ., you could also use _.
 # app_baseURL = ''
 # app.forceGlobalSecureRequests = false
 # app.CSPEnabled = false
@@ -29,14 +33,18 @@
 #--------------------------------------------------------------------
 # DATABASE
 #--------------------------------------------------------------------
+# Used Database configuration MongoDB
+#database.default.hostname = localhost
+#database.default.port = 27017
+#database.default.database = better_carrier_portal
+#database.default.username =
+#database.default.password =
+#database.default.DBDriver = MongoDB
 
-# database.default.hostname = localhost
-# database.default.database = ci4
-# database.default.username = root
-# database.default.password = root
-# database.default.DBDriver = MySQLi
-# database.default.DBPrefix =
-# database.default.port = 3306
+# Redis Configuration
+redis.host = localhost
+redis.port = 6379
+redis.password =
 
 # If you use MySQLi as tests, first update the values of Config\Database::$tests.
 # database.tests.hostname = localhost
