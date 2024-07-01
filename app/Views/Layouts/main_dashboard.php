@@ -397,19 +397,19 @@ $user_level = $user["user_level"];
                         <?php
                     }
                     ?>
-                    <li>
-                        <a href="/feedback" class="side-menu
-                    <?php if ($_SERVER["REQUEST_URI"] === "feedback" || str_contains($_SERVER["REQUEST_URI"], "feedback")) {
-                            ?>side-menu--active<?php
-                        } ?>">
-                            <div class="side-menu__icon">
-                                <i data-tw-merge="" data-lucide="message-square" class="stroke-1.5 w-5 h-5"></i>
-                            </div>
-                            <div class="side-menu__title">
-                                Feedback
-                            </div>
-                        </a>
-                    </li>
+<!--                    <li>-->
+<!--                        <a href="/feedback" class="side-menu-->
+<!--                    --><?php //if ($_SERVER["REQUEST_URI"] === "feedback" || str_contains($_SERVER["REQUEST_URI"], "feedback")) {
+//                            ?><!--side-menu--active--><?php
+//                        } ?><!--">-->
+<!--                            <div class="side-menu__icon">-->
+<!--                                <i data-tw-merge="" data-lucide="message-square" class="stroke-1.5 w-5 h-5"></i>-->
+<!--                            </div>-->
+<!--                            <div class="side-menu__title">-->
+<!--                                Feedback-->
+<!--                            </div>-->
+<!--                        </a>-->
+<!--                    </li>-->
                     <li>
                         <a href="/view-applications" class="side-menu
                     <?php if ($_SERVER["REQUEST_URI"] === "view-applications" || str_contains($_SERVER["REQUEST_URI"], "application")) {
