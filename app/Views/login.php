@@ -8,7 +8,7 @@
             <div class="hidden min-h-screen flex-col xl:flex">
                 <a class="-intro-x flex items-center pt-5" href="#">
                     <img class="w-6" src="dist/images/logo.svg" alt="carrier portal">
-                    <span class="ml-3 text-lg text-white">Better Carrier Portal </span>
+                    <span class="ml-3 text-lg text-white"><?=$_ENV[system_name]?></span>
                 </a>
                 <div class="my-auto">
                     <img class="-intro-x -mt-16 w-1/2" src="dist/images/phone-illustration.svg"
