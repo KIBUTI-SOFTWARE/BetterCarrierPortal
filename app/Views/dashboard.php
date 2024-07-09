@@ -20,15 +20,15 @@
                                     <i data-tw-merge="" data-lucide="users"
                                        class="stroke-1.5 h-[28px] w-[28px] text-primary"></i>
                                     <div class="ml-auto">
-                                        <div data-placement="top" title="33% Higher than last month"
+                                        <div data-placement="top" title="0% Higher than last month"
                                              class="tooltip cursor-pointer flex items-center rounded-full bg-success py-[3px] pl-2 pr-1 text-xs font-medium text-white">
-                                            33%
+                                            0%
                                             <i data-tw-merge="" data-lucide="chevron-up"
                                                class="stroke-1.5 ml-0.5 h-4 w-4"></i>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="mt-6 text-3xl font-medium leading-8">4,710</div>
+                                <div class="mt-6 text-3xl font-medium leading-8">0</div>
                                 <div class="mt-1 text-base text-slate-500">Employers</div>
                             </div>
                         </div>
@@ -40,15 +40,15 @@
                                     <i data-tw-merge="" data-lucide="user"
                                        class="stroke-1.5 h-[28px] w-[28px] text-pending"></i>
                                     <div class="ml-auto">
-                                        <div data-placement="top" title="2% Lower than last month"
+                                        <div data-placement="top" title="0% Lower than last month"
                                              class="tooltip cursor-pointer flex items-center rounded-full bg-danger py-[3px] pl-2 pr-1 text-xs font-medium text-white">
-                                            2%
+                                            0%
                                             <i data-tw-merge="" data-lucide="chevron-down"
                                                class="stroke-1.5 ml-0.5 h-4 w-4"></i>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="mt-6 text-3xl font-medium leading-8">3,721</div>
+                                <div class="mt-6 text-3xl font-medium leading-8">0</div>
                                 <div class="mt-1 text-base text-slate-500">Job Seekers</div>
                             </div>
                         </div>
@@ -60,15 +60,15 @@
                                     <i data-tw-merge="" data-lucide="file-text"
                                        class="stroke-1.5 h-[28px] w-[28px] text-warning"></i>
                                     <div class="ml-auto">
-                                        <div data-placement="top" title="12% Higher than last month"
+                                        <div data-placement="top" title="0% Higher than last month"
                                              class="tooltip cursor-pointer flex items-center rounded-full bg-success py-[3px] pl-2 pr-1 text-xs font-medium text-white">
-                                            12%
+                                       0%
                                             <i data-tw-merge="" data-lucide="chevron-up"
                                                class="stroke-1.5 ml-0.5 h-4 w-4"></i>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="mt-6 text-3xl font-medium leading-8">2,149</div>
+                                <div class="mt-6 text-3xl font-medium leading-8">0</div>
                                 <div class="mt-1 text-base text-slate-500">
                                     Job Posts
                                 </div>
@@ -82,15 +82,15 @@
                                     <i data-tw-merge="" data-lucide="edit"
                                        class="stroke-1.5 h-[28px] w-[28px] text-success"></i>
                                     <div class="ml-auto">
-                                        <div data-placement="top" title="22% Higher than last month"
+                                        <div data-placement="top" title="0% Higher than last month"
                                              class="tooltip cursor-pointer flex items-center rounded-full bg-success py-[3px] pl-2 pr-1 text-xs font-medium text-white">
-                                            22%
+                                            0%
                                             <i data-tw-merge="" data-lucide="chevron-up"
                                                class="stroke-1.5 ml-0.5 h-4 w-4"></i>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="mt-6 text-3xl font-medium leading-8">152,040</div>
+                                <div class="mt-6 text-3xl font-medium leading-8">0</div>
                                 <div class="mt-1 text-base text-slate-500">
                                     Job Applications
                                 </div>
