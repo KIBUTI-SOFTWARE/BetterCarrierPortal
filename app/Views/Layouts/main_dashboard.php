@@ -15,7 +15,7 @@ $user_level = $user["user_level"];
     <meta name="csrf-token" content="ceKdwoQjZ4VuoGqoSQaSREwB7MD9sjwFnfhlp7MH">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="author" content="LEFT4CODE">
-    <title><?=$_ENV[system_name]?></title>
+    <title><?=$_ENV["system_name"]?></title>
     <!-- BEGIN: CSS Assets-->
     <link rel="stylesheet" href="dist/css/vendors/tippy.css">
     <link rel="stylesheet" href="dist/css/vendors/litepicker.css">
@@ -272,7 +272,7 @@ $user_level = $user["user_level"];
             <a class="intro-x mt-3 flex items-center pl-5 pt-4" href="#">
                 <img class="w-6" src="dist/images/logo.svg" alt="Career Portal">
                 <span class="ml-3 hidden text-lg text-white xl:block">
-                        <?=$_ENV[system_name]?>
+                        <?=$_ENV["system_name"]?>
                     </span>
             </a>
             <div class="side-nav__divider my-6"></div>
