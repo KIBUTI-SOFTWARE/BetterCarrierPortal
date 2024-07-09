@@ -7,7 +7,7 @@
     <meta name="csrf-token" content="ceKdwoQjZ4VuoGqoSQaSREwB7MD9sjwFnfhlp7MH">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="author" content="Abdulmujib Nizary(Kibuti Software)">
-    <title><?=$_ENV[system_name]?></title>
+    <title><?=$_ENV["system_name"]?></title>
     <!-- BEGIN: CSS Assets-->
     <!-- END: CSS Assets-->
     <link rel="stylesheet" href="dist/css/app.css">
