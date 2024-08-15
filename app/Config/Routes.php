@@ -57,3 +57,12 @@ $routes->post('/new-job-post', 'JobPosts::newJobPost');
     //Applications
 $routes->get('/view-applications', 'JobApplications::jobPostApplications');
 $routes->post('/apply-job', 'JobApplications::newJobApplication');
+
+
+//Categories Management
+$routes->post('/ajax/get-category', 'Categories::getAJAXCategory');
+$routes->get('/categories', 'Categories::viewCategories');
+$routes->post('/new-category', 'Categories::createCategory');
+$routes->get('/view-category/(:any)', 'Categories::viewCategory/$1');
+$routes->get('/category-profile', 'Categories::categoryProfile');
+$routes->post('/categories/update-category', 'Categories::updateCategory');

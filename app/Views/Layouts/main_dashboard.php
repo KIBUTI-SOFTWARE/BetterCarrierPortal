@@ -187,6 +187,16 @@ $user_level = $user["user_level"];
                                         </div>
                                     </a>
                                 </li>
+                                <li>
+                                    <a class="menu" href="/categories">
+                                        <div class="menu__icon">
+                                            <i data-tw-merge="" data-lucide="layer-3" class="stroke-1.5 w-5 h-5"></i>
+                                        </div>
+                                        <div class="menu__title">
+                                            Others
+                                        </div>
+                                    </a>
+                                </li>
                             </ul>
                         </li>
                         <?php
@@ -394,6 +404,16 @@ $user_level = $user["user_level"];
                                 </li>
                             </ul>
                         </li>
+                        <li>
+                                    <a href="/categories" class="side-menu">
+                                        <div class="side-menu__icon">
+                                            <i data-tw-merge="" data-lucide="layers-3" class="stroke-1.5 w-5 h-5"></i>
+                                        </div>
+                                        <div class="side-menu__title">
+                                            Categories
+                                        </div>
+                                    </a>
+                                </li>
                         <?php
                     }
                     ?>

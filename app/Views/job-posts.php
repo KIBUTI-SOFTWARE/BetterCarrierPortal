@@ -41,7 +41,21 @@ $job_posts_with_users = array_map(function ($job_post) {
              class="dropdown-menu absolute z-[9999] hidden">
             <div data-tw-merge=""
                  class="dropdown-content rounded-md border-transparent bg-white p-2 shadow-[0px_3px_10px_#00000017] dark:border-transparent dark:bg-darkmode-600 w-40">
-                <a href="/internship-posts"
+                <?php 
+                    $categories = (new \App\Controllers\Categories)->getCategories();
+                                if (count($categories) > 0) {
+                                    foreach ($categories as $category) {
+                                        ?>
+                                        <a href="/internship-posts"
+                   class="cursor-pointer flex items-center p-2 transition duration-300 ease-in-out rounded-md hover:bg-slate-200/60 dark:bg-darkmode-600 dark:hover:bg-darkmode-400 dropdown-item"><i
+                            data-tw-merge="" data-lucide="activity" class="stroke-1.5 mr-2 h-4 w-4"></i>
+                    <?=ucwords($category['category_name'])?></a>
+                                        <!-- <option value="<?=$category['_id']?>"><?=ucwords($category['category_name'])?></option> -->
+                                        <?php
+                                    }
+                                }
+                ?>
+                 <a href="/internship-posts"
                    class="cursor-pointer flex items-center p-2 transition duration-300 ease-in-out rounded-md hover:bg-slate-200/60 dark:bg-darkmode-600 dark:hover:bg-darkmode-400 dropdown-item"><i
                             data-tw-merge="" data-lucide="activity" class="stroke-1.5 mr-2 h-4 w-4"></i>
                     Internship</a>
