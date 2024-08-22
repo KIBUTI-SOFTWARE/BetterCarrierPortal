@@ -54,6 +54,9 @@ $routes->get('/internship-posts', 'JobPosts::jobPosts');
 $routes->get('/employment-posts', 'JobPosts::jobPosts');
 $routes->get('/employment-posts', 'JobPosts::employmentPosts');
 $routes->post('/new-job-post', 'JobPosts::newJobPost');
+$routes->get('/view-job-post/(:any)', 'JobPosts::viewJobPost/$1');
+$routes->get('/job-post-profile', 'JobPosts::jobPostProfile');
+$routes->post('/update-job-post', 'JobPosts::updateJobPost');
     //Applications
 $routes->get('/view-applications', 'JobApplications::jobPostApplications');
 $routes->post('/apply-job', 'JobApplications::newJobApplication');

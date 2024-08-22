@@ -5,6 +5,9 @@ namespace App\Controllers;
 use App\Models\JobPostsModel;
 use App\Models\UsersModel;
 use Config\MyFunctions as CustomFunctions;
+use MongoDB\BSON\ObjectId;
+use Config\Services;
+use CodeIgniter\HTTP\RedirectResponse;
 
 class JobPosts extends BaseController
 {
@@ -40,13 +43,14 @@ class JobPosts extends BaseController
         $model = new JobPostsModel();
 
 
-        if ($this->request->getUri()->getPath() === '/employment-posts') {
-            $job_posts = $model->getJobPostsByCategory("1", $user_level, $user_id);
-        } else if ($this->request->getUri()->getPath()=== '/internship-posts') {
-            $job_posts = $model->getJobPostsByCategory("2", $user_level, $user_id);
-        } else {
-            $job_posts = $model->getJobPosts($user_level, $user_id);
-        }
+        // if ($this->request->getUri()->getPath() === '/employment-posts') {
+        //     $job_posts = $model->getJobPostsByCategory("1", $user_level, $user_id);
+        // } else if ($this->request->getUri()->getPath()=== '/internship-posts') {
+        //     $job_posts = $model->getJobPostsByCategory("2", $user_level, $user_id);
+        // } else {
+        //     $job_posts = $model->getJobPosts($user_level, $user_id);
+        // }
+        $job_posts = $model->getJobPosts($user_level, $user_id);
 
         $data = [
             'job_posts' => $job_posts
@@ -79,11 +83,10 @@ class JobPosts extends BaseController
                     ],
 
                     'job_post_category' => [
-                        'rules' => 'required|in_list[1,2]',
+                        'rules' => 'required',
                         'label' => "Job Post Category",
                         'errors' => [
                             'required' => "Job Post Category Field Cannot be Empty.",
-                            'in_list' => "Please Select a Valid Job Post Category.",
                         ]
                     ],
 
@@ -131,13 +134,14 @@ class JobPosts extends BaseController
 
                     $insertionData = [
                         'job_post_title' => $job_post_title,
-                        'job_post_category' => $job_post_category,
+                        'job_post_category' => new ObjectId($job_post_category),
                         'job_post_description' => $job_post_description,
                         'job_post_from' => $job_post_from,
                         'job_post_to' => $job_post_to,
                         'job_post_attachment_file' => $job_post_attachment_file,
-                        'job_post_active' => true,
-                        'job_post_created_by' => $user_id,
+                        'job_post_active' => false,
+                        'job_post_approved' => false,
+                        'job_post_created_by' => new ObjectId($user_id),
                         'job_post_created_on' => CustomFunctions::getDate(),
                         'job_post_deleted_flag' => false,
                         'job_post_updated_by' => "",
@@ -180,6 +184,211 @@ class JobPosts extends BaseController
         }
 
         return redirect()->back();
+    }
+
+    public function viewJobPost($job_post_id): RedirectResponse
+    {
+        $session = Services::session();
+
+        $user = $session->get('user');
+        $user_id = new ObjectId($user['_id']);
+
+        $model = new JobPostsModel();
+
+        $job_post_data = $model->getJobPostByID(new ObjectId($job_post_id));
+
+        if (empty($job_post_data)) {
+            $message = [
+                "message" => "Couldn't Retrieve Post Info, Please Try Again."
+            ];
+            $session->setFlashdata("error", $message);
+            return redirect()->back();
+        }
+
+        $message = [
+            "message" => $session->getFlashdata("success")['message'] ?? "Post Data Retrieved Successfully."
+        ];
+        $session->setFlashdata("success", $message);
+        $session->setTempdata('job_post_data', $job_post_data, 3600);
+
+        return redirect()->to("job-post-profile");
+    }
+
+    public function jobPostProfile(): string|RedirectResponse
+    {
+        $session = Services::session();
+        $job_post_data = $session->getTempdata('job_post_data') ?? array();
+
+        if (empty($job_post_data)) {
+            $message = [
+                "message" => "Couldn't Retrieve Post Info, Please Try Again."
+            ];
+            $session->setFlashdata("error", $message);
+            return redirect()->to("view-job-posts");
+        }
+
+        $data = [
+            'job_post_data' => $job_post_data
+        ];
+
+        $message = [
+            "message" => $session->getFlashdata("success")['message'] ?? "Post Data Retrieved Successfully."
+        ];
+        $session->setFlashdata("success", $message);
+//        $session->removeTempdata('patient_data');
+        return view('job-post-profile', $data);
+    }
+
+    public function updateCategory(): RedirectResponse
+    {
+        if ($this->request->is('post')) {
+            //Retrieve Submitted Data
+            $data = $this->request->getPost();
+            $validation = Services::validation();
+            $session = Services::session();
+            helper(['form']);
+
+            if (!is_null($data)) {
+                $validation->setRules([
+                    'category_id' => [
+                        'rules' => 'required',
+                        'label' => 'Category ID',
+                        'errors' => [
+                            'required' => 'Category ID Field Cannot be Empty.'
+                        ]
+                    ],
+                    'category_name' => [
+                        'rules' => 'required',
+                        'label' => 'Category Name',
+                        'errors' => [
+                            'required' => 'Category Name Field Cannot be Empty.'
+                        ]
+                    ]
+                ]);
+
+                if ($validation->run($data)) {
+                    $user_data = $session->get('user');
+
+                    $category_id = new ObjectId($data['category_id']);
+                    $category_name = $data['category_name'];
+                    $category_description = $data['category_description'] ?? "";
+                    $category_updated_by = new ObjectId($user_data['_id']);
+
+                    $model = new CategoriesModel();
+
+                    $updateData = [
+                        'category_name' => $category_name,
+                        'category_description' => $category_description,
+                        'category_updated_by' => $category_updated_by,
+                        'category_updated_on' => ConfigMyFunctions::getDate(),
+                    ];
+
+                    $result = $model->updateCategory($updateData, $category_id);
+
+                    if (empty($result)) {
+                        $message = [
+                            "message" => "Couldn't Update Category, Please Try Again."
+                        ];
+                        $session->setFlashdata("error", $message);
+                        $session->setFlashdata('form_data', $data);
+
+                    } else {
+                        $message = [
+                            "message" => "Category Updated Successfully."
+                        ];
+                        $session->setFlashdata("success", $message);
+                        return redirect()->to("/view-category/$category_id");
+                    }
+                } else {
+                    $_SESSION['validationErrors'] = $validation->getErrors();
+                    $message = [
+                        "message" => $validation->getErrors()
+                    ];
+                    $session->setFlashdata("validationErrors", $message);
+                    $session->setFlashdata('form_data', $data);
+                }
+            } else {
+                $message = [
+                    "message" => "Invalid Form Data."
+                ];
+                $session->setFlashdata("error", $message);
+                $session->setFlashdata('form_data', $data);
+            }
+
+        }
+        return redirect()->back();
+
+    }
+
+    public function deleteCategory(): RedirectResponse
+    {
+        if ($this->request->is('post')) {
+            //Retrieve Submitted Data
+            $data = $this->request->getPost();
+            $validation = Services::validation();
+            $session = Services::session();
+            helper(['form']);
+
+            if (!is_null($data)) {
+                $validation->setRules([
+                    'category_id' => [
+                        'rules' => 'required',
+                        'label' => 'Category ID',
+                        'errors' => [
+                            'required' => 'Category ID Field Cannot be Empty.'
+                        ]
+                    ]
+                ]);
+
+                if ($validation->run($data)) {
+                    $user_data = $session->get('user');
+
+                    $category_id = new ObjectId($data['category_id']);
+                    $category_deleted_by = new ObjectId($user_data['_id']);
+
+                    $model = new CategoriesModel();
+
+                    $updateData = [
+                        'category_deleted_flag' => true,
+                        'category_deleted_by' => $category_deleted_by,
+                        'category_deleted_on' => ConfigMyFunctions::getDate(),
+                    ];
+
+                    $result = $model->updateCategory($updateData, $category_id);
+
+                    if (empty($result)) {
+                        $message = [
+                            "message" => "Couldn't Delete Category, Please Try Again."
+                        ];
+                        $session->setFlashdata("error", $message);
+                        $session->setFlashdata('form_data', $data);
+
+                    } else {
+                        $message = [
+                            "message" => "Category Deleted Successfully."
+                        ];
+                        $session->setFlashdata("success", $message);
+                        return redirect()->to("categories");
+                    }
+                } else {
+                    $_SESSION['validationErrors'] = $validation->getErrors();
+                    $message = [
+                        "message" => $validation->getErrors()
+                    ];
+                    $session->setFlashdata("validationErrors", $message);
+                    $session->setFlashdata('form_data', $data);
+                }
+            } else {
+                $message = [
+                    "message" => "Invalid Form Data."
+                ];
+                $session->setFlashdata("error", $message);
+                $session->setFlashdata('form_data', $data);
+            }
+
+        }
+        return redirect()->back();
+
     }
 
     private function saveFile(): string
