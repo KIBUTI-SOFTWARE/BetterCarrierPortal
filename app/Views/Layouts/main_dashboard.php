@@ -92,8 +92,8 @@ $user_level = $user["user_level"];
                         <li>
                             <a href="/view-job-posts" class="menu <?php if ($_SERVER["REQUEST_URI"] === "employment-posts" || $_SERVER["REQUEST_URI"] === "internship-posts" || str_contains($_SERVER["REQUEST_URI"], "post")) {
                                                                     ?>menu--active<?php
-                                                                    }
-                                    ?>">
+                                                                                }
+                                                                                    ?>">
                                 <div class="menu__icon">
                                     <i data-tw-merge="" data-lucide="activity" class="stroke-1.5 w-5 h-5"></i>
                                 </div>
@@ -561,6 +561,8 @@ $user_level = $user["user_level"];
     </script>
     <!-- BEGIN: Vendor JS Assets-->
     <script src="dist/js/vendors/dom.js"></script>
+    <script src="dist/js/vendors/tab.js"></script>
+    <script src="dist/js/vendors/accordion.js"></script>
     <script src="dist/js/vendors/tailwind-merge.js"></script>
     <script src="dist/js/vendors/dropzone.js"></script>
     <script src="dist/js/vendors/tom-select.js"></script>
@@ -594,15 +596,16 @@ $user_level = $user["user_level"];
     <script src="dist/js/components/report-donut-chart-1.js"></script>
     <script src="dist/js/components/simple-line-chart-1.js"></script>
     <script src="dist/js/components/base/tiny-slider.js"></script>
-    <script src="dist/js/themes/tinker.js"></script>
+    <script src="dist/js/themes/enigma.js"></script>
     <script src="dist/js/components/base/leaflet-map-loader.js"></script>
     <script src="dist/js/components/mobile-menu.js"></script>
-    <script src="dist/js/components/themes/tinker/top-bar.js"></script>
+    <script src="dist/js/components/themes/enigma/top-bar.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
         crossorigin="anonymous"></script>
     <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
     <link href=" https://cdn.jsdelivr.net/npm/sweetalert2@11.10.7/dist/sweetalert2.min.css " rel="stylesheet">
     <script src=" https://cdn.jsdelivr.net/npm/sweetalert2@11.10.7/dist/sweetalert2.all.min.js "></script>
+    <script src="https://cdn.jsdelivr.net/npm/lucide@0.383.0/dist/cjs/lucide.min.js"></script>
     <!-- END: Vendor JS Assets-->
     <!-- BEGIN: Pages, layouts, components JS Assets-->
     <!-- END: Pages, layouts, components JS Assets-->
