@@ -23,6 +23,13 @@ class JobPosts extends BaseController
         return $model->getJobPostByID($post_id);
     }
 
+    public function getJobPosts($user_level, $user_id): ?array
+    {
+        $model = new JobPostsModel();
+
+        return $model->getJobPosts($user_level, $user_id);
+    }
+
     public function getAJAXJobPost(): \CodeIgniter\HTTP\ResponseInterface
     {
         $post_id = $this->request->getJsonVar('post_id');

@@ -33,6 +33,13 @@ class Users extends BaseController
         return $this->response->setJSON($user_data);
     }
 
+    public function getUsers($user_level): ?array
+    {
+        $model = new UsersModel();
+
+        return $model->getUsers($user_level);
+    }
+
     public function viewUsers(): string
     {
         $session = \Config\Services::session();

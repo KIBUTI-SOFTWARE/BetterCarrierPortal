@@ -13,22 +13,15 @@
                     </a>
                 </div>
                 <div class="mt-5 grid grid-cols-12 gap-6">
-                    <div class="intro-y col-span-12 sm:col-span-6 xl:col-span-3">
+                    <!-- <div class="intro-y col-span-12 sm:col-span-6 xl:col-span-3">
                         <div class="relative zoom-in before:box before:absolute before:inset-x-3 before:mt-3 before:h-full before:bg-slate-50 before:content-['']">
                             <div class="box p-5">
                                 <div class="flex">
                                     <i data-tw-merge="" data-lucide="users"
                                        class="stroke-1.5 h-[28px] w-[28px] text-primary"></i>
-                                    <div class="ml-auto">
-                                        <div data-placement="top" title="0% Higher than last month"
-                                             class="tooltip cursor-pointer flex items-center rounded-full bg-success py-[3px] pl-2 pr-1 text-xs font-medium text-white">
-                                            0%
-                                            <i data-tw-merge="" data-lucide="chevron-up"
-                                               class="stroke-1.5 ml-0.5 h-4 w-4"></i>
-                                        </div>
-                                    </div>
+                                
                                 </div>
-                                <div class="mt-6 text-3xl font-medium leading-8">0</div>
+                                <div class="mt-6 text-3xl font-medium leading-8"><?= number_format($employers_count ?? 0) ?></div>
                                 <div class="mt-1 text-base text-slate-500">Employers</div>
                             </div>
                         </div>
@@ -39,58 +32,37 @@
                                 <div class="flex">
                                     <i data-tw-merge="" data-lucide="user"
                                        class="stroke-1.5 h-[28px] w-[28px] text-pending"></i>
-                                    <div class="ml-auto">
-                                        <div data-placement="top" title="0% Lower than last month"
-                                             class="tooltip cursor-pointer flex items-center rounded-full bg-danger py-[3px] pl-2 pr-1 text-xs font-medium text-white">
-                                            0%
-                                            <i data-tw-merge="" data-lucide="chevron-down"
-                                               class="stroke-1.5 ml-0.5 h-4 w-4"></i>
-                                        </div>
-                                    </div>
+                                    
                                 </div>
-                                <div class="mt-6 text-3xl font-medium leading-8">0</div>
+                                <div class="mt-6 text-3xl font-medium leading-8"><?= number_format($job_seekers_count ?? 0) ?></div>
                                 <div class="mt-1 text-base text-slate-500">Job Seekers</div>
                             </div>
                         </div>
-                    </div>
-                    <div class="intro-y col-span-12 sm:col-span-6 xl:col-span-3">
+                    </div> -->
+                    <div class="intro-y col-span-12 sm:col-span-6 xl:col-span-6">
                         <div class="relative zoom-in before:box before:absolute before:inset-x-3 before:mt-3 before:h-full before:bg-slate-50 before:content-['']">
                             <div class="box p-5">
                                 <div class="flex">
                                     <i data-tw-merge="" data-lucide="file-text"
                                        class="stroke-1.5 h-[28px] w-[28px] text-warning"></i>
-                                    <div class="ml-auto">
-                                        <div data-placement="top" title="0% Higher than last month"
-                                             class="tooltip cursor-pointer flex items-center rounded-full bg-success py-[3px] pl-2 pr-1 text-xs font-medium text-white">
-                                       0%
-                                            <i data-tw-merge="" data-lucide="chevron-up"
-                                               class="stroke-1.5 ml-0.5 h-4 w-4"></i>
-                                        </div>
-                                    </div>
+                                    
                                 </div>
-                                <div class="mt-6 text-3xl font-medium leading-8">0</div>
+                                <div class="mt-6 text-3xl font-medium leading-8"><?= number_format($job_posts_count ?? 0) ?></div>
                                 <div class="mt-1 text-base text-slate-500">
                                     Job Posts
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="intro-y col-span-12 sm:col-span-6 xl:col-span-3">
+                    <div class="intro-y col-span-12 sm:col-span-6 xl:col-span-6">
                         <div class="relative zoom-in before:box before:absolute before:inset-x-3 before:mt-3 before:h-full before:bg-slate-50 before:content-['']">
                             <div class="box p-5">
                                 <div class="flex">
                                     <i data-tw-merge="" data-lucide="edit"
                                        class="stroke-1.5 h-[28px] w-[28px] text-success"></i>
-                                    <div class="ml-auto">
-                                        <div data-placement="top" title="0% Higher than last month"
-                                             class="tooltip cursor-pointer flex items-center rounded-full bg-success py-[3px] pl-2 pr-1 text-xs font-medium text-white">
-                                            0%
-                                            <i data-tw-merge="" data-lucide="chevron-up"
-                                               class="stroke-1.5 ml-0.5 h-4 w-4"></i>
-                                        </div>
-                                    </div>
+                                    
                                 </div>
-                                <div class="mt-6 text-3xl font-medium leading-8">0</div>
+                                <div class="mt-6 text-3xl font-medium leading-8"><?= number_format($job_applications_count ?? 0) ?></div>
                                 <div class="mt-1 text-base text-slate-500">
                                     Job Applications
                                 </div>
@@ -101,7 +73,7 @@
             </div>
             <!-- END: General Report -->
             <!-- BEGIN: Report -->
-            <div class="col-span-12 mt-8 lg:col-span-12">
+            <!-- <div class="col-span-12 mt-8 lg:col-span-12">
                 <div class="intro-y block h-10 items-center sm:flex">
                     <h2 class="mr-5 truncate text-lg font-medium">Applications Report</h2>
                 </div>
@@ -130,7 +102,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
             <!-- END: Report -->
         </div>
     </div>

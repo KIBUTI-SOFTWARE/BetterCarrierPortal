@@ -14,6 +14,13 @@ class JobApplications extends BaseController
         //Reserved
     }
 
+    public function getJobApplications(): ?array
+    {
+        $model = new JobApplicationsModel();
+
+        return $model->getJobApplications();
+    }
+
     public function jobPostApplications(): string
     {
         $session = \Config\Services::session();
