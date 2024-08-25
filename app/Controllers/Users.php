@@ -5,6 +5,8 @@ namespace App\Controllers;
 use CodeIgniter\API\ResponseTrait;
 use App\Models\UsersModel;
 use Exception;
+use Config\Services;
+use MongoDB\BSON\ObjectId;
 
 class Users extends BaseController
 {
@@ -333,5 +335,57 @@ class Users extends BaseController
             return $this->respond(['status' => 'failure', 'message' => 'Unauthorized Access.', 'data' => ''], 401);
         }
         return $this->respond(['status' => 'failure', 'message' => 'The Requested URL could not be Found.', 'data' => ''], 404);
+    }
+
+    public function viewUser($user_id): \CodeIgniter\HTTP\RedirectResponse
+    {
+        $session = Services::session();
+
+        $user = $session->get('user');
+
+        $model = new UsersModel();
+
+        $user_data = $model->getUserByID(new ObjectId($user_id));
+
+        if (empty($user_data)) {
+            $message = [
+                "message" => "Couldn't Retrieve User Info, Please Try Again."
+            ];
+            $session->setFlashdata("error", $message);
+            return redirect()->back();
+        }
+
+        $message = [
+            "message" => $session->getFlashdata("success")['message'] ?? "User Data Retrieved Successfully."
+        ];
+        $session->setFlashdata("success", $message);
+        $session->setTempdata('user_data', $user_data, 3600);
+
+        return redirect()->to("user-profile");
+    }
+
+    public function userProfile(): string|\CodeIgniter\HTTP\RedirectResponse
+    {
+        $session = Services::session();
+        $user_data = $session->getTempdata('user_data') ?? array();
+
+        if (empty($user_data)) {
+            $message = [
+                "message" => "Couldn't Retrieve User Info, Please Try Again."
+            ];
+            $session->setFlashdata("error", $message);
+            return redirect()->to("users");
+        }
+
+        $data = [
+            'user_data' => $user_data
+        ];
+
+        $message = [
+            "message" => $session->getFlashdata("success")['message'] ?? "User Data Retrieved Successfully."
+        ];
+        $session->setFlashdata("success", $message);
+//        $session->removeTempdata('user_data');
+        return view('user-profile', $data);
     }
 }

@@ -44,6 +44,9 @@ $routes->post('/ajax/get-user', 'Users::getAJAXUser');
 $routes->get('/view-users', 'Users::viewUsers');
 $routes->get('/view-employers', 'Users::viewUsers');
 $routes->get('/view-job-seekers', 'Users::viewUsers');
+$routes->get('/view-user/(:any)', 'Users::viewUser/$1');
+$routes->get('/user-profile', 'Users::userProfile');
+
 
 
 //Job Posts && Applications
