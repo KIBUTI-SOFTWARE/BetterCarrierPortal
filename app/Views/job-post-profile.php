@@ -89,12 +89,18 @@ $job_post_created_by = (new Users)->getUser($job_post_data["job_post_created_by"
                                     <?php
                                     if ($user_level < "3") {
                                     ?>
-                                        <button data-tw-merge="" data-tw-toggle="modal" data-tw-target="#approve-job-post"
-                                            class="transition duration-200 border inline-flex items-center justify-center py-2 px-3 rounded-md font-medium cursor-pointer focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus-visible:outline-none dark:focus:ring-slate-700 dark:focus:ring-opacity-50 [&:hover:not(:disabled)]:bg-opacity-90 [&:hover:not(:disabled)]:border-opacity-90 [&:not(button)]:text-center disabled:opacity-70 disabled:cursor-not-allowed bg-primary border-primary text-white dark:border-primary mr-2 shadow-md">
-                                            Approve Post
-                                        </button>
-                                        <button data-tw-merge="" data-tw-toggle="modal" data-tw-target="#delete-job-post"
-                                            class="transition duration-200 border inline-flex items-center justify-center py-2 px-3 rounded-md font-medium cursor-pointer focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus-visible:outline-none dark:focus:ring-slate-700 dark:focus:ring-opacity-50 [&:hover:not(:disabled)]:bg-opacity-90 [&:hover:not(:disabled)]:border-opacity-90 [&:not(button)]:text-center disabled:opacity-70 disabled:cursor-not-allowed bg-primary border-primary text-white dark:border-primary mr-2 shadow-md">
+                                        <?php
+                                        if ($job_post_data['job_post_approved'] === false) {
+                                        ?>
+                                            <button data-tw-merge="" data-tw-toggle="modal" data-tw-target="#approve-job-post" data-post-id="<?= $job_post_data['_id'] ?>"
+                                                class="approve-job-post transition duration-200 border inline-flex items-center justify-center py-2 px-3 rounded-md font-medium cursor-pointer focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus-visible:outline-none dark:focus:ring-slate-700 dark:focus:ring-opacity-50 [&:hover:not(:disabled)]:bg-opacity-90 [&:hover:not(:disabled)]:border-opacity-90 [&:not(button)]:text-center disabled:opacity-70 disabled:cursor-not-allowed bg-primary border-primary text-white dark:border-primary mr-2 shadow-md">
+                                                Approve Post
+                                            </button>
+                                        <?php
+                                        }
+                                        ?>
+                                        <button data-tw-merge="" data-tw-toggle="modal" data-tw-target="#delete-job-post" data-post-id="<?= $job_post_data['_id'] ?>"
+                                            class="delete-job-post transition duration-200 border inline-flex items-center justify-center py-2 px-3 rounded-md font-medium cursor-pointer focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus-visible:outline-none dark:focus:ring-slate-700 dark:focus:ring-opacity-50 [&:hover:not(:disabled)]:bg-opacity-90 [&:hover:not(:disabled)]:border-opacity-90 [&:not(button)]:text-center disabled:opacity-70 disabled:cursor-not-allowed bg-primary border-primary text-white dark:border-primary mr-2 shadow-md">
                                             Delete Post
                                         </button>
                                     <?php
@@ -190,4 +196,46 @@ $job_post_created_by = (new Users)->getUser($job_post_data["job_post_created_by"
     <!-- END: Personal Information -->
 </div>
 <!-- END: Content -->
+<?php include "Modals/job-posts.php"; ?>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const approvePost = document.querySelectorAll('.approve-job-post');
+
+        approvePost.forEach(function(button) {
+            button.addEventListener('click', function(e) {
+                const postID = button.getAttribute('data-post-id');
+                const postIDInput = document.querySelector('#approve-job-post .postID');
+                console.log(postID);
+                if (postIDInput) {
+                    postIDInput.value = postID;
+                }
+
+                // Show the modal
+                const approvePost = new bootstrap.Modal(document.getElementById('approve-job-post'));
+                approvePost.show();
+            });
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const deletePost = document.querySelectorAll('.delete-job-post');
+
+        deletePost.forEach(function(button) {
+            button.addEventListener('click', function(e) {
+                const postID = button.getAttribute('data-post-id');
+                const postIDInput = document.querySelector('#delete-job-post .postID');
+                console.log(postID);
+                if (postIDInput) {
+                    postIDInput.value = postID;
+                }
+
+                // Show the modal
+                const deletePost = new bootstrap.Modal(document.getElementById('delete-job-post'));
+                deletePost.show();
+            });
+        });
+    });
+</script>
+
 <?= $this->endSection('content') ?>

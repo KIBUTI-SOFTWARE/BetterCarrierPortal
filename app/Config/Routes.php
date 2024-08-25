@@ -60,6 +60,8 @@ $routes->post('/new-job-post', 'JobPosts::newJobPost');
 $routes->get('/view-job-post/(:any)', 'JobPosts::viewJobPost/$1');
 $routes->get('/job-post-profile', 'JobPosts::jobPostProfile');
 $routes->post('/update-job-post', 'JobPosts::updateJobPost');
+$routes->post('/job-posts/approve-job-post', 'JobPosts::approveJobPost');
+$routes->post('/job-posts/delete-job-post', 'JobPosts::deleteJobPost');
     //Applications
 $routes->get('/view-applications', 'JobApplications::jobPostApplications');
 $routes->post('/apply-job', 'JobApplications::newJobApplication');

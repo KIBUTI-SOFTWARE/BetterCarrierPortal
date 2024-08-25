@@ -40,7 +40,7 @@ class JobPostsModel extends MongoConnectionModel
             $query = ['job_post_deleted_flag' => false, 'job_post_created_by' => new \MongoDB\BSON\ObjectId($user_id)];
         } else if ($user_level === '4') {
             // Query for user level 4: Return posts given is Active
-            $query = ['job_post_approved' => true, 'job_post_active' => true, 'job_post_deleted_flag' => false];
+            $query = ['job_post_approved' => true, 'job_post_deleted_flag' => false];
         } else {
             // Query for other user levels: Return posts not deleted
             $query = ['job_post_deleted_flag' => false];

@@ -320,7 +320,7 @@ class JobPosts extends BaseController
 
     }
 
-    public function deleteCategory(): RedirectResponse
+    public function approveJobPost(): RedirectResponse
     {
         if ($this->request->is('post')) {
             //Retrieve Submitted Data
@@ -331,11 +331,11 @@ class JobPosts extends BaseController
 
             if (!is_null($data)) {
                 $validation->setRules([
-                    'category_id' => [
+                    'job_post_id' => [
                         'rules' => 'required',
-                        'label' => 'Category ID',
+                        'label' => 'Post ID',
                         'errors' => [
-                            'required' => 'Category ID Field Cannot be Empty.'
+                            'required' => 'Post ID Field Cannot be Empty.'
                         ]
                     ]
                 ]);
@@ -343,32 +343,103 @@ class JobPosts extends BaseController
                 if ($validation->run($data)) {
                     $user_data = $session->get('user');
 
-                    $category_id = new ObjectId($data['category_id']);
-                    $category_deleted_by = new ObjectId($user_data['_id']);
+                    $post_id = new ObjectId($data['job_post_id']);
+                    $post_updated_by = new ObjectId($user_data['_id']);
 
-                    $model = new CategoriesModel();
+                    $model = new JobPostsModel();
 
                     $updateData = [
-                        'category_deleted_flag' => true,
-                        'category_deleted_by' => $category_deleted_by,
-                        'category_deleted_on' => ConfigMyFunctions::getDate(),
+                        'job_post_approved' => true,
+                        'job_post_updated_by' => $post_updated_by,
+                        'job_post_updated_on' => CustomFunctions::getDate(),
                     ];
 
-                    $result = $model->updateCategory($updateData, $category_id);
+                    $result = $model->updateJobPost($updateData, $post_id);
 
                     if (empty($result)) {
                         $message = [
-                            "message" => "Couldn't Delete Category, Please Try Again."
+                            "message" => "Couldn't Approve Job Post, Please Try Again."
                         ];
                         $session->setFlashdata("error", $message);
                         $session->setFlashdata('form_data', $data);
 
                     } else {
                         $message = [
-                            "message" => "Category Deleted Successfully."
+                            "message" => "Job Post Approved Successfully."
                         ];
                         $session->setFlashdata("success", $message);
-                        return redirect()->to("categories");
+                        return redirect()->to("/view-job-post/$post_id");
+                    }
+                } else {
+                    $_SESSION['validationErrors'] = $validation->getErrors();
+                    $message = [
+                        "message" => $validation->getErrors()
+                    ];
+                    $session->setFlashdata("validationErrors", $message);
+                    $session->setFlashdata('form_data', $data);
+                }
+            } else {
+                $message = [
+                    "message" => "Invalid Form Data."
+                ];
+                $session->setFlashdata("error", $message);
+                $session->setFlashdata('form_data', $data);
+            }
+
+        }
+        return redirect()->back();
+
+    }
+
+    public function deleteJobPost(): RedirectResponse
+    {
+        if ($this->request->is('post')) {
+            //Retrieve Submitted Data
+            $data = $this->request->getPost();
+            $validation = Services::validation();
+            $session = Services::session();
+            helper(['form']);
+
+            if (!is_null($data)) {
+                $validation->setRules([
+                    'job_post_id' => [
+                        'rules' => 'required',
+                        'label' => 'Job Post ID',
+                        'errors' => [
+                            'required' => 'Job Post ID Field Cannot be Empty.'
+                        ]
+                    ]
+                ]);
+
+                if ($validation->run($data)) {
+                    $user_data = $session->get('user');
+
+                    $job_post_id = new ObjectId($data['job_post_id']);
+                    $job_post_deleted_by = new ObjectId($user_data['_id']);
+
+                    $model = new JobPostsModel();
+
+                    $updateData = [
+                        'job_post_deleted_flag' => true,
+                        'job_post_deleted_by' => $job_post_deleted_by,
+                        'job_post_deleted_on' => CustomFunctions::getDate(),
+                    ];
+
+                    $result = $model->updateJobPost($updateData, $job_post_id);
+
+                    if (empty($result)) {
+                        $message = [
+                            "message" => "Couldn't Delete Job Post, Please Try Again."
+                        ];
+                        $session->setFlashdata("error", $message);
+                        $session->setFlashdata('form_data', $data);
+
+                    } else {
+                        $message = [
+                            "message" => "Job Post Deleted Successfully."
+                        ];
+                        $session->setFlashdata("success", $message);
+                        return redirect()->to("view-job-posts");
                     }
                 } else {
                     $_SESSION['validationErrors'] = $validation->getErrors();
