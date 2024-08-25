@@ -161,13 +161,9 @@ $job_applications = $job_applications ?? array();
                     <td data-tw-merge=""
                                 class="text-left px-5 py-3 border-b dark:border-darkmode-300 box w-56 rounded-l-none rounded-r-none border-x-0 shadow-[5px_3px_5px_#00000005] first:rounded-l-[0.6rem] first:border-l last:rounded-r-[0.6rem] last:border-r dark:bg-darkmode-600 before:absolute before:inset-y-0 before:left-0 before:my-auto before:block before:h-8 before:w-px before:bg-slate-200 before:dark:bg-darkmode-400">
                         <div class="flex items-center justify-center">
-                            <a class="mr-3 flex items-center" href="#">
+                            <a class="mr-3 flex items-center" href="/view-user/${jobApplicant._id}">
                                 <i data-tw-merge="" data-lucide="view" class="stroke-1.5 mr-1 h-4 w-4"></i>
-                                View
-                            </a>
-                            <a class="flex items-center text-danger" data-tw-toggle="modal" data-tw-target="#delete-confirmation-modal" href="#">
-                                <i data-tw-merge="" data-lucide="trash" class="stroke-1.5 mr-1 h-4 w-4"></i>
-                                Delete
+                                View Applicant
                             </a>
                         </div>
                     </td>
