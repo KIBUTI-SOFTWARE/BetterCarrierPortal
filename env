@@ -26,6 +26,8 @@ system_email = 'noreply@kibuti.co.tz';
 mongodb_database = 'better_carrier_portal';
 mongodb_connection_uri = 'mongodb://143.198.232.68:4999/';
 system_logo = 'logo.svg';
+messaging_api_base_URL = 'https://messaging-service.co.tz/api/sms/v1/text/';
+system_vendor_name = 'KIBUTI BOT';
 # If you have trouble with ., you could also use _.
 # app_baseURL = ''
 # app.forceGlobalSecureRequests = false

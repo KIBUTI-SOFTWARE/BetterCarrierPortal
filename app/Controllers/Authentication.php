@@ -129,14 +129,13 @@ class Authentication extends BaseController
                             $session->setFlashdata('form_data', $data);
                         } else {
                             $action = "Activate Account";
-                            $otp_sent = $this->generateAndSendOTP(ucwords($user_firstname), $user_email, $model, $action);
+                            $otp_sent = $this->generateAndSendOTP(ucwords($user_firstname), $user_phone, $model, $action);
                             $message = [
-                                "message" => "Account Created Successfully, and a Verification Email has been Sent."
+                                "message" => "Account Created Successfully, and a Verification Code has been Sent."
                             ];
                             $session->setTempdata('form_data', $data, 3000000);
                             $session->setFlashdata("success", $message);
                             return redirect()->to("resend-code");
-
                         }
                     } else {
                         if ($isUserWithSimilarEmailExisting && $isUserWithSimilarPhoneExisting) {
@@ -161,7 +160,6 @@ class Authentication extends BaseController
                             $session->setFlashdata('form_data', $data);
                         }
                     }
-
                 } else {
                     $_SESSION['validationErrors'] = $validation->getErrors();
                     $message = [
@@ -170,7 +168,6 @@ class Authentication extends BaseController
                     $session->setFlashdata("validationErrors", $message);
                     $session->setFlashdata('form_data', $data);
                 }
-
             } else {
                 $message = [
                     "message" => "Invalid Form Data."
@@ -178,7 +175,6 @@ class Authentication extends BaseController
                 $session->setFlashdata("error", $message);
                 $session->setFlashdata('form_data', $data);
             }
-
         }
         return redirect()->back();
     }
@@ -196,24 +192,24 @@ class Authentication extends BaseController
 
                 $validation->setRules([
 
-                    'user_email' => [
-                        'rules' => 'required|valid_email',
-                        'label' => "User Email",
+                    'user_phone' => [
+                        'rules' => 'required|exact_length[10]',
+                        'label' => 'Phone',
                         'errors' => [
-                            'required' => "User Email Field Cannot be Empty.",
-                            'valid_email' => "User Email Field must contain a valid Email.",
+                            'required' => 'Phone Field Cannot be Empty.',
+                            'exact_length' => 'Please Enter a valid Phone Number.'
                         ]
                     ],
                 ]);
 
                 if ($validation->run($data)) {
 
-                    $user_email = $data['user_email'];
+                    $user_phone = $data['user_phone'];
                     $user_firstname = $data['user_firstname'];
 
                     $model = new UsersModel();
 
-                    $isUserExisting = $model->getUserByEmail($user_email);
+                    $isUserExisting = $model->getUserByPhone($user_phone);
 
                     if (!empty($isUserExisting)) {
                         $other = $session->getTempdata("form_data");
@@ -221,12 +217,12 @@ class Authentication extends BaseController
                         if ($previous_action === null) {
                             $action = "Activate Account";
                             $message = [
-                                "message" => "A new Verification Email has been Sent."
+                                "message" => "A new Verification Code has been Sent."
                             ];
-                        }  else {
+                        } else {
                             $action = "Password Recovery";
                             $message = [
-                                "message" => "A new Password Recovery Email has been Sent."
+                                "message" => "A new Password Recovery Code has been Sent."
                             ];
                             unset($isUserExisting['user_password']);
                             $other = [
@@ -234,18 +230,17 @@ class Authentication extends BaseController
                             ];
                             $data = array_merge($data, $isUserExisting, $other);
                         }
-                        $otp_sent = $this->generateAndSendOTP(ucwords($user_firstname), $user_email, $model, $action);
+                        $otp_sent = $this->generateAndSendMessageOTP(ucwords($user_firstname), $user_phone, $model, $action);
                         $session->setTempdata('form_data', $data, 3000000);
                         $session->setFlashdata("success", $message);
                     } else {
                         $message = [
-                            "message" => "A User with the provided Email could not be found."
+                            "message" => "A User with the provided Phone could not be found."
                         ];
                         $session->removeTempdata('form_data');
                         $session->setFlashdata("error", $message);
                         return redirect()->to("login");
                     }
-
                 } else {
                     $_SESSION['validationErrors'] = $validation->getErrors();
                     $message = [
@@ -254,7 +249,6 @@ class Authentication extends BaseController
                     $session->setFlashdata("validationErrors", $message);
                     $session->setFlashdata('form_data', $data);
                 }
-
             } else {
                 $message = [
                     "message" => "Invalid Form Data."
@@ -262,7 +256,6 @@ class Authentication extends BaseController
                 $session->setFlashdata("error", $message);
                 $session->setFlashdata('form_data', $data);
             }
-
         }
         return redirect()->back();
     }
@@ -287,7 +280,7 @@ class Authentication extends BaseController
                     'user_account_activated' => true
                 ];
 
-                $user_data = $model->getUserByEmail($otp_data['otp_sent_to']);
+                $user_data = $model->getUserByPhone($otp_data['otp_sent_to']);
 
                 if (empty($user_data)) {
                     $message = [
@@ -332,7 +325,7 @@ class Authentication extends BaseController
             } else {
                 $otp_id = $otp_data['_id'];
 
-                $user_data = $model->getUserByEmail($otp_data['otp_sent_to']);
+                $user_data = $model->getUserByPhone($otp_data['otp_sent_to']);
 
                 if (empty($user_data)) {
                     $message = [
@@ -404,9 +397,9 @@ class Authentication extends BaseController
                     } else {
                         if ($user_data['user_account_activated'] === true) {
                             $action = "Password Recovery";
-                            $sendTO = $user_data['user_email'];
+                            $sendTO = $user_data['user_phone'];
                             $user_firstname = ucwords($user_data['user_firstname'] ?? "");
-                            $sent_OTP = $this->generateAndSendOTP($user_firstname, $sendTO, $model, $action);
+                            $sent_OTP = $this->generateAndSendMessageOTP($user_firstname, $sendTO, $model, $action);
                             unset($user_data['user_password']);
                             $other = [
                                 "action" => 'passwordRecovery',
@@ -414,7 +407,7 @@ class Authentication extends BaseController
                             $data = array_merge($data, $user_data, $other);
                             $session->setTempdata("form_data", $data, 3000000);
                             $message = [
-                                "message" => "An email with the password recovery link has been sent to you."
+                                "message" => "An SMS with the password recovery link has been sent to you."
                             ];
                             $session->setFlashdata("success", $message);
                             return redirect()->to("resend-code");
@@ -431,7 +424,6 @@ class Authentication extends BaseController
                     ];
                     $session->setFlashdata("validationErrors", $message);
                 }
-
             } else {
 
                 $message = [
@@ -495,7 +487,6 @@ class Authentication extends BaseController
                                 "message" => "Could not Find User with Email or Phone Number."
                             ];
                             $session->setFlashdata("error", $message);
-
                         } else if ($result['user_deleted_flag'] === true) {
                             $message = [
                                 "message" => "Account Not Found."
@@ -533,7 +524,6 @@ class Authentication extends BaseController
                         ];
                         $session->setFlashdata("error", $message);
                     }
-
                 } else {
                     $_SESSION['validationErrors'] = $validation->getErrors();
                     $message = [
@@ -541,7 +531,6 @@ class Authentication extends BaseController
                     ];
                     $session->setFlashdata("validationErrors", $message);
                 }
-
             } else {
                 $message = [
                     "message" => "Invalid Form Data."
@@ -553,7 +542,6 @@ class Authentication extends BaseController
         }
 
         return redirect()->back();
-
     }
 
     public function login(): \CodeIgniter\HTTP\RedirectResponse
@@ -616,7 +604,6 @@ class Authentication extends BaseController
                                     } else {
                                         return redirect()->to("dashboard");
                                     }
-
                                 }
                                 $message = [
                                     "message" => "Incorrect Password or Username."
@@ -629,7 +616,6 @@ class Authentication extends BaseController
                         }
                     }
                     $session->setFlashdata("error", $message);
-
                 } else {
                     $_SESSION['validationErrors'] = $validation->getErrors();
                     $message = [
@@ -637,7 +623,6 @@ class Authentication extends BaseController
                     ];
                     $session->setFlashdata("validationErrors", $message);
                 }
-
             } else {
                 $message = [
                     "message" => "Invalid Username or Password."
@@ -711,4 +696,79 @@ class Authentication extends BaseController
         return $model->saveSentOTP($OTP_data);
     }
 
+    private function generateAndSendMessageOTP(string $user_firstname, string $user_phone, UsersModel $model, string $action): bool
+    {
+        $otp_code = CustomFunctions::generateValidationLink();
+        $verification_url = base_url(($action === "Activate Account" ? "verify" : "verify-link") . "/$otp_code");
+        $message = $action === "Activate Account"
+            ? "Dear $user_firstname, your account activation code is: $verification_url. Please use it to activate your account."
+            : "Dear $user_firstname, your password recovery code is: $verification_url. Please use it to recover your password.";
+
+        try {
+            // Preparing the phone number in international format
+            $receiver_phone = strval('255' . ltrim($user_phone, "0"));
+
+            // Get vendor name
+            $vendor_name = $_ENV['system_vendor_name'];
+
+            // Send the SMS
+            $result = json_decode($this->sendSMS($vendor_name, $receiver_phone, $message), true);
+
+            // Log the result of the SMS sending
+            log_message('info', 'SMS API Response: ' . print_r($result, true));
+
+            // Validate the response
+            if ($result === null || !isset($result['messages'])) {
+                throw new \Exception("Error: Invalid response from SMS service.");
+            }
+
+            // Check the status of the sent message
+            $message_sent = false;
+            foreach ($result['messages'] as $msg) {
+                if (isset($msg['status']['name']) && $msg['status']['name'] === 'PENDING_ENROUTE') {
+                    $message_sent = true;
+                    break;
+                }
+            }
+
+            if (!$message_sent) {
+                throw new \Exception("Error: Couldn't send OTP via SMS. Please try again.");
+            }
+
+            // Log successful OTP sending
+            log_message('info', "OTP sent successfully to $receiver_phone for action: $action.");
+
+            // Save the OTP data to the database
+            $OTP_data = [
+                'otp_code' => $otp_code,
+                'otp_sent_to' => $user_phone,
+                'otp_sent_on' => date('Y-m-d H:i:s'),
+                'otp_status' => false,
+            ];
+
+            return $model->saveSentOTP($OTP_data);
+        } catch (\Exception $e) {
+            log_message('error', 'Exception occurred while sending OTP via SMS: ' . $e->getMessage());
+            return false;
+        }
+    }
+
+
+    public static function sendSMS($vendor_name, $receiver_phone, $message): string
+    {
+        $request_url = 'single';
+        $request_method = 'POST';
+        $headers = [
+            'Authorization: Basic ZWR3aW5ndWRmcmllbmQ6QEplc3VzMjAyMA==',
+            'Content-Type: application/json',
+            'Accept: application/json'
+        ];
+        $request_data = json_encode([
+            "from" => $vendor_name,
+            "to" => $receiver_phone,
+            "text" => $message,
+        ]);
+
+        return CustomFunctions::connectToApi($request_method, $request_url, $headers, $request_data);
+    }
 }

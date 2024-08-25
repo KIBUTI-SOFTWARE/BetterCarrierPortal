@@ -31,7 +31,7 @@
                         Account Verification
                     </h2>
                     <div class="intro-x mt-2 text-center text-slate-400 ">
-                        <p>An email with a verification link has been sent to <strong><?=$form_data["user_email"] ?? ""?></strong>, if you have not received an email please click the button below.</p>
+                        <p>An SMS with a verification link has been sent to <strong><?=$form_data["user_phone"] ?? ""?></strong>, if you have not received the code please click the button below.</p>
                     </div>
                     <form name="resend-code" action="/resend-code" method="post" enctype="multipart/form-data">
                         <div class="intro-x mt-8">
@@ -41,8 +41,8 @@
                                    value="<?= $form_data['user_firstname'] ?? '' ?>"
                                    class="disabled:bg-slate-100 disabled:cursor-not-allowed dark:disabled:bg-darkmode-800/50 dark:disabled:border-transparent [&[readonly]]:bg-slate-100 [&[readonly]]:cursor-not-allowed [&[readonly]]:dark:bg-darkmode-800/50 [&[readonly]]:dark:border-transparent transition duration-200 ease-in-out w-full text-sm border-slate-200 shadow-sm rounded-md placeholder:text-slate-400/90 focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus:border-primary focus:border-opacity-40 dark:bg-darkmode-800 dark:border-transparent dark:focus:ring-slate-700 dark:focus:ring-opacity-50 dark:placeholder:text-slate-500/80 group-[.form-inline]:flex-1 group-[.input-group]:rounded-none group-[.input-group]:[&:not(:first-child)]:border-l-transparent group-[.input-group]:first:rounded-l group-[.input-group]:last:rounded-r group-[.input-group]:z-10 intro-x block min-w-full px-4 py-3 xl:min-w-[350px]">
                             <label for="user_email"></label>
-                            <input data-tw-merge="" id="user_email" name="user_email" type="hidden" required
-                                   value="<?=$form_data["user_email"] ?? ""?>"
+                            <input data-tw-merge="" id="user_phone" name="user_phone" type="hidden" required
+                                   value="<?=$form_data["user_phone"] ?? ""?>"
                                    class="disabled:bg-slate-100 disabled:cursor-not-allowed dark:disabled:bg-darkmode-800/50 dark:disabled:border-transparent [&[readonly]]:bg-slate-100 [&[readonly]]:cursor-not-allowed [&[readonly]]:dark:bg-darkmode-800/50 [&[readonly]]:dark:border-transparent transition duration-200 ease-in-out w-full text-sm border-slate-200 shadow-sm rounded-md placeholder:text-slate-400/90 focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus:border-primary focus:border-opacity-40 dark:bg-darkmode-800 dark:border-transparent dark:focus:ring-slate-700 dark:focus:ring-opacity-50 dark:placeholder:text-slate-500/80 group-[.form-inline]:flex-1 group-[.input-group]:rounded-none group-[.input-group]:[&:not(:first-child)]:border-l-transparent group-[.input-group]:first:rounded-l group-[.input-group]:last:rounded-r group-[.input-group]:z-10 intro-x block min-w-full px-4 py-3 xl:min-w-[350px]">
                         </div>
                         <div class="intro-x mt-5 text-center xl:mt-8 xl:text-center">

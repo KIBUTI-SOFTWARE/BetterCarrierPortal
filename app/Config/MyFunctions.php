@@ -25,10 +25,39 @@ class MyFunctions extends BaseConfig
         return $date . str_shuffle($rand) . ($queryT);
     }
 
+    public static function connectToApi($request_method, $request_url, $headers, $request_data = null): string
+    {
+        $curl = curl_init();
+        $apiURI = $_ENV['messaging_api_base_URL'];
+
+        curl_setopt_array($curl, [
+            CURLOPT_URL => $apiURI . $request_url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "$request_method",
+            CURLOPT_POSTFIELDS => $request_data,
+            CURLOPT_HTTPHEADER => $headers,
+        ]);
+
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+
+        curl_close($curl);
+
+        if ($err) {
+            return "cURL Error #:" . $err;
+        } else {
+            return $response;
+        }
+    }
+
     public static function generateValidationLink(): string
     {
         $set = '123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        return substr(str_shuffle($set), 0, 24);
+        return substr(str_shuffle($set), 0, 6);
     }
 
     public static function sendVerificationEmail($subject, $message, $sent_to): string

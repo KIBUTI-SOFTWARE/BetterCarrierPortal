@@ -127,6 +127,18 @@ class UsersModel extends MongoConnectionModel
         return $user ? $this->convertDocumentToArray($user) : null;
     }
 
+    public function getUserByPhone(string $phone): ?array
+    {
+        $collection = $this->connectToDatabase()->selectCollection($this->users_collection);
+
+        $user = $collection->findOne([
+            'user_phone' => $phone,
+            'user_deleted_flag' => false
+        ]);
+
+        return $user ? $this->convertDocumentToArray($user) : null;
+    }
+
     public function getOTP(string $otp_code): ?array
     {
         $collection = $this->connectToDatabase()->selectCollection($this->otp_collection);
