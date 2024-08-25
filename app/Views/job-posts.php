@@ -177,11 +177,6 @@ $job_posts_with_users = array_map(function ($job_post) {
                                class="cursor-pointer flex items-center p-2 transition duration-300 ease-in-out rounded-md hover:bg-slate-200/60 dark:bg-darkmode-600 dark:hover:bg-darkmode-400 dropdown-item"><i
                                         data-tw-merge="" data-lucide="eye" class="stroke-1.5 mr-2 h-4 w-4"></i>
                                 View Post</a>
-                            <a href="/delete-job-post/${post._id}"
-                               class="cursor-pointer flex items-center p-2 transition duration-300 ease-in-out rounded-md hover:bg-slate-200/60 dark:bg-darkmode-600 dark:hover:bg-darkmode-400 dropdown-item"><i
-                                        data-tw-merge="" data-lucide="trash"
-                                        class="stroke-1.5 mr-2 h-4 w-4"></i>
-                                Delete Post</a>
                         </div>
                     </div>
                 </div>
