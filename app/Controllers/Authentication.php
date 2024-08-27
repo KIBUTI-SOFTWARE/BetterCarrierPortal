@@ -129,7 +129,7 @@ class Authentication extends BaseController
                             $session->setFlashdata('form_data', $data);
                         } else {
                             $action = "Activate Account";
-                            $otp_sent = $this->generateAndSendOTP(ucwords($user_firstname), $user_phone, $model, $action);
+                            $otp_sent = $this->generateAndSendMessageOTP(ucwords($user_firstname), $user_phone, $model, $action);
                             $message = [
                                 "message" => "Account Created Successfully, and a Verification Code has been Sent."
                             ];
