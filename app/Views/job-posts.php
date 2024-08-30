@@ -149,7 +149,7 @@ $job_posts_with_users = array_map(function ($job_post) {
                data-tw-target="#apply-now"
                data-post-id="${post._id}"
                class="apply-now tooltip cursor-pointer intro-x ml-2 flex h-8 w-8 items-center justify-center rounded-full bg-primary text-white"><i
-                    data-tw-merge="" data-lucide="file-text" class="stroke-1.5 h-3 w-3">Apply</i>Apply</a>
+                    data-tw-merge="" data-lucide="file-text" class="stroke-1.5 h-3 w-3"></i>Apply</a>
         ` : '';
 
             const editDeleteButtonsHTML = isCreator ? `
@@ -172,7 +172,7 @@ $job_posts_with_users = array_map(function ($job_post) {
                          class="dropdown-content rounded-md border-transparent bg-white p-2 shadow-[0px_3px_10px_#00000017] dark:border-transparent dark:bg-darkmode-600 w-40">
                         <a href="/view-job-post/${post._id}"
                            class="cursor-pointer flex items-center p-2 transition duration-300 ease-in-out rounded-md hover:bg-slate-200/60 dark:bg-darkmode-600 dark:hover:bg-darkmode-400 dropdown-item"><i
-                                    data-tw-merge="" data-lucide="eye" class="stroke-1.5 mr-2 h-4 w-4">View</i>
+                                    data-tw-merge="" data-lucide="eye" class="stroke-1.5 mr-2 h-4 w-4"></i>
                             View Post</a>
                     </div>
                 </div>
@@ -214,7 +214,7 @@ $job_posts_with_users = array_map(function ($job_post) {
                     <a data-placement="top" title="Share" href="#"
                        data-post-link="${postLink}"
                        class="share-link tooltip cursor-pointer intro-x ml-auto flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-primary dark:bg-darkmode-300 dark:text-slate-300"><i
-                                data-tw-merge="" data-lucide="share" class="stroke-1.5 h-3 w-3">Share</i>Share</a>
+                                data-tw-merge="" data-lucide="share" class="stroke-1.5 h-3 w-3"></i>Share</a>
                     ${applyButtonHTML}
                 </div>
             </div>
