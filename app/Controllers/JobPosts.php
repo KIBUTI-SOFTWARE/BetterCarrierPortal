@@ -290,7 +290,7 @@ class JobPosts extends BaseController
                         'job_post_updated_on' => CustomFunctions::getDate(),
                     ];
 
-                    $result = $model->updateJobPost($updateData, $category_id);
+                    $result = $model->updateJobPost($updateData, $job_post_id);
 
                     if (empty($result)) {
                         $message = [
