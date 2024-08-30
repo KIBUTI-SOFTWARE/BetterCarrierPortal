@@ -246,7 +246,7 @@ class JobPosts extends BaseController
         return view('job-post-profile', $data);
     }
 
-    public function updateCategory(): RedirectResponse
+    public function updateJobPost(): RedirectResponse
     {
         if ($this->request->is('post')) {
             //Retrieve Submitted Data
@@ -257,18 +257,25 @@ class JobPosts extends BaseController
 
             if (!is_null($data)) {
                 $validation->setRules([
-                    'category_id' => [
+                    'job_post_id' => [
                         'rules' => 'required',
-                        'label' => 'Category ID',
+                        'label' => 'Post ID',
                         'errors' => [
-                            'required' => 'Category ID Field Cannot be Empty.'
+                            'required' => 'Post ID Field Cannot be Empty.'
                         ]
                     ],
-                    'category_name' => [
+                    'job_post_title' => [
                         'rules' => 'required',
                         'label' => 'Category Name',
                         'errors' => [
-                            'required' => 'Category Name Field Cannot be Empty.'
+                            'required' => 'Post Title Field Cannot be Empty.'
+                        ]
+                    ],
+                    'job_post_category' => [
+                        'rules' => 'required',
+                        'label' => 'Category Name',
+                        'errors' => [
+                            'required' => 'Post Category Field Cannot be Empty.'
                         ]
                     ]
                 ]);
@@ -276,35 +283,37 @@ class JobPosts extends BaseController
                 if ($validation->run($data)) {
                     $user_data = $session->get('user');
 
-                    $category_id = new ObjectId($data['category_id']);
-                    $category_name = $data['category_name'];
-                    $category_description = $data['category_description'] ?? "";
-                    $category_updated_by = new ObjectId($user_data['_id']);
+                    $job_post_id = new ObjectId($data['job_post_id']);
+                    $job_post_title = $data['job_post_title'];
+                    $job_post_description = $data['job_post_description'] ?? "";
+                    $job_post_category = new ObjectId($data['job_post_category']);
+                    $job_post_updated_by = new ObjectId($user_data['_id']);
 
-                    $model = new CategoriesModel();
+                    $model = new JobPostsModel();
 
                     $updateData = [
-                        'category_name' => $category_name,
-                        'category_description' => $category_description,
-                        'category_updated_by' => $category_updated_by,
-                        'category_updated_on' => ConfigMyFunctions::getDate(),
+                        'job_post_title' => job_post_title,
+                        '$job_post_category' => $job_post_category,
+                        'job_post_description' => job_post_description,
+                        'job_post_updated_by' => $job_post_updated_by,
+                        'job_post_updated_on' => ConfigMyFunctions::getDate(),
                     ];
 
-                    $result = $model->updateCategory($updateData, $category_id);
+                    $result = $model->updateJobPost($updateData, $category_id);
 
                     if (empty($result)) {
                         $message = [
-                            "message" => "Couldn't Update Category, Please Try Again."
+                            "message" => "Couldn't Update Job Post, Please Try Again."
                         ];
                         $session->setFlashdata("error", $message);
                         $session->setFlashdata('form_data', $data);
 
                     } else {
                         $message = [
-                            "message" => "Category Updated Successfully."
+                            "message" => "Job Post Updated Successfully."
                         ];
                         $session->setFlashdata("success", $message);
-                        return redirect()->to("/view-category/$category_id");
+                        return redirect()->to("/view-job-post/$job_post_id");
                     }
                 } else {
                     $_SESSION['validationErrors'] = $validation->getErrors();
