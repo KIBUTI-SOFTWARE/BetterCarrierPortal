@@ -270,13 +270,6 @@ class JobPosts extends BaseController
                         'errors' => [
                             'required' => 'Post Title Field Cannot be Empty.'
                         ]
-                    ],
-                    'job_post_category' => [
-                        'rules' => 'required',
-                        'label' => 'Category Name',
-                        'errors' => [
-                            'required' => 'Post Category Field Cannot be Empty.'
-                        ]
                     ]
                 ]);
 
@@ -286,14 +279,12 @@ class JobPosts extends BaseController
                     $job_post_id = new ObjectId($data['job_post_id']);
                     $job_post_title = $data['job_post_title'];
                     $job_post_description = $data['job_post_description'] ?? "";
-                    $job_post_category = new ObjectId($data['job_post_category']);
                     $job_post_updated_by = new ObjectId($user_data['_id']);
 
                     $model = new JobPostsModel();
 
                     $updateData = [
                         'job_post_title' => job_post_title,
-                        'job_post_category' => $job_post_category,
                         'job_post_description' => job_post_description,
                         'job_post_updated_by' => $job_post_updated_by,
                         'job_post_updated_on' => ConfigMyFunctions::getDate(),
