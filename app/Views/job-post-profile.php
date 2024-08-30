@@ -160,6 +160,28 @@ $job_post_created_by = (new Users)->getUser($job_post_data["job_post_created_by"
                                             required value="<?= $job_post_data['job_post_title'] ?? "" ?>"
                                             class="disabled:bg-slate-100 disabled:cursor-not-allowed dark:disabled:bg-darkmode-800/50 dark:disabled:border-transparent [&[readonly]]:bg-slate-100 [&[readonly]]:cursor-not-allowed [&[readonly]]:dark:bg-darkmode-800/50 [&[readonly]]:dark:border-transparent transition duration-200 ease-in-out w-full text-sm border-slate-200 shadow-sm rounded-md placeholder:text-slate-400/90 focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus:border-primary focus:border-opacity-40 dark:bg-darkmode-800 dark:border-transparent dark:focus:ring-slate-700 dark:focus:ring-opacity-50 dark:placeholder:text-slate-500/80 group-[.form-inline]:flex-1 group-[.input-group]:rounded-none group-[.input-group]:[&:not(:first-child)]:border-l-transparent group-[.input-group]:first:rounded-l group-[.input-group]:last:rounded-r group-[.input-group]:z-10">
                                     </div>
+                                    <div class="col-span-12 sm:col-span-12">
+                                        <label data-tw-merge="" for="modal-form-2"
+                                            class="inline-block mb-2 group-[.form-inline]:mb-2 group-[.form-inline]:sm:mb-0 group-[.form-inline]:sm:mr-5 group-[.form-inline]:sm:text-right">
+                                            Job Type/Category
+                                        </label>
+                                        <div class="preview relative [&.hide]:overflow-hidden [&.hide]:h-0">
+                                            <select data-placeholder="Job Type/Category"
+                                                name="job_post_category" id="modal-form-2" class="tom-select w-full" required>
+                                                <?php
+                                                $categories = (new \App\Controllers\Categories)->getCategories();
+                                                if (count($categories) > 0) {
+                                                    foreach ($categories as $category) {
+                                                ?>
+                    
+                                                        <option value="<?= $category['_id'] ?>"><?= ucwords($category['category_name']) ?></option>
+                                                <?php
+                                                    }
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                    </div>
                                     <div class="mt-3">
                                         <label data-tw-merge="" for="category_description"
                                             class="inline-block mb-2 group-[.form-inline]:mb-2 group-[.form-inline]:sm:mb-0 group-[.form-inline]:sm:mr-5 group-[.form-inline]:sm:text-right">
