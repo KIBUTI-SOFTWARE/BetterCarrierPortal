@@ -284,8 +284,8 @@ class JobPosts extends BaseController
                     $model = new JobPostsModel();
 
                     $updateData = [
-                        'job_post_title' => job_post_title,
-                        'job_post_description' => job_post_description,
+                        'job_post_title' => $job_post_title,
+                        'job_post_description' => $job_post_description,
                         'job_post_updated_by' => $job_post_updated_by,
                         'job_post_updated_on' => ConfigMyFunctions::getDate(),
                     ];
