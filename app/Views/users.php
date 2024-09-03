@@ -11,10 +11,6 @@ $users = $users ?? array();
 <h2 class="intro-y mt-10 text-lg font-medium">Users (<?= number_format(count($users)) ?>)</h2>
 <div class="mt-5 grid grid-cols-12 gap-6">
     <div class="intro-y col-span-12 mt-2 flex flex-wrap items-center sm:flex-nowrap">
-        <button data-tw-merge="" data-tw-toggle="modal" data-tw-target="#"
-                class="transition duration-200 border inline-flex items-center justify-center py-2 px-3 rounded-md font-medium cursor-pointer focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus-visible:outline-none dark:focus:ring-slate-700 dark:focus:ring-opacity-50 [&:hover:not(:disabled)]:bg-opacity-90 [&:hover:not(:disabled)]:border-opacity-90 [&:not(button)]:text-center disabled:opacity-70 disabled:cursor-not-allowed bg-primary border-primary text-white dark:border-primary mr-2 shadow-md">
-            Add New User
-        </button>
         <div class="mx-auto hidden text-slate-500 md:block" id="entries-info">
             <!-- Entries info will be updated by JavaScript '-->
         </div>
