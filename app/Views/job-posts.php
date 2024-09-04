@@ -118,7 +118,97 @@ $job_posts_with_users = array_map(function ($job_post) {
         renderResults();
     });
 
-              </div>
+    async function renderResults() {
+        const searchQuery = document.getElementById('search-input').value.toLowerCase();
+        const filteredPosts = job_posts.filter(post => {
+            const job_posted_by = post.job_posted_by;
+            return job_posted_by.user_firstname.toLowerCase().includes(searchQuery) ||
+                job_posted_by.user_lastname.toLowerCase().includes(searchQuery) ||
+                post.job_post_title.toLowerCase().includes(searchQuery);
+        });
+
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        const paginatedPosts = filteredPosts.slice(startIndex, endIndex);
+
+        const postsContainer = document.getElementById('posts-container');
+        postsContainer.innerHTML = '';
+
+        for (const post of paginatedPosts) {
+            const postLink = <?= base_url() ?>view-job-post/${post._id};
+            const jobCategory = await getPostCategory(post.job_post_category); // Await inside an async function using a loop that supports async
+            const jobPostedOn = timeAgo(post.job_post_created_on);
+            const job_posted_by = post.job_posted_by;
+            const job_posted_by_profile = JSON.parse(job_posted_by.user_profile);
+
+            const userLevel = <?= ($user_level) ?> > "3"; // Assume this is a boolean check
+            const isCreator = <?= $user_id ?> === post.job_post_created_by || <?= $user_level ?> < "3";
+
+            const applyButtonHTML = userLevel ? 
+            <a data-placement="top" title="Apply Now" href="#" data-tw-toggle="modal"
+               data-tw-target="#apply-now"
+               data-post-id="${post._id}"
+               class="apply-now tooltip cursor-pointer intro-x ml-2 flex h-8 w-8 items-center justify-center rounded-full bg-primary text-white"><i
+                    data-tw-merge="" data-lucide="file-text" class="stroke-1.5 h-3 w-3"></i>Apply</a>
+         : '';
+
+            const editDeleteButtonsHTML = isCreator ? 
+            <div data-tw-merge="" data-tw-placement="bottom-end" class="dropdown relative ml-3">
+                <button data-tw-toggle="dropdown" aria-expanded="false"
+                        class="cursor-pointer h-5 w-5 text-slate-500" tag="a">
+                    <i data-tw-merge=""
+                       data-lucide="more-vertical"
+                       class="stroke-1.5 w-5 h-5"></i>
+                </button>
+                <div data-transition="" data-selector=".show"
+                     data-enter="transition-all ease-linear duration-150"
+                     data-enter-from="absolute !mt-5 invisible opacity-0 translate-y-1"
+                     data-enter-to="!mt-1 visible opacity-100 translate-y-0"
+                     data-leave="transition-all ease-linear duration-150"
+                     data-leave-from="!mt-1 visible opacity-100 translate-y-0"
+                     data-leave-to="absolute !mt-5 invisible opacity-0 translate-y-1"
+                     class="dropdown-menu absolute z-[9999] hidden">
+                    <div data-tw-merge=""
+                         class="dropdown-content rounded-md border-transparent bg-white p-2 shadow-[0px_3px_10px_#00000017] dark:border-transparent dark:bg-darkmode-600 w-40">
+                        <a href="/view-job-post/${post._id}"
+                           class="cursor-pointer flex items-center p-2 transition duration-300 ease-in-out rounded-md hover:bg-slate-200/60 dark:bg-darkmode-600 dark:hover:bg-darkmode-400 dropdown-item"><i
+                                    data-tw-merge="" data-lucide="eye" class="stroke-1.5 mr-2 h-4 w-4"></i>
+                            View Post</a>
+                    </div>
+                </div>
+            </div>
+         : '';
+
+            const postHTML = 
+            <div class="intro-y col-span-12 md:col-span-6 xl:col-span-4 box">
+                <div class="flex items-center border-b border-slate-200/60 px-5 py-4 dark:border-darkmode-400">
+                    <div class="image-fit h-10 w-10 flex-none">
+                        <img class="rounded-full" src="${job_posted_by_profile.user_photo}"
+                             onerror="this.onerror=null; this.src='dist/images/fakers/profile-9.jpg';"
+                             alt="Post">
+                    </div>
+                    <div class="ml-3 mr-auto">
+                        <a class="font-medium" href="#">${job_posted_by.user_firstname} ${job_posted_by.user_lastname}</a>
+                        <div class="mt-0.5 flex truncate text-xs text-slate-500">
+                            <a class="inline-block truncate text-primary" href="#">
+                                ${jobCategory.category_name}
+                            </a>
+                            <span class="mx-1">•</span> ${jobPostedOn}
+                        </div>
+                    </div>
+                    ${editDeleteButtonsHTML}
+                </div>
+                <div class="p-5">
+                    <div class="image-fit h-40 2xl:h-56">
+                        <img class="rounded-md" src="dist/images/pdf.png"
+                             alt="Post">
+                    </div>
+                    <a class="mt-5 block text-base font-medium" href="/view-job-post/${post._id}">
+                        ${post.job_post_title}
+                    </a>
+                    <div class="mt-2 text-slate-600 dark:text-slate-500">
+                        ${post.job_post_title}
+                    </div>
                 </div>
                 <div class="flex items-center border-t border-slate-200/60 px-5 py-3 dark:border-darkmode-400">
                     <a data-placement="top" title="Share" href="#"
