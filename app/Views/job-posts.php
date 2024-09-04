@@ -180,7 +180,8 @@ $job_posts_with_users = array_map(function ($job_post) {
         ` : '';
 
         const postHTML = `
-            <a href="/view-job-post/${post._id}" class="intro-y col-span-12 md:col-span-6 xl:col-span-4 box">
+            <div class="intro-y col-span-12 md:col-span-6 xl:col-span-4 box">
+            <a href="/view-job-post/${post._id}">
                 <div class="flex items-center border-b border-slate-200/60 px-5 py-4 dark:border-darkmode-400">
                     <div class="image-fit h-10 w-10 flex-none">
                         <img class="rounded-full" src="${job_posted_by_profile.user_photo}"
@@ -217,7 +218,9 @@ $job_posts_with_users = array_map(function ($job_post) {
                                 data-tw-merge="" data-lucide="share" class="stroke-1.5 h-3 w-3"></i>Share</a>
                     ${applyButtonHTML}
                 </div>
-            </a>
+                </a>
+            </div>
+    
         `;
         postsContainer.insertAdjacentHTML('beforeend', postHTML);
     }
