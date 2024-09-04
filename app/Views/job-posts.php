@@ -180,45 +180,49 @@ $job_posts_with_users = array_map(function ($job_post) {
         ` : '';
 
             const postHTML = `
-            <div class="intro-y col-span-12 md:col-span-6 xl:col-span-4 box">
-                <div class="flex items-center border-b border-slate-200/60 px-5 py-4 dark:border-darkmode-400">
-                    <div class="image-fit h-10 w-10 flex-none">
-                        <img class="rounded-full" src="${job_posted_by_profile.user_photo}"
-                             onerror="this.onerror=null; this.src='dist/images/fakers/profile-9.jpg';"
-                             alt="Post">
-                    </div>
-                    <div class="ml-3 mr-auto">
-                        <a class="font-medium" href="#">${job_posted_by.user_firstname} ${job_posted_by.user_lastname}</a>
-                        <div class="mt-0.5 flex truncate text-xs text-slate-500">
-                            <a class="inline-block truncate text-primary" href="#">
-                                ${jobCategory.category_name}
-                            </a>
-                            <span class="mx-1">•</span> ${jobPostedOn}
-                        </div>
-                    </div>
-                    ${editDeleteButtonsHTML}
-                </div>
-                <div class="p-5">
-                    <div class="image-fit h-40 2xl:h-56">
-                        <img class="rounded-md" src="dist/images/pdf.png"
-                             alt="Post">
-                    </div>
-                    <a class="mt-5 block text-base font-medium" href="/view-job-post/${post._id}">
-                        ${post.job_post_title}
-                    </a>
-                    <div class="mt-2 text-slate-600 dark:text-slate-500">
-                        ${post.job_post_title}
-                    </div>
-                </div>
-                <div class="flex items-center border-t border-slate-200/60 px-5 py-3 dark:border-darkmode-400">
-                    <a data-placement="top" title="Share" href="#"
-                       data-post-link="${postLink}"
-                       class="share-link tooltip cursor-pointer intro-x ml-auto flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-primary dark:bg-darkmode-300 dark:text-slate-300"><i
-                                data-tw-merge="" data-lucide="share" class="stroke-1.5 h-3 w-3"></i>Share</a>
-                    ${applyButtonHTML}
-                </div>
+<a href="/view-job-post/${post._id}" class="intro-y col-span-12 md:col-span-6 xl:col-span-4 box block no-underline text-black">
+    <div class="flex items-center border-b border-slate-200/60 px-5 py-4 dark:border-darkmode-400">
+        <div class="image-fit h-10 w-10 flex-none">
+            <img class="rounded-full" src="${job_posted_by_profile.user_photo}"
+                 onerror="this.onerror=null; this.src='dist/images/fakers/profile-9.jpg';"
+                 alt="Post">
+        </div>
+        <div class="ml-3 mr-auto">
+            <span class="font-medium">${job_posted_by.user_firstname} ${job_posted_by.user_lastname}</span>
+            <div class="mt-0.5 flex truncate text-xs text-slate-500">
+                <span class="inline-block truncate text-primary">
+                    ${jobCategory.category_name}
+                </span>
+                <span class="mx-1">•</span> ${jobPostedOn}
             </div>
-        `;
+        </div>
+        <div class="relative ml-3" style="pointer-events: auto;">
+            ${editDeleteButtonsHTML}
+        </div>
+    </div>
+    <div class="p-5">
+        <div class="image-fit h-40 2xl:h-56">
+            <img class="rounded-md" src="dist/images/pdf.png"
+                 alt="Post">
+        </div>
+        <span class="mt-5 block text-base font-medium">
+            ${post.job_post_title}
+        </span>
+        <div class="mt-2 text-slate-600 dark:text-slate-500">
+            ${post.job_post_title}
+        </div>
+    </div>
+    <div class="flex items-center border-t border-slate-200/60 px-5 py-3 dark:border-darkmode-400">
+        <span data-placement="top" title="Share"
+               data-post-link="${postLink}"
+               class="share-link tooltip cursor-pointer intro-x ml-auto flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-primary dark:bg-darkmode-300 dark:text-slate-300" style="pointer-events: auto;">
+               <i data-tw-merge="" data-lucide="share" class="stroke-1.5 h-3 w-3"></i>Share
+        </span>
+        ${applyButtonHTML}
+    </div>
+</a>
+`;
+
             postsContainer.insertAdjacentHTML('beforeend', postHTML);
         }
 
