@@ -203,7 +203,7 @@ $job_posts_with_users = array_map(function ($job_post) {
                         <img class="rounded-md" src="dist/images/pdf.png"
                              alt="Post">
                     </div>
-                    <a class="mt-5 block text-base font-medium" href="#">
+                    <a class="mt-5 block text-base font-medium" href="/view-job-post/${post._id}">
                         ${post.job_post_title}
                     </a>
                     <div class="mt-2 text-slate-600 dark:text-slate-500">
