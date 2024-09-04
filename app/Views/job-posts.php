@@ -142,7 +142,7 @@ $job_posts_with_users = array_map(function ($job_post) {
         const job_posted_by_profile = JSON.parse(job_posted_by.user_profile);
 
         const userLevel = <?= $user_level ?> > 3; // Use numeric comparison
-        const isCreator = <?= $user_id ?> === post.job_post_created_by || <?= $user_level ?> < 3;
+        const isCreator = "<?= $user_id ?>" === post.job_post_created_by || <?= $user_level ?> < 3;
 
         const applyButtonHTML = userLevel ? `
             <a data-placement="top" title="Apply Now" href="#" data-tw-toggle="modal"
