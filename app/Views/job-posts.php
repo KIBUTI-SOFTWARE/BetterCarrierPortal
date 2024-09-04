@@ -135,7 +135,7 @@ $job_posts_with_users = array_map(function ($job_post) {
         postsContainer.innerHTML = '';
 
         for (const post of paginatedPosts) {
-            const postLink = <?= base_url() ?>view-job-post/${post._id};
+            const postLink = "<?= base_url() ?>view-job-post/${post._id}";
             const jobCategory = await getPostCategory(post.job_post_category); // Await inside an async function using a loop that supports async
             const jobPostedOn = timeAgo(post.job_post_created_on);
             const job_posted_by = post.job_posted_by;
