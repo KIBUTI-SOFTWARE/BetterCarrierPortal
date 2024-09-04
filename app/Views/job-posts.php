@@ -119,43 +119,43 @@ $job_posts_with_users = array_map(function ($job_post) {
     });
 
     async function renderResults() {
-        const searchQuery = document.getElementById('search-input').value.toLowerCase();
-        const filteredPosts = job_posts.filter(post => {
-            const job_posted_by = post.job_posted_by;
-            return job_posted_by.user_firstname.toLowerCase().includes(searchQuery) ||
-                job_posted_by.user_lastname.toLowerCase().includes(searchQuery) ||
-                post.job_post_title.toLowerCase().includes(searchQuery);
-        });
+    const searchQuery = document.getElementById('search-input').value.toLowerCase();
+    const filteredPosts = job_posts.filter(post => {
+        const job_posted_by = post.job_posted_by;
+        return job_posted_by.user_firstname.toLowerCase().includes(searchQuery) ||
+            job_posted_by.user_lastname.toLowerCase().includes(searchQuery) ||
+            post.job_post_title.toLowerCase().includes(searchQuery);
+    });
 
-        const startIndex = (currentPage - 1) * itemsPerPage;
-        const endIndex = startIndex + itemsPerPage;
-        const paginatedPosts = filteredPosts.slice(startIndex, endIndex);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const paginatedPosts = filteredPosts.slice(startIndex, endIndex);
 
-        const postsContainer = document.getElementById('posts-container');
-        postsContainer.innerHTML = '';
+    const postsContainer = document.getElementById('posts-container');
+    postsContainer.innerHTML = '';
 
-        for (const post of paginatedPosts) {
-            const postLink = "<?= base_url() ?>view-job-post/${post._id}";
-            const jobCategory = await getPostCategory(post.job_post_category); // Await inside an async function using a loop that supports async
-            const jobPostedOn = timeAgo(post.job_post_created_on);
-            const job_posted_by = post.job_posted_by;
-            const job_posted_by_profile = JSON.parse(job_posted_by.user_profile);
+    for (const post of paginatedPosts) {
+        const postLink = `<?= base_url() ?>view-job-post/${post._id}`;
+        const jobCategory = await getPostCategory(post.job_post_category);
+        const jobPostedOn = timeAgo(post.job_post_created_on);
+        const job_posted_by = post.job_posted_by;
+        const job_posted_by_profile = JSON.parse(job_posted_by.user_profile);
 
-            const userLevel = <?= ($user_level) ?> > "3"; // Assume this is a boolean check
-            const isCreator = <?= $user_id ?> === post.job_post_created_by || <?= $user_level ?> < "3";
+        const userLevel = <?= $user_level ?> > 3; // Use numeric comparison
+        const isCreator = <?= $user_id ?> === post.job_post_created_by || <?= $user_level ?> < 3;
 
-            const applyButtonHTML = userLevel ? 
+        const applyButtonHTML = userLevel ? `
             <a data-placement="top" title="Apply Now" href="#" data-tw-toggle="modal"
                data-tw-target="#apply-now"
                data-post-id="${post._id}"
                class="apply-now tooltip cursor-pointer intro-x ml-2 flex h-8 w-8 items-center justify-center rounded-full bg-primary text-white"><i
                     data-tw-merge="" data-lucide="file-text" class="stroke-1.5 h-3 w-3"></i>Apply</a>
-         : '';
+        ` : '';
 
-            const editDeleteButtonsHTML = isCreator ? 
+        const editDeleteButtonsHTML = isCreator ? `
             <div data-tw-merge="" data-tw-placement="bottom-end" class="dropdown relative ml-3">
                 <button data-tw-toggle="dropdown" aria-expanded="false"
-                        class="cursor-pointer h-5 w-5 text-slate-500" tag="a">
+                        class="cursor-pointer h-5 w-5 text-slate-500">
                     <i data-tw-merge=""
                        data-lucide="more-vertical"
                        class="stroke-1.5 w-5 h-5"></i>
@@ -177,9 +177,9 @@ $job_posts_with_users = array_map(function ($job_post) {
                     </div>
                 </div>
             </div>
-         : '';
+        ` : '';
 
-            const postHTML = 
+        const postHTML = `
             <div class="intro-y col-span-12 md:col-span-6 xl:col-span-4 box">
                 <div class="flex items-center border-b border-slate-200/60 px-5 py-4 dark:border-darkmode-400">
                     <div class="image-fit h-10 w-10 flex-none">
@@ -218,16 +218,16 @@ $job_posts_with_users = array_map(function ($job_post) {
                     ${applyButtonHTML}
                 </div>
             </div>
-        ;
-            postsContainer.insertAdjacentHTML('beforeend', postHTML);
-        }
-
-        const entriesInfo = document.getElementById('entries-info');
-        const totalEntries = filteredPosts.length;
-        const startEntry = startIndex + 1;
-        const endEntry = Math.min(endIndex, totalEntries);
-        entriesInfo.textContent = Showing ${startEntry} to ${endEntry} of ${totalEntries} entries;
+        `;
+        postsContainer.insertAdjacentHTML('beforeend', postHTML);
     }
+
+    const entriesInfo = document.getElementById('entries-info');
+    const totalEntries = filteredPosts.length;
+    const startEntry = startIndex + 1;
+    const endEntry = Math.min(endIndex, totalEntries);
+    entriesInfo.textContent = `Showing ${startEntry} to ${endEntry} of ${totalEntries} entries`;
+}
 
     function renderPagination() {
         const searchQuery = document.getElementById('search-input').value.toLowerCase();
